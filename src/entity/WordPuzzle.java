@@ -22,11 +22,15 @@ public class WordPuzzle {
         this.letters = letters;
     }
 
-    //this getter can be used to modify the revealedLetters boolean array due to array's mutability
+    // getRevealedLetters can also be used to modify the revealedLetters boolean array due to array's mutability
     public boolean[] getRevealedLetters() {
         return revealedLetters;
     }
 
+    /* isLetterInWord checks whether the letter is present in the word puzzle;
+    boolean revealLetter function as a switch to whether update the revealedLetter array
+    if the letter is found in the word puzzle.
+    */
     public boolean isLetterInWord(char letter, boolean revealLetter) {
         for( int i = 0; i < letters.length; i++ ){
             if (letters[i] == letter){
@@ -41,6 +45,7 @@ public class WordPuzzle {
         return false;
     }
 
+    // Check if the puzzle is completed by checking if all the letters have been revealed in the word puzzle
     public boolean isPuzzleComplete(){
         for ( int i = 0; i < revealedLetters.length; i++ ){
             if (revealedLetters[i] == false){
