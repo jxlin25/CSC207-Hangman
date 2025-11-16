@@ -1,13 +1,14 @@
 package entity;
 
 public class Hint {
-    private final String hint;
 
-    public Hint(String hint) {
-        this.hint = hint;
+    private final String text;
+
+    public Hint(String text) {
+        this.text = text;
     }
 
-    public String gethint() {
-        return hint;
+    public String getText() {
+        return text;
     }
 }
