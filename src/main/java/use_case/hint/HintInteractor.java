@@ -21,6 +21,6 @@ public class HintInteractor implements HintInputBoundary {
         Hint hint = new Hint(hintText);
         HintOutputData output = new HintOutputData(hint);
 
-        HintPresenter.present(output);
+        HintPresenter.prepareSuccessView(output);
     }
 }
