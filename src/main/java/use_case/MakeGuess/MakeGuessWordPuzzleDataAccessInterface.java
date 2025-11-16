@@ -3,7 +3,7 @@ package use_case.MakeGuess;
 import entity.Guess;
 import entity.WordPuzzle;
 
-public interface MakeGuessPuzzleWordDataAccessInterface {
+public interface MakeGuessWordPuzzleDataAccessInterface {
 
     // Get the current word puzzle
     WordPuzzle getCurrentWordPuzzle();

@@ -1,4 +1,4 @@
 package use_case.MakeGuess;
 
-public class MakeGuessOutputBoundry {
+public class MakeGuessOutputBoundary {
 }

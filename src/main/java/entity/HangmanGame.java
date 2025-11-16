@@ -25,14 +25,13 @@ public class HangmanGame {
     }
 
 
-
     /**
      * Gets the currently active round.
      * @return The current Round object, or null if the game is over.
      */
     public Round getCurrentRound() {
         if (isGameOverallOver()) {
-            return null; // No more rounds
+            return null;
         }
         return rounds.get(currentRoundIndex);
     }
