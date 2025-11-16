@@ -4,23 +4,23 @@ import entity.Hint;
 
 public class HintInteractor implements HintInputBoundary {
 
-    private final HintDataAccessInterface dao;
-    private final HintOutputBoundary presenter;
+    private final HintDataAccessInterface HintDataAccessObject;
+    private final HintOutputBoundary HintPresenter;
 
-    public HintInteractor(HintDataAccessInterface dao,
-                          HintOutputBoundary presenter) {
-        this.dao = dao;
-        this.presenter = presenter;
+    public HintInteractor(HintDataAccessInterface HintDataAccessObject,
+                          HintOutputBoundary HintPresenter) {
+        this.HintDataAccessObject = HintDataAccessObject;
+        this.HintPresenter = HintPresenter;
     }
 
     @Override
     public void execute(HintInputData inputData) {
         String word = inputData.getWord();
-        String hintText = dao.fetchHint(word);
+        String hintText = HintDataAccessObject.getHint(word);
 
         Hint hint = new Hint(hintText);
         HintOutputData output = new HintOutputData(hint);
 
-        presenter.present(output);
+        HintPresenter.present(output);
     }
 }
