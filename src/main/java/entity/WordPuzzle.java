@@ -3,57 +3,117 @@ package entity;
 public class WordPuzzle {
 
     private char[] letters;
-    private boolean[] revealedLetters; // the indexes of the revealed letter in letters; eg. letters = ['A', 'p', 'p', 'l', 'e'], to have letter 'A' and 'l' revealed, revealedLetterIndexes = [true, false, false, true, false]
+
+    /*
+     * The indexes of the revealed letters in `letters`.
+     * Example:
+     * letters = ['A', 'p', 'p', 'l', 'e']
+     * To have letter 'A' and 'l' revealed:
+     * revealedLettersBooleans = [true, false, false, true, false]
+     */
+    private boolean[] revealedLettersBooleans;
 
     // Constructor of WordPuzzle with no letters revealed
     public WordPuzzle(char[] letters) {
         this.letters = letters;
-        this.revealedLetters = new boolean[letters.length];
-        for( int i = 0; i < letters.length; i++ ){
-            this.revealedLetters[i] = false;
+        this.revealedLettersBooleans = new boolean[letters.length];
+        for (int i = 0; i < letters.length; i++) {
+            this.revealedLettersBooleans[i] = false;
         }
     }
 
     public char[] getLetters() {
-        return letters;
+        return this.letters.clone();
     }
 
-    public void setLetters(char[] letters) {
-        this.letters = letters;
+    public boolean[] getRevealedLettersBooleans() {
+        return revealedLettersBooleans.clone();
     }
 
-    // getRevealedLetters can also be used to modify the revealedLetters boolean array due to array's mutability
-    public boolean[] getRevealedLetters() {
+    public char[] getRevealedLetters() {
+
+        // Count how many letters have been revealed
+        int revealedLettersCount = 0;
+        for (boolean a : this.revealedLettersBooleans) {
+            if (a == true) {
+                revealedLettersCount++;
+            }
+        }
+
+        char[] revealedLetters = new char[revealedLettersCount];
+        int index = 0;
+
+        for (int i = 0; i < revealedLettersBooleans.length; i++) {
+            if (revealedLettersBooleans[i] == true) {
+                revealedLetters[index] = letters[i];
+                index++;
+            }
+        }
+
         return revealedLetters;
     }
 
-    /* isLetterInWord checks whether the letter is present in the word puzzle;
-    boolean revealLetter function as a switch to whether update the revealedLetter array
-    if the letter is found in the word puzzle.
-    */
-    public boolean isLetterInWord(char letter, boolean revealLetter) {
-        for( int i = 0; i < letters.length; i++ ){
-            if (letters[i] == letter){
+    public char[] getHiddenLetters() {
 
-                if (revealLetter == true){
-                    this.revealedLetters[i] = true;
-                }
+        // Count how many letters have not been revealed
+        int hiddenLettersCount = 0;
+        for (boolean a : this.revealedLettersBooleans) {
+            if (a == false) {
+                hiddenLettersCount++;
+            }
+        }
 
+        char[] hiddenLetters = new char[hiddenLettersCount];
+        int index = 0;
+
+        for (int i = 0; i < revealedLettersBooleans.length; i++) {
+            if (this.revealedLettersBooleans[i] == false) {
+                hiddenLetters[index] = letters[i];
+                index++;
+            }
+        }
+
+        return hiddenLetters;
+    }
+
+    // Check if all letters have been revealed
+    public boolean isPuzzleComplete() {
+        for (boolean a : this.revealedLettersBooleans) {
+            if (a == false) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Reveal all occurrences of a given letter
+    public void revealLetter(char letter) {
+        for (int i = 0; i < letters.length; i++) {
+            if (letters[i] == letter) {
+                this.revealedLettersBooleans[i] = true;
+            }
+        }
+    }
+
+    // Check if a given letter appears in the word
+    public boolean isLetterInWord(char letter) {
+        for (int i = 0; i < letters.length; i++) {
+            if (letters[i] == letter) {
                 return true;
             }
         }
         return false;
     }
 
-    // Check if the puzzle is completed by checking if all the letters have been revealed in the word puzzle
-    public boolean isPuzzleComplete(){
-        for ( int i = 0; i < revealedLetters.length; i++ ){
-            if (revealedLetters[i] == false){
-                return false;
+    // Check if a given letter has been revealed
+    public boolean isLetterRevealed(char letter) {
+        for (int i = 0; i < letters.length; i++) {
+            if (letters[i] == letter) {
+                if (revealedLettersBooleans[i]) {
+                    return true;
+                }
             }
         }
-
-        return true;
+        return false;
     }
-
 }
