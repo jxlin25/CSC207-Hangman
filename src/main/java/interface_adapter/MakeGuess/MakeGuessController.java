@@ -1,4 +1,4 @@
-package interface_adaptor;
+package interface_adapter.MakeGuess;
 
 import entity.Guess;
 import use_case.MakeGuess.MakeGuessInputBoundary;

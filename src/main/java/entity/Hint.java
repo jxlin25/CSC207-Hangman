@@ -2,6 +2,8 @@ package entity;
 
 public class Hint {
 
+    //TODO
+
     private final String text;
 
     public Hint(String text) {
