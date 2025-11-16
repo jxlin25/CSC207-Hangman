@@ -1,4 +1,4 @@
-package interface_adapter.hint;
+package interface_adapter.Hint;
 
 import interface_adapter.ViewModel;
 
