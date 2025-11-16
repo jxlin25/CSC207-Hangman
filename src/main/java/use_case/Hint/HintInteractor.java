@@ -1,4 +1,4 @@
-package use_case.hint;
+package use_case.Hint;
 
 import entity.Hint;
 

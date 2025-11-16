@@ -4,28 +4,24 @@ import entity.WordPuzzle;
 
 public class GenerateWordInteractor implements GenerateWordInputBoundary {
 
-    private final WordPuzzleDataAccessInterface dataAccess;
-    private final GenerateWordOutputBoundary presenter;
+    private final WordPuzzleDataAccessInterface wordPuzzleDataAccessInterface;
+    private final GenerateWordOutputBoundary generateWordOutputBoundary;
 
-    public GenerateWordInteractor(WordPuzzleDataAccessInterface dataAccess,
-                                  GenerateWordOutputBoundary presenter) {
-        this.dataAccess = dataAccess;
-        this.presenter = presenter;
+    public GenerateWordInteractor(WordPuzzleDataAccessInterface wordPuzzleDataAccessInterface,
+                                  GenerateWordOutputBoundary generateWordOutputBoundary) {
+        this.wordPuzzleDataAccessInterface = wordPuzzleDataAccessInterface;
+        this.generateWordOutputBoundary = generateWordOutputBoundary;
     }
 
     @Override
     public void execute() {
-        for (int attempt = 0; attempt < 10; attempt++) {
-
-            String word = dataAccess.getRandomWord();
-
-            if (dataAccess.isValidWord(word)) {
-                WordPuzzle puzzle = new WordPuzzle(word.toCharArray());
-                presenter.prepareSuccessView(new GenerateWordOutputData(puzzle));
-                return;
-            }
+        String word = wordPuzzleDataAccessInterface.getRandomWord();
+        if (wordPuzzleDataAccessInterface.isValidWord(word)) {
+            WordPuzzle puzzle = new WordPuzzle(word.toCharArray());
+            generateWordOutputBoundary.prepareSuccessView(new GenerateWordOutputData(puzzle));
+            return;
         }
-
-        presenter.prepareFailView("Failed to generate a valid word after 10 attempts.");
+        //TODO here must be pass because isValidWord only return true now.
+        return;
     }
 }

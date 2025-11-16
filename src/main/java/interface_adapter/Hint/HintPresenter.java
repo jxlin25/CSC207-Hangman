@@ -1,7 +1,7 @@
 package interface_adapter.Hint;
 
-import use_case.hint.HintOutputBoundary;
-import use_case.hint.HintOutputData;
+import use_case.Hint.HintOutputBoundary;
+import use_case.Hint.HintOutputData;
 
 public class HintPresenter implements HintOutputBoundary {
 
@@ -13,7 +13,5 @@ public class HintPresenter implements HintOutputBoundary {
 
     @Override
     public void prepareSuccessView(HintOutputData outputData) {
-        hintViewModel.setHintText(outputData.getHint().getText());
-        hintViewModel.firePropertyChanged();
     }
 }

@@ -1,6 +1,6 @@
 package data_access;
 
-import use_case.hint.HintDataAccessInterface;
+import use_case.Hint.HintDataAccessInterface;
 
 public class DBGeminiHintDataAccessObject implements HintDataAccessInterface {
 

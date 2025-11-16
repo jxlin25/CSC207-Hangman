@@ -1,7 +1,7 @@
 package interface_adapter.Hint;
 
-import use_case.hint.HintInputBoundary;
-import use_case.hint.HintInputData;
+import use_case.Hint.HintInputBoundary;
+import use_case.Hint.HintInputData;
 
 public class HintController {
     private final HintInputBoundary hintInputBoundary;
