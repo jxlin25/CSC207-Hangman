@@ -2,8 +2,8 @@ package Demo;
 
 import javax.swing.*;
 
-public class Main {
-    public static void main(String[] args) {
+public class MayBeMain {
+    public static void Notmain(String[] args) {
         HintDemoBuilder appBuilder = new HintDemoBuilder();
         JFrame application = appBuilder
                 .addHintDemoView()
