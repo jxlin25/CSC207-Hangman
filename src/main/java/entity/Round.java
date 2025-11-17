@@ -31,7 +31,7 @@ public class Round {
         this.status = status;
     }
 
-    public void setWon() {
+    public void setWON() {
         this.setStatus(WON);
     }
 

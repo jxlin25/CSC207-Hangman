@@ -47,7 +47,13 @@ public class HangmanGame {
      * Attempts to move to the next round.
      * @return true if successfully moved to a new round, false if all rounds are over.
      */
-    public boolean startNextRound() {
+    public boolean startNextRound(boolean won) {
+        if (won){
+            this.getCurrentRound().setWON();
+        }
+        else{
+            this.getCurrentRound().setLOST();
+        }
         if (!isGameOver()) {
             currentRoundIndex++;
             if (!this.isGameOver()) {
