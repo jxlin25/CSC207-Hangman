@@ -2,6 +2,9 @@ package entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import static Constant.StatusConstant.*;
 
 /**
  * Manages the overall game state, including a list of all rounds.
@@ -14,12 +17,15 @@ public class HangmanGame {
 
     /**
      * Creates a new game.
-     * @param words A list of words, where each word becomes a round.
+     * @param words A list of words, where each round contains a word
      */
     public HangmanGame(List<String> words) {
         this.rounds = new ArrayList<>();
+
+        //creating rounds of the game
         for (String word : words) {
-            this.rounds.add(new Round(word));
+            WordPuzzle wordPuzzle = new WordPuzzle(word.toCharArray());
+            this.rounds.add(new Round(wordPuzzle));
         }
         this.currentRoundIndex = 0;
     }
@@ -55,8 +61,6 @@ public class HangmanGame {
         return currentRoundIndex >= rounds.size();
     }
 
-
-
     public int getCurrentRoundNumber() {
         // Add 1 because index is 0-based
         return currentRoundIndex + 1;
@@ -73,14 +77,11 @@ public class HangmanGame {
         int wins = 0;
 
         for (int i = 0; i < currentRoundIndex; i++) {
-            if (rounds.get(i).isWon()) {
+            if (rounds.get(i).getStatus().equals(WON)) {
                 wins++;
             }
         }
 
-        if (getCurrentRound() != null && getCurrentRound().isOver() && getCurrentRound().isWon()){
-            wins++;
-        }
         return wins;
     }
 }
