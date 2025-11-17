@@ -32,7 +32,7 @@ public class GenerateWordView extends JPanel implements ActionListener, Property
         WordPuzzle initialPuzzle = viewModel.getState().getWordPuzzle();
 
         String initialMaskedWord = (initialPuzzle != null)
-                ? initialPuzzle.getMaskedWord()
+                ? initialPuzzle.getMaskedWord() // Assumes getMaskedWord() exists on the WordPuzzle entity
                 : "Press START to generate a word.";
 
         this.numOfDashesLabel = new JLabel(initialMaskedWord);
@@ -48,7 +48,10 @@ public class GenerateWordView extends JPanel implements ActionListener, Property
         startGameButton = new JButton("START");
         startGameButton.addActionListener(evt -> {
             if (evt.getSource().equals(startGameButton)) {
-                generateWordController.execute();
+                // Ensure controller is not null before executing
+                if (generateWordController != null) {
+                    generateWordController.execute();
+                }
             }
         });
 
@@ -69,11 +72,10 @@ public class GenerateWordView extends JPanel implements ActionListener, Property
         this.add(dashPanel);
         this.add(Box.createVerticalStrut(20));
         this.add(buttonPanel);
-<<<<<<< HEAD
+
+        // MERGE RESOLUTION: Kept the Box.createVerticalGlue() to center content.
+        // The second 'this.add(imagePanel);' was redundant and removed.
         this.add(Box.createVerticalGlue()); // Push content to center
-=======
-        this.add(imagePanel);
->>>>>>> 947e2ecd6a3967df3e734f01f8b956197f8cf13d
     }
 
 
