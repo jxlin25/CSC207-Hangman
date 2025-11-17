@@ -16,5 +16,4 @@ public class StatusConstant {
     public static final String LOST = "Lost";
 
 
-    public static final String GOOD = "Good";
 }

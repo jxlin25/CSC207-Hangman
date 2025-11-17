@@ -3,6 +3,7 @@ package app;
 import data_access.InMemoryHangmanDataAccessObject;
 //import data_access.InMemoryWordPuzzleDataAccessObject;
 import entity.HangmanGame;
+import interface_adapter.MakeGuess.MakeGuessState;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.GenerateWord.GenerateWordController;
 import interface_adapter.GenerateWord.GenerateWordPresenter;
@@ -85,6 +86,16 @@ public class AppBuilder {
         makeGuessViewModel = new MakeGuessViewModel(MakeGuessViewModel.VIEW_NAME);
 
         makeGuessView = new MakeGuessView(makeGuessViewModel);
+
+        // Cheat for demo
+        MakeGuessState initial = makeGuessViewModel.getState();
+        initial.setLetters("apple".toCharArray());
+        initial.setRevealedLettersBooleans(new boolean[]{false, false, false, false, false});
+        initial.setRemainingAttempts(6);
+        initial.setMessage("Game started!");
+        initial.setCurrentRoundNumber(1);
+        makeGuessViewModel.setState(initial);
+        makeGuessViewModel.firePropertyChanged();
 
         cardPanel.add(makeGuessView, makeGuessView.getViewName());
 

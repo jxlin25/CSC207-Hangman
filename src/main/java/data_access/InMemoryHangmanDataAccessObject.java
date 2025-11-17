@@ -74,5 +74,22 @@ public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameData
     public boolean isPuzzleComplete() {
         return this.getCurrentWordPuzzle().isPuzzleComplete();
     }
+
+    @Override
+    public char[] getWordPuzzle() {
+        return this.getCurrentWordPuzzle().getLetters();
+    }
+
+    @Override
+    public boolean[] getRevealedLettersBooleans() {
+        return this.getCurrentWordPuzzle().getRevealedLettersBooleans();
+    }
+
+    @Override
+    public int getCurrentRoundNumber() {
+        return this.getHangmanGame().getCurrentRoundNumber();
+    }
+
+
 }
 

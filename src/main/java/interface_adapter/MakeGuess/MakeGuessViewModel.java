@@ -8,7 +8,6 @@ import java.beans.PropertyChangeSupport;
 public class MakeGuessViewModel extends ViewModel<MakeGuessState> {
     public static final String VIEW_NAME = "Make Guess";
 
-    public static final int REMAINING_ATTEMPT = 0;
     public MakeGuessViewModel(String viewName) {
         super(viewName);
         setState(new MakeGuessState());

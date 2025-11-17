@@ -19,8 +19,7 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
 
         Guess guess = inputData.getGuess();
 
-        // Deduct 1 attempt from the play in the current round
-        this.hangmanGameDAO.decreaseCurrentRoundAttempt();
+
         // add the guess to the current round
         this.hangmanGameDAO.addGuessToCurrentRound(guess);
 
@@ -29,7 +28,6 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
 
         String roundStatus = GUESSING;
         boolean isGameOver = false;
-        int remainingAttempts = this.hangmanGameDAO.getCurrentRoundAttempt();
 
         // If the guess is correct, reveal the correctly guessed letter and check if the puzzle is complete
         if (isGuessCorrect) {
@@ -44,6 +42,12 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
                 }
             }
         }
+        else{
+            // Deduct 1 attempt if the guess is wrong
+            this.hangmanGameDAO.decreaseCurrentRoundAttempt();
+        }
+        int remainingAttempts = this.hangmanGameDAO.getCurrentRoundAttempt();
+
 
         // If the guess is the last guess and does not complete the puzzle, mark the current round as LOST and start next round
         if (!this.hangmanGameDAO.isPuzzleComplete() && this.hangmanGameDAO.getCurrentRoundAttempt() == 0) {
@@ -55,7 +59,7 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
         }
 
         MakeGuessOutputData outputData =
-                new MakeGuessOutputData(guess, isGuessCorrect, roundStatus, isGameOver, remainingAttempts);
+                new MakeGuessOutputData(guess, isGuessCorrect, roundStatus, isGameOver, remainingAttempts, this.hangmanGameDAO.getWordPuzzle(), this.hangmanGameDAO.getRevealedLettersBooleans(), this.hangmanGameDAO.getCurrentRoundNumber());
 
         presenter.updateView(outputData);
     }

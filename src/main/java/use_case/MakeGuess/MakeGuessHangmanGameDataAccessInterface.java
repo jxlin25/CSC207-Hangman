@@ -30,4 +30,10 @@ public interface MakeGuessHangmanGameDataAccessInterface {
 
     boolean isPuzzleComplete();
 
+    char[] getWordPuzzle();
+
+    boolean[] getRevealedLettersBooleans();
+
+    int getCurrentRoundNumber();
+
 }
