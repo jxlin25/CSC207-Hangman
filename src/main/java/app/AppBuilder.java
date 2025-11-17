@@ -4,18 +4,24 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.GenerateWord.GenerateWordController;
 import interface_adapter.GenerateWord.GenerateWordPresenter;
 import interface_adapter.GenerateWord.GenerateWordViewModel;
-
 import use_case.GenerateWord.GenerateWordInputBoundary;
 import use_case.GenerateWord.GenerateWordInteractor;
 import use_case.GenerateWord.GenerateWordOutputBoundary;
-
 import data_access.DBGenerateWordDataAccessObject;
-
 import view.GenerateWordView;
 import view.ViewManager;
-
 import javax.swing.*;
 import java.awt.*;
+
+
+import view.MakeGuessView;
+import interface_adapter.MakeGuess.MakeGuessViewModel;
+import interface_adapter.MakeGuess.MakeGuessController;
+import interface_adapter.MakeGuess.MakeGuessPresenter;
+import use_case.MakeGuess.MakeGuessInputBoundary;
+import use_case.MakeGuess.MakeGuessInteractor;
+import use_case.MakeGuess.MakeGuessOutputBoundary;
+import use_case.MakeGuess.MakeGuessWordPuzzleDataAccessInterface;
 
 public class AppBuilder {
 
@@ -29,6 +35,10 @@ public class AppBuilder {
 
     private GenerateWordViewModel generateWordViewModel;
     private GenerateWordView generateWordView;
+    private GenerateWordController generateWordController;
+
+    private MakeGuessViewModel makeGuessViewModel;
+    private MakeGuessView makeGuessView;
 
 
     public AppBuilder() {
@@ -63,5 +73,20 @@ public class AppBuilder {
         viewManagerModel.firePropertyChange();
 
         return application;
+    }
+
+    public AppBuilder addMakeGuessView() {
+
+        makeGuessViewModel = new MakeGuessViewModel(MakeGuessViewModel.VIEW_NAME);
+
+        makeGuessView = new MakeGuessView(makeGuessViewModel);
+
+        return this;
+    }
+
+    public AppBuilder addMakeGuessUseCase() {
+        MakeGuessOutputBoundary makeGuessOutputBoundary = new MakeGuessPresenter(makeGuessViewModel);
+
+        return this;
     }
 }
