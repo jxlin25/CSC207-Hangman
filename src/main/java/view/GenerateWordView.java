@@ -10,46 +10,68 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import view.HangmanImagePanel;
+
 
 public class GenerateWordView extends JPanel implements ActionListener, PropertyChangeListener {
-    private final HangmanImagePanel imagePanel = new HangmanImagePanel();
+
     private final String viewName = "generate word";
+
+    private final HangmanImagePanel imagePanel = new HangmanImagePanel();
+    private final JLabel numOfDashesLabel; // This will display the masked word
 
     private GenerateWordController generateWordController;
     private final GenerateWordViewModel generateWordViewModel;
 
-    private final JLabel generatedWordLabel = new JLabel("Press START to generate a word.");
     private final JButton startGameButton;
 
     public GenerateWordView(GenerateWordViewModel viewModel) {
         this.generateWordViewModel = viewModel;
+        viewModel.addPropertyChangeListener(this);
 
-        generateWordViewModel.addPropertyChangeListener(this);
+
+        WordPuzzle initialPuzzle = viewModel.getState().getWordPuzzle();
+
+        String initialMaskedWord = (initialPuzzle != null)
+                ? initialPuzzle.getMaskedWord() // Uses the correct masked word entity method
+                : "Press START to generate a word.";
+
+        this.numOfDashesLabel = new JLabel(initialMaskedWord);
+
+        Font currentFont = this.numOfDashesLabel.getFont();
+        Font largerFont = new Font(currentFont.getName(), Font.BOLD, 36);
+        this.numOfDashesLabel.setFont(largerFont);
 
         final JLabel title = new JLabel("Let's Start Game!");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title.setFont(new Font(title.getFont().getName(), Font.BOLD, 28));
 
         startGameButton = new JButton("START");
-
         startGameButton.addActionListener(evt -> {
             if (evt.getSource().equals(startGameButton)) {
-                generateWordController.execute();
+                if (generateWordController != null) {
+                    generateWordController.execute();
+                }
             }
         });
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JPanel center = new JPanel();
-        center.add(generatedWordLabel);
+        JPanel dashPanel = new JPanel();
+        dashPanel.add(this.numOfDashesLabel);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(startGameButton);
 
+        this.add(Box.createVerticalStrut(20));
         this.add(title);
-        this.add(center);
+        this.add(Box.createVerticalStrut(20));
+        this.add(this.imagePanel); // Added Hangman Image Panel
+        this.add(Box.createVerticalStrut(20));
+        this.add(dashPanel); // Added Dashes Label
+        this.add(Box.createVerticalStrut(20));
         this.add(buttonPanel);
-        this.add(imagePanel);
+        this.add(Box.createVerticalGlue());
     }
 
     @Override
@@ -63,8 +85,10 @@ public class GenerateWordView extends JPanel implements ActionListener, Property
         WordPuzzle puzzle = state.getWordPuzzle();
 
         if (puzzle != null) {
-            String word = new String(puzzle.getLetters());
-            generatedWordLabel.setText("Generated Word: " + word);
+            String maskedWord = puzzle.getMaskedWord();
+            this.numOfDashesLabel.setText(maskedWord);
+
+
         }
     }
 
