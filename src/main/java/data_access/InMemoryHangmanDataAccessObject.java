@@ -36,15 +36,14 @@ public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameData
     // Set current round as WON and move on to the next round
     @Override
     public boolean setCurrentRoundWonAndStartNextRound() {
-        this.getCurrentRound().setWon();
-        return this.getHangmanGame().startNextRound();
+        return this.getHangmanGame().startNextRound(true);
     }
 
     // Set current round as LOST and move on to the next round
     @Override
     public boolean setCurrentRoundLostAndStartNextRound() {
-        this.getCurrentRound().setLOST();
-        return this.getHangmanGame().startNextRound();
+        return this.getHangmanGame().startNextRound(false);
+
     }
 
     @Override

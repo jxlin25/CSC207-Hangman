@@ -6,19 +6,19 @@ import entity.Guess;
 public class MakeGuessOutputData {
     private Guess guess;
     private boolean isGuessCorrect;
-    private boolean isPuzzleComplete;
+    private String roundStatus;
     private boolean isGameOver;
 
 
-    public MakeGuessOutputData(Guess guess, boolean isGuessCorrect,  boolean isPuzzleComplete, boolean isGameOver) {
+    public MakeGuessOutputData(Guess guess, boolean isGuessCorrect,  String roundStatus, boolean isGameOver) {
         this.guess = guess;
         this.isGuessCorrect = isGuessCorrect;
-        this.isPuzzleComplete = isPuzzleComplete;
+        this.roundStatus = roundStatus;
         this.isGameOver = isGameOver;
     }
 
     public Guess getGuess() {return this.guess;}
     public boolean isGuessCorrect() {return this.isGuessCorrect;}
-    public boolean isPuzzleComplete() {return this.isPuzzleComplete;}
+    public String  getRoundStatus() {return this.roundStatus;}
     public boolean isGameOver() {return this.isGameOver;}
 }
