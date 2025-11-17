@@ -4,11 +4,11 @@ import entity.Guess;
 
 public class MakeGuessInputData {
 
-    private final Guess guess;
-
+    final  private Guess guess;
     public MakeGuessInputData(Guess guess) {
         this.guess = guess;
     }
-
-    public Guess getGuess() {return this.guess;}
+    public Guess getGuess() {
+        return guess;
+    }
 }
