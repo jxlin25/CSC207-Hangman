@@ -69,7 +69,11 @@ public class GenerateWordView extends JPanel implements ActionListener, Property
         this.add(dashPanel);
         this.add(Box.createVerticalStrut(20));
         this.add(buttonPanel);
+<<<<<<< HEAD
         this.add(Box.createVerticalGlue()); // Push content to center
+=======
+        this.add(imagePanel);
+>>>>>>> 947e2ecd6a3967df3e734f01f8b956197f8cf13d
     }
 
 
