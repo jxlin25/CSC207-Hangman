@@ -128,4 +128,22 @@ public class WordPuzzle {
         }
         return false;
     }
+    public String getMaskedWord() {
+        StringBuilder masked = new StringBuilder();
+
+        for (int i = 0; i < this.letters.length; i++) {
+            char currentLetter = this.letters[i];
+            boolean isRevealed = this.revealedLettersBooleans[i];
+
+            if (isRevealed) {
+                masked.append(currentLetter);
+            } else {
+                masked.append("_");
+            }
+
+            masked.append(" ");
+        }
+
+        return masked.toString().trim().toUpperCase();
+    }
 }
