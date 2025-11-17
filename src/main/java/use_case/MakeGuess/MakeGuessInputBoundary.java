@@ -1,6 +1,6 @@
 package use_case.MakeGuess;
 
-public class MakeGuessInputBoundry {
+public interface MakeGuessInputBoundary {
 
-    void execute(MakeGuessInputData makeGuessInputData) {}
+    void execute(MakeGuessInputData makeGuessInputData);
 }

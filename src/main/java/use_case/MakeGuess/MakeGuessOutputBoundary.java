@@ -1,4 +1,7 @@
 package use_case.MakeGuess;
 
-public class MakeGuessOutputBoundry {
+public interface MakeGuessOutputBoundary {
+
+    void updateView(MakeGuessOutputData makeGuessOutputData);
+
 }

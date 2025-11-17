@@ -1,9 +1,8 @@
-package interface_adaptor;
+package interface_adaptor.MakeGuess;
 
 import entity.Guess;
 import use_case.MakeGuess.MakeGuessInputBoundary;
 import use_case.MakeGuess.MakeGuessInputData;
-import use_case.MakeGuess.MakeGuessInteractor;
 
 public class MakeGuessController {
 
