@@ -49,6 +49,7 @@ public class GenerateWordView extends JPanel implements ActionListener, Property
         this.add(title);
         this.add(center);
         this.add(buttonPanel);
+        this.add(imagePanel);
     }
 
     @Override

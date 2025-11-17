@@ -36,11 +36,11 @@ public class MakeGuessPresenter implements MakeGuessOutputBoundary {
 
                 // If the guess is correct
                 if (outputData.isGuessCorrect()) {
-                    state.setMessage("Correct guess!");
+                    state.setMessage(String.format("Correct guess! %d attempts left.", outputData.getRemainingAttempts()));
                 }
                 // If the guess is incorrect
                 else if (!outputData.isGuessCorrect()) {
-                    state.setMessage("Wrong guess, try again.");
+                    state.setMessage(String.format("Wrong guess, try again. %d attempts left.", outputData.getRemainingAttempts()));
                 }
 
             }
