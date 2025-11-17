@@ -92,4 +92,8 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
 
     }
 
+    public String getViewName() {
+        return viewName;
+    }
+
 }
