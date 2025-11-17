@@ -11,13 +11,13 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+
 public class GenerateWordView extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final String viewName = "generate word";
 
     private final HangmanImagePanel imagePanel = new HangmanImagePanel();
-
-    private final JLabel numOfDashesLabel;
+    private final JLabel numOfDashesLabel; // This will display the masked word
 
     private GenerateWordController generateWordController;
     private final GenerateWordViewModel generateWordViewModel;
@@ -32,7 +32,7 @@ public class GenerateWordView extends JPanel implements ActionListener, Property
         WordPuzzle initialPuzzle = viewModel.getState().getWordPuzzle();
 
         String initialMaskedWord = (initialPuzzle != null)
-                ? initialPuzzle.getMaskedWord() // Assumes getMaskedWord() exists on the WordPuzzle entity
+                ? initialPuzzle.getMaskedWord() // Uses the correct masked word entity method
                 : "Press START to generate a word.";
 
         this.numOfDashesLabel = new JLabel(initialMaskedWord);
@@ -48,7 +48,6 @@ public class GenerateWordView extends JPanel implements ActionListener, Property
         startGameButton = new JButton("START");
         startGameButton.addActionListener(evt -> {
             if (evt.getSource().equals(startGameButton)) {
-                // Ensure controller is not null before executing
                 if (generateWordController != null) {
                     generateWordController.execute();
                 }
@@ -67,17 +66,13 @@ public class GenerateWordView extends JPanel implements ActionListener, Property
         this.add(Box.createVerticalStrut(20));
         this.add(title);
         this.add(Box.createVerticalStrut(20));
-        this.add(this.imagePanel);
+        this.add(this.imagePanel); // Added Hangman Image Panel
         this.add(Box.createVerticalStrut(20));
-        this.add(dashPanel);
+        this.add(dashPanel); // Added Dashes Label
         this.add(Box.createVerticalStrut(20));
         this.add(buttonPanel);
-
-        // MERGE RESOLUTION: Kept the Box.createVerticalGlue() to center content.
-        // The second 'this.add(imagePanel);' was redundant and removed.
-        this.add(Box.createVerticalGlue()); // Push content to center
+        this.add(Box.createVerticalGlue());
     }
-
 
     @Override
     public void actionPerformed(ActionEvent evt) {
@@ -92,6 +87,7 @@ public class GenerateWordView extends JPanel implements ActionListener, Property
         if (puzzle != null) {
             String maskedWord = puzzle.getMaskedWord();
             this.numOfDashesLabel.setText(maskedWord);
+
 
         }
     }
