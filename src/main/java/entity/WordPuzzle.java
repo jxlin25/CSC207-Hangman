@@ -58,7 +58,7 @@ public class WordPuzzle {
         // Count how many letters have not been revealed
         int hiddenLettersCount = 0;
         for (boolean a : this.revealedLettersBooleans) {
-            if (a == false) {
+            if (!a) {
                 hiddenLettersCount++;
             }
         }
@@ -67,7 +67,7 @@ public class WordPuzzle {
         int index = 0;
 
         for (int i = 0; i < revealedLettersBooleans.length; i++) {
-            if (this.revealedLettersBooleans[i] == false) {
+            if (!this.revealedLettersBooleans[i]) {
                 hiddenLetters[index] = letters[i];
                 index++;
             }
@@ -105,11 +105,23 @@ public class WordPuzzle {
         return false;
     }
 
-    // Check if a given letter has been revealed
+    // Check if a given letter is in the word and is revealed
     public boolean isLetterRevealed(char letter) {
         for (int i = 0; i < letters.length; i++) {
             if (letters[i] == letter) {
                 if (revealedLettersBooleans[i]) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // Check if a given letter is in the word and is hidden
+    public boolean isLetterHidden(char letter) {
+        for (int i = 0; i < letters.length; i++) {
+            if (letters[i] == letter) {
+                if (!revealedLettersBooleans[i]) {
                     return true;
                 }
             }
