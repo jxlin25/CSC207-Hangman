@@ -10,8 +10,8 @@ public interface MakeGuessWordPuzzleDataAccessInterface {
 
     boolean isGuessCorrect(Guess guess);
 
-    void revealLetter(char letter);
+    void revealLetter(Guess guess);
 
-    void save(WordPuzzle wordPuzzle);
+    boolean isPuzzleComplete();
 
 }

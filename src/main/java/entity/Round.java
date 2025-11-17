@@ -14,11 +14,7 @@ public class Round {
     }
 
     public boolean isGuessCorrect(Guess guess) {
-        //if the guessed letter is present in the word, update the revealedLetters and return true
-        if(word.isLetterInWord(guess.getLetter(), true)){
-            return true;
-        }
-        return false;
+        return this.word.isLetterHidden(guess.getLetter());
     }
 
     public boolean isPuzzleComplete(){
