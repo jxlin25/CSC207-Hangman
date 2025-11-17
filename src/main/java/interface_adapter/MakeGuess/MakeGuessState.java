@@ -17,7 +17,7 @@ public class MakeGuessState {
      */
     private String guessedLetter = "";
     private boolean guessCorrect;
-    private boolean puzzleComplete;
+    private String roundStatus;
     private String message = "";
 
     public MakeGuessState() {
@@ -39,12 +39,12 @@ public class MakeGuessState {
         this.guessCorrect = guessCorrect;
     }
 
-    public boolean isPuzzleComplete() {
-        return puzzleComplete;
+    public String getRoundStatus() {
+        return this.roundStatus;
     }
 
-    public void setPuzzleComplete(boolean puzzleComplete) {
-        this.puzzleComplete = puzzleComplete;
+    public void setRoundStatus(String status) {
+        this.roundStatus = status;
     }
 
     public String getMessage() {
