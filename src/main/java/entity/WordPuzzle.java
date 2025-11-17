@@ -117,7 +117,6 @@ public class WordPuzzle {
         return false;
     }
 
-    // Check if a given letter is in the word and is hidden
     public boolean isLetterHidden(char letter) {
         for (int i = 0; i < letters.length; i++) {
             if (letters[i] == letter) {
