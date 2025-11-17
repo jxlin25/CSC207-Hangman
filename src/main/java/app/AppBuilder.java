@@ -81,6 +81,8 @@ public class AppBuilder {
 
         makeGuessView = new MakeGuessView(makeGuessViewModel);
 
+        cardPanel.add(makeGuessView, makeGuessView.getViewName());
+
         return this;
     }
 
