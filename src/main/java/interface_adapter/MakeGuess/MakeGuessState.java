@@ -7,22 +7,54 @@ public class MakeGuessState {
      * This class is the State of MarkGuess is stored. I think it might contain
      * information such as which letter the player guessed, where it was
      * located, and whether the guess was correct.
-     *
+     * <p>
      * e.g.
-     *  guess.getletter -> "a"
-     *  located - > 3  (the third letter is a)
-     *  istrue() - > true - > it true letter
-     *
-     *  then view- >  ------   to  --a---
+     * guess.getletter -> "a"
+     * located - > 3  (the third letter is a)
+     * istrue() - > true - > it true letter
+     * <p>
+     * then view- >  ------   to  --a---
      */
-    private Guess guess;
+    private String guessedLetter = "";
+    private boolean guessCorrect;
+    private boolean puzzleComplete;
+    private String message = "";
 
-    public Guess getGuess() {
-        return guess;
+    public MakeGuessState() {
     }
 
-    public void setWordPuzzle(Guess guess) {
-        this.guess = guess;
+    public String getGuessedLetter() {
+        return guessedLetter;
     }
-    //TODO
+
+    public void setGuessedLetter(String guessedLetter) {
+        this.guessedLetter = guessedLetter;
+    }
+
+    public boolean isGuessCorrect() {
+        return guessCorrect;
+    }
+
+    public void setGuessCorrect(boolean guessCorrect) {
+        this.guessCorrect = guessCorrect;
+    }
+
+    public boolean isPuzzleComplete() {
+        return puzzleComplete;
+    }
+
+    public void setPuzzleComplete(boolean puzzleComplete) {
+        this.puzzleComplete = puzzleComplete;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }
+    //TODO
+
+
