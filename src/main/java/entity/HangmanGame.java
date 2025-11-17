@@ -2,7 +2,6 @@ package entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static Constant.StatusConstant.*;
 
@@ -36,20 +35,25 @@ public class HangmanGame {
      * @return The current Round object, or null if the game is over.
      */
     public Round getCurrentRound() {
-        if (isGameOverallOver()) {
+        if (isGameOver()) {
             return null;
         }
         return rounds.get(currentRoundIndex);
     }
+
+
 
     /**
      * Attempts to move to the next round.
      * @return true if successfully moved to a new round, false if all rounds are over.
      */
     public boolean startNextRound() {
-        if (!isGameOverallOver()) {
+        if (!isGameOver()) {
             currentRoundIndex++;
-            return !isGameOverallOver();
+            if (!this.isGameOver()) {
+                this.getCurrentRound().startRound();
+                return true;
+            }
         }
         return false;
     }
@@ -57,7 +61,7 @@ public class HangmanGame {
     /**
      * Checks if all rounds have been played.
      */
-    public boolean isGameOverallOver() {
+    public boolean isGameOver() {
         return currentRoundIndex >= rounds.size();
     }
 
