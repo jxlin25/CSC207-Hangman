@@ -100,8 +100,3 @@ public class GenerateWordView extends JPanel implements ActionListener, Property
         this.generateWordController = controller;
     }
 }
-
-    public void setGenerateWordController(GenerateWordController controller) {
-        this.generateWordController = controller;
-    }
-}
