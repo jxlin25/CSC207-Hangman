@@ -10,9 +10,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import view.HangmanImagePanel;
 
 public class GenerateWordView extends JPanel implements ActionListener, PropertyChangeListener {
-
+    private final HangmanImagePanel imagePanel = new HangmanImagePanel();
     private final String viewName = "generate word";
 
     private GenerateWordController generateWordController;

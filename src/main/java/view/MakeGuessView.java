@@ -88,23 +88,8 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
 
 
     }
+    public void updateImage(int mistakes) {
 
-
-    private void updateImage(int mistakes) {
-
-        String path = "/images/hangman" + mistakes + ".png";
-        java.net.URL imgURL = getClass().getResource(path);
-
-        if (imgURL != null) {
-            ImageIcon icon = new ImageIcon(imgURL);
-            hangmanImageLabel.setIcon(icon);
-        } else {
-            System.err.println("Could not find image: " + path);
-        }
     }
 
-
-    public void setMakeGuessController(MakeGuessController controller) {
-        this.makeGuessController = controller;
-    }
 }
