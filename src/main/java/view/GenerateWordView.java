@@ -13,7 +13,7 @@ import java.beans.PropertyChangeListener;
 import view.HangmanImagePanel;
 
 public class GenerateWordView extends JPanel implements ActionListener, PropertyChangeListener {
-    private final HangmanImagePanel imagePanel = new HangmanImagePanel();
+    //private final HangmanImagePanel imagePanel = new HangmanImagePanel();
     private final String viewName = "generate word";
 
     private GenerateWordController generateWordController;
@@ -49,7 +49,7 @@ public class GenerateWordView extends JPanel implements ActionListener, Property
         this.add(title);
         this.add(center);
         this.add(buttonPanel);
-        this.add(imagePanel);
+        //this.add(imagePanel);
     }
 
     @Override

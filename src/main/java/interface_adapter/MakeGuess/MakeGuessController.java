@@ -13,13 +13,9 @@ public class MakeGuessController {
         this.makeGuessInputBoundary = makeGuessInputBoundary;
     }
 
-    public void execute(String letter) {
-        // 1. Check for valid input
-        if (letter == null || letter.isEmpty()) {
-            return;
-        }
+    public void execute(char letter) {
 
-        Guess guess = new Guess(letter.charAt(0));
+        Guess guess = new Guess(letter);
 
         final MakeGuessInputData makeGuessInputData = new MakeGuessInputData(guess);
         this.makeGuessInputBoundary.execute(makeGuessInputData);

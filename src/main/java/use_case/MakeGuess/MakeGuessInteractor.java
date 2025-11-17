@@ -7,12 +7,10 @@ import static Constant.StatusConstant.*;
 public class MakeGuessInteractor implements MakeGuessInputBoundary {
 
     private final MakeGuessOutputBoundary presenter;
-    private final MakeGuessWordPuzzleDataAccessInterface wordPuzzleDAO;
     private final MakeGuessHangmanGameDataAccessInterface hangmanGameDAO;
 
-    public MakeGuessInteractor(MakeGuessOutputBoundary presenter, MakeGuessWordPuzzleDataAccessInterface wordPuzzleDAO, MakeGuessHangmanGameDataAccessInterface hangmanGameDAO) {
+    public MakeGuessInteractor(MakeGuessOutputBoundary presenter, MakeGuessHangmanGameDataAccessInterface hangmanGameDAO) {
         this.presenter = presenter;
-        this.wordPuzzleDAO = wordPuzzleDAO;
         this.hangmanGameDAO = hangmanGameDAO;
     }
 
@@ -27,7 +25,7 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
         this.hangmanGameDAO.addGuessToCurrentRound(guess);
 
         // Check if the letter in the guess exist in the word puzzle
-        boolean isGuessCorrect = wordPuzzleDAO.isGuessCorrect(guess);
+        boolean isGuessCorrect = hangmanGameDAO.isGuessCorrect(guess);
 
         String roundStatus = GUESSING;
         boolean isGameOver = false;
@@ -35,10 +33,10 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
 
         // If the guess is correct, reveal the correctly guessed letter and check if the puzzle is complete
         if (isGuessCorrect) {
-            this.wordPuzzleDAO.revealLetter(guess);
+            this.hangmanGameDAO.revealLetter(guess);
 
             // If this guess leads to the completion of the puzzle, mark the current round as WON and start next round
-            if (this.wordPuzzleDAO.isPuzzleComplete()){
+            if (this.hangmanGameDAO.isPuzzleComplete()){
                 roundStatus = WON;
 
                 if (!this.hangmanGameDAO.setCurrentRoundWonAndStartNextRound()) {
@@ -48,7 +46,7 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
         }
 
         // If the guess is the last guess and does not complete the puzzle, mark the current round as LOST and start next round
-        if (!this.wordPuzzleDAO.isPuzzleComplete() && this.hangmanGameDAO.getCurrentRoundAttempt() == 0) {
+        if (!this.hangmanGameDAO.isPuzzleComplete() && this.hangmanGameDAO.getCurrentRoundAttempt() == 0) {
             roundStatus = LOST;
 
             if (!this.hangmanGameDAO.setCurrentRoundLostAndStartNextRound()) {

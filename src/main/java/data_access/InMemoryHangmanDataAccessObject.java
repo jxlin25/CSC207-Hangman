@@ -3,6 +3,7 @@ package data_access;
 import entity.Guess;
 import entity.HangmanGame;
 import entity.Round;
+import entity.WordPuzzle;
 import use_case.MakeGuess.MakeGuessHangmanGameDataAccessInterface;
 
 public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameDataAccessInterface {
@@ -50,4 +51,28 @@ public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameData
     public int getCurrentRoundAttempt() {
         return  this.getCurrentRound().getAttempt();
     }
+
+    @Override
+    public WordPuzzle getCurrentWordPuzzle() {
+        return this.getCurrentRound().getWordPuzzle();
+    }
+
+    @Override
+    public boolean isGuessCorrect(Guess guess){
+        // If the letter in the guess corresponds to a hidden letter in the puzzle, this is a correct guess
+        return this.getCurrentWordPuzzle().isLetterHidden(guess.getLetter());
+    }
+
+    @Override
+    // Reveal the given letter in the word puzzle
+    public void revealLetter(Guess guess) {
+        this.getCurrentWordPuzzle().revealLetter(guess.getLetter());
+    }
+
+    @Override
+    // Check if the puzzle is completed
+    public boolean isPuzzleComplete() {
+        return this.getCurrentWordPuzzle().isPuzzleComplete();
+    }
 }
+
