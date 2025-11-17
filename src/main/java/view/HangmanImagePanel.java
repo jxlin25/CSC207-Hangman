@@ -11,19 +11,19 @@ public class HangmanImagePanel extends JPanel {
     public HangmanImagePanel() {
         this.setLayout(new BorderLayout());
         this.add(imageLabel, BorderLayout.CENTER);
-        // Start with 0 mistakes image loaded (assuming it's in resources/images/hangman0.png)
+        // Start with 0 attempt used image loaded (assuming it's in resources/images/hangman0.png)
         setIncorrectGuesses(0);
     }
 
-    // This method updates the image based on the number of mistakes
+    // This method updates the image based on the number of attempts used
     public void setIncorrectGuesses(int guesses) {
         ImageIcon icon = loadImage(guesses);
         imageLabel.setIcon(icon);
     }
 
-    private ImageIcon loadImage(int mistakes) {
+    private ImageIcon loadImage(int attempt) {
         // Path should be like /images/hangman0.png
-        String path = "/images/hangman" + mistakes + ".png";
+        String path = "/images/hangman" + attempt + ".png";
 
         URL imgURL = getClass().getResource(path);
 
