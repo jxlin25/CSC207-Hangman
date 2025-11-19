@@ -35,9 +35,7 @@ public class HangmanGame {
      * @return The current Round object, or null if the game is over.
      */
     public Round getCurrentRound() {
-        if (isGameOver()) {
-            return null;
-        }
+
         return rounds.get(currentRoundIndex);
     }
 
@@ -54,14 +52,14 @@ public class HangmanGame {
         else{
             this.getCurrentRound().setLOST();
         }
-        if (!isGameOver()) {
-            currentRoundIndex++;
-            if (!this.isGameOver()) {
-                this.getCurrentRound().startRound();
-                return true;
-            }
+        if (currentRoundIndex >= rounds.size() - 1) {
+            return false; // cannot move to next round
         }
-        return false;
+
+        // Otherwise move to next
+        currentRoundIndex++;
+        this.getCurrentRound().startRound();
+        return true;
     }
 
     /**

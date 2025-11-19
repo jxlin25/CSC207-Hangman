@@ -22,17 +22,21 @@ public class HangmanImagePanel extends JPanel {
     }
 
     private ImageIcon loadImage(int attempt) {
-        // Path should be like /images/hangman0.png
         String path = "/images/hangman" + attempt + ".png";
-
         URL imgURL = getClass().getResource(path);
 
         if (imgURL != null) {
-            return new ImageIcon(imgURL);
-        } else {
-            System.err.println("Error: Image not found at " + path);
-            // Return a placeholder or null if the file isn't found
-            return null;
+            ImageIcon icon = new ImageIcon(imgURL);
+
+            // Scale image
+            Image scaled = icon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+            return new ImageIcon(scaled);
         }
+        return null;
     }
+
+//    // shrink panel
+//    public Dimension getPreferredSize() {
+//        return new Dimension(200, 200);
+//    }
 }

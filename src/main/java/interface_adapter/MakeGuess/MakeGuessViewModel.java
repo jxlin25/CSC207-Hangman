@@ -8,7 +8,6 @@ import java.beans.PropertyChangeSupport;
 public class MakeGuessViewModel extends ViewModel<MakeGuessState> {
     public static final String VIEW_NAME = "Make Guess";
 
-    public static final String GUESS_BUTTON_LABEL = "Guess";
     public MakeGuessViewModel(String viewName) {
         super(viewName);
         setState(new MakeGuessState());

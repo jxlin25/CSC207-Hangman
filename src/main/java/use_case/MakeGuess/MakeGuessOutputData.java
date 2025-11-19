@@ -9,14 +9,20 @@ public class MakeGuessOutputData {
     private String roundStatus;
     private boolean isGameOver;
     private int remainingAttempts;
+    private char[] letters;
+    private boolean[] revealedLettersBooleans;
+    private int currentRoundNumber;
 
 
-    public MakeGuessOutputData(Guess guess, boolean isGuessCorrect,  String roundStatus, boolean isGameOver, int remainingAttempts) {
+    public MakeGuessOutputData(Guess guess, boolean isGuessCorrect,  String roundStatus, boolean isGameOver, int remainingAttempts,  char[] letters, boolean[] revealedLettersBooleans,  int currentRoundNumber) {
         this.guess = guess;
         this.isGuessCorrect = isGuessCorrect;
         this.roundStatus = roundStatus;
         this.isGameOver = isGameOver;
         this.remainingAttempts = remainingAttempts;
+        this.letters = letters;
+        this.revealedLettersBooleans = revealedLettersBooleans;
+        this.currentRoundNumber = currentRoundNumber;
     }
 
     public Guess getGuess() {return this.guess;}
@@ -24,4 +30,10 @@ public class MakeGuessOutputData {
     public String  getRoundStatus() {return this.roundStatus;}
     public boolean isGameOver() {return this.isGameOver;}
     public int getRemainingAttempts() {return this.remainingAttempts;}
+    public char[] getLetters() {return this.letters;}
+    public int getCurrentRoundNumber() {return this.currentRoundNumber;}
+
+    public boolean[] getRevealedLettersBooleans() {
+        return revealedLettersBooleans;
+    }
 }

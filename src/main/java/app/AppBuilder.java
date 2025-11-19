@@ -1,5 +1,9 @@
 package app;
 
+import data_access.InMemoryHangmanDataAccessObject;
+//import data_access.InMemoryWordPuzzleDataAccessObject;
+import entity.HangmanGame;
+import interface_adapter.MakeGuess.MakeGuessState;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.GenerateWord.GenerateWordController;
 import interface_adapter.GenerateWord.GenerateWordPresenter;
@@ -8,20 +12,19 @@ import use_case.GenerateWord.GenerateWordInputBoundary;
 import use_case.GenerateWord.GenerateWordInteractor;
 import use_case.GenerateWord.GenerateWordOutputBoundary;
 import data_access.DBGenerateWordDataAccessObject;
+import use_case.MakeGuess.*;
 import view.GenerateWordView;
 import view.ViewManager;
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 import view.MakeGuessView;
 import interface_adapter.MakeGuess.MakeGuessViewModel;
 import interface_adapter.MakeGuess.MakeGuessController;
 import interface_adapter.MakeGuess.MakeGuessPresenter;
-import use_case.MakeGuess.MakeGuessInputBoundary;
-import use_case.MakeGuess.MakeGuessInteractor;
-import use_case.MakeGuess.MakeGuessOutputBoundary;
-import use_case.MakeGuess.MakeGuessWordPuzzleDataAccessInterface;
 
 public class AppBuilder {
 
@@ -68,8 +71,11 @@ public class AppBuilder {
         JFrame application = new JFrame("Hangman");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         application.add(cardPanel);
+// disable for demo
+//        viewManagerModel.setState(generateWordView.getViewName());
+//        viewManagerModel.firePropertyChange();
 
-        viewManagerModel.setState(generateWordView.getViewName());
+        viewManagerModel.setState(makeGuessView.getViewName());
         viewManagerModel.firePropertyChange();
 
         return application;
@@ -81,13 +87,35 @@ public class AppBuilder {
 
         makeGuessView = new MakeGuessView(makeGuessViewModel);
 
+//        // Cheat for demo
+//        MakeGuessState initial = makeGuessViewModel.getState();
+//        initial.setLetters("apple".toCharArray());
+//        initial.setRevealedLettersBooleans(new boolean[]{false, false, false, false, false});
+//        initial.setRemainingAttempts(6);
+//        initial.setMessage("Game started!");
+//        initial.setCurrentRoundNumber(1);
+//        makeGuessViewModel.setState(initial);
+//        makeGuessViewModel.firePropertyChanged();
+
         cardPanel.add(makeGuessView, makeGuessView.getViewName());
 
         return this;
     }
 
     public AppBuilder addMakeGuessUseCase() {
-        MakeGuessOutputBoundary makeGuessOutputBoundary = new MakeGuessPresenter(makeGuessViewModel);
+        ArrayList<String> wordList = new ArrayList<>(Arrays.asList("apple", "cat", "umbrella", "university", "hangman"));
+        InMemoryHangmanDataAccessObject hangmanGameDAO = new InMemoryHangmanDataAccessObject(new HangmanGame(wordList));
+
+        MakeGuessOutputBoundary makeGuessOutputBoundary =
+                new MakeGuessPresenter(makeGuessViewModel);
+
+        MakeGuessInputBoundary makeGuessInteractor =
+                new MakeGuessInteractor(makeGuessOutputBoundary, hangmanGameDAO);
+
+        MakeGuessController makeGuessController =
+                new MakeGuessController(makeGuessInteractor);
+
+        makeGuessView.setMakeGuessController(makeGuessController);
 
         return this;
     }
