@@ -87,15 +87,15 @@ public class AppBuilder {
 
         makeGuessView = new MakeGuessView(makeGuessViewModel);
 
-        // Cheat for demo
-        MakeGuessState initial = makeGuessViewModel.getState();
-        initial.setLetters("apple".toCharArray());
-        initial.setRevealedLettersBooleans(new boolean[]{false, false, false, false, false});
-        initial.setRemainingAttempts(6);
-        initial.setMessage("Game started!");
-        initial.setCurrentRoundNumber(1);
-        makeGuessViewModel.setState(initial);
-        makeGuessViewModel.firePropertyChanged();
+//        // Cheat for demo
+//        MakeGuessState initial = makeGuessViewModel.getState();
+//        initial.setLetters("apple".toCharArray());
+//        initial.setRevealedLettersBooleans(new boolean[]{false, false, false, false, false});
+//        initial.setRemainingAttempts(6);
+//        initial.setMessage("Game started!");
+//        initial.setCurrentRoundNumber(1);
+//        makeGuessViewModel.setState(initial);
+//        makeGuessViewModel.firePropertyChanged();
 
         cardPanel.add(makeGuessView, makeGuessView.getViewName());
 
