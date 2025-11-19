@@ -4,9 +4,10 @@ import entity.Guess;
 import entity.HangmanGame;
 import entity.Round;
 import entity.WordPuzzle;
+import use_case.InitializeFirstRound.InitializeFirstRoundDataAccessInterface;
 import use_case.MakeGuess.MakeGuessHangmanGameDataAccessInterface;
 
-public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameDataAccessInterface {
+public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameDataAccessInterface, InitializeFirstRoundDataAccessInterface {
 
     private HangmanGame currentHangmanGame;
 
@@ -76,13 +77,18 @@ public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameData
     }
 
     @Override
-    public char[] getWordPuzzle() {
+    public char[] getCurrentWordPuzzleLetters() {
         return this.getCurrentWordPuzzle().getLetters();
     }
 
     @Override
-    public boolean[] getRevealedLettersBooleans() {
+    public boolean[] getCurrentWordPuzzleRevealedLettersBooleans() {
         return this.getCurrentWordPuzzle().getRevealedLettersBooleans();
+    }
+
+    @Override
+    public String getMaskedWord(){
+        return this.getCurrentWordPuzzle().getMaskedWord();
     }
 
     @Override
@@ -90,6 +96,30 @@ public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameData
         return this.getHangmanGame().getCurrentRoundNumber();
     }
 
+    // InitializeFirstRoundDataAccessInterface
+    @Override
+    public Round getFirstRound() {
+        return this.currentHangmanGame.getRound(0);
+    }
 
+    @Override
+    public String getFirstMaskedWord() {
+        return this.getFirstWordPuzzle().getMaskedWord();
+    }
+
+    @Override
+    public WordPuzzle getFirstWordPuzzle() {
+        return this.getFirstRound().getWordPuzzle();
+    }
+
+    @Override
+    public int getFirstRoundNumber() {
+        return 1;
+    }
+
+    @Override
+    public int getFirstRoundAttempt() {
+        return this.getFirstRound().getAttempt();
+    }
 }
 

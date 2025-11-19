@@ -59,7 +59,7 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
         }
 
         MakeGuessOutputData outputData =
-                new MakeGuessOutputData(guess, isGuessCorrect, roundStatus, isGameOver, remainingAttempts, this.hangmanGameDAO.getWordPuzzle(), this.hangmanGameDAO.getRevealedLettersBooleans(), this.hangmanGameDAO.getCurrentRoundNumber());
+                new MakeGuessOutputData(guess, isGuessCorrect, roundStatus, isGameOver, remainingAttempts, this.hangmanGameDAO.getCurrentRoundNumber(), this.hangmanGameDAO.getMaskedWord());
 
         presenter.updateView(outputData);
     }

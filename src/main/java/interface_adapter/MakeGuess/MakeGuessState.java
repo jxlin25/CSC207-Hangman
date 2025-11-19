@@ -9,9 +9,8 @@ public class MakeGuessState {
     private String roundStatus = GUESSING;
     private boolean isGameOver = false;
     private int remainingAttempts = 6;
-    private char[] letters;
-    private boolean[] revealedLettersBooleans;
     private int currentRoundNumber = 1;
+    private String maskedWord = "";
     private String message = "";
 
 
@@ -19,15 +18,14 @@ public class MakeGuessState {
 
     }
 
-    public MakeGuessState(String guessedLetter, boolean isGuessCorrect, boolean isGameOver, String roundStatus, int remainingAttempts, char[] letters, boolean[] revealedLettersBooleans, int currentRoundNumber) {
+    public MakeGuessState(String guessedLetter, boolean isGuessCorrect, boolean isGameOver, String roundStatus, int remainingAttempts, int currentRoundNumber,  String maskedWord) {
         this.guessedLetter = guessedLetter;
         this.isGuessCorrect = isGuessCorrect;
         this.isGameOver = isGameOver;
         this.roundStatus = roundStatus;
         this.remainingAttempts = remainingAttempts;
-        this.letters = letters;
-        this.revealedLettersBooleans = revealedLettersBooleans;
         this.currentRoundNumber = currentRoundNumber;
+        this.maskedWord = maskedWord;
     }
 
     public String getGuessedLetter() {
@@ -77,24 +75,18 @@ public class MakeGuessState {
         this.remainingAttempts = remainingAttempts;
     }
 
-    public char[] getLetters() {
-        return letters;
-    }
-    public void setLetters(char[] letters) {
-        this.letters = letters;
-    }
-    public boolean[] getRevealedLettersBooleans() {
-        return revealedLettersBooleans;
-    }
-    public void setRevealedLettersBooleans(boolean[] revealedLettersBooleans) {
-        this.revealedLettersBooleans = revealedLettersBooleans;
-    }
-
     public int getCurrentRoundNumber() {
         return currentRoundNumber;
     }
     public void setCurrentRoundNumber(int currentRoundNumber) {
         this.currentRoundNumber = currentRoundNumber;
+    }
+
+    public String getMaskedWord() {
+        return maskedWord;
+    }
+    public void setMaskedWord(String maskedWord) {
+        this.maskedWord = maskedWord;
     }
 }
 
