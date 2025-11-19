@@ -1,8 +1,6 @@
 package app;
 
 import javax.swing.*;
-//import use_case.MakeGuess.MakeGuessWordPuzzleDataAccessInterface;
-//import use_case.MakeGuess.MakeGuessWordPuzzleDataAccessInterface;
 import network.*;
 import view.RoomJoinView;
 import interface_adapter.Room.RoomJoinController;
