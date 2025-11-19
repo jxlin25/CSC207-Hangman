@@ -1,7 +1,6 @@
 package app;
 
 import data_access.InMemoryHangmanDataAccessObject;
-//import data_access.InMemoryWordPuzzleDataAccessObject;
 import entity.HangmanGame;
 import interface_adapter.InitializeFirstRound.InitializeFirstRoundController;
 import interface_adapter.InitializeFirstRound.InitializeFirstRoundPresenter;
