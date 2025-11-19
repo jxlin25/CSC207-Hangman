@@ -6,14 +6,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class RoomJoinController implements RoomJoinView.Controller {
     private RoomJoinInteractor interactor;
+    private String username;
 
     public RoomJoinController(RoomJoinInteractor interactor) {
         this.interactor = interactor;
+//        this.username = username;
     }
 
     @Override
-    public void onJoinRoom(int roomId) {
-        // Your actual business logic here
+    public void onJoinRoom(int roomId, String username) {
 //        interactor.joinRoom(roomId);
 //
         interactor.checkRoomExists(roomId, new RoomJoinInteractor.RoomCheckCallback() {
@@ -21,7 +22,7 @@ public class RoomJoinController implements RoomJoinView.Controller {
             public void onRoomChecked(int roomId, boolean exists) {
                 if (exists) {
                     System.out.println("Room " + roomId + " exists!");
-                    interactor.joinRoom(roomId);
+                    interactor.joinRoom(roomId, username);
                 } else {
                     System.out.println("Room " + roomId + " does not exist!");
                 }
@@ -32,27 +33,25 @@ public class RoomJoinController implements RoomJoinView.Controller {
                 System.out.println("Error: " + message);
             }
         });
-        // Or whatever your controller needs to do
     }
 
-    public void onCreateRoom() {
-        createRoomWithRetry(3, 1);
+    public void onCreateRoom(String username) {
+        createRoomWithRetry(3, 1, username);
     }
 
-    public void createRoomWithRetry(int maxAttempt, int currentAttempt) {
+    public void createRoomWithRetry(int maxAttempt, int currentAttempt, String username) {
         if (currentAttempt > maxAttempt) {
             System.out.println("Failed to create room after " + currentAttempt + " attempts");
-            // for all messages, try to reroute or deliver it back to the view
         }
         int roomId = (int) (Math.random() * 9000) + 1000;
         interactor.checkRoomExists(roomId, new RoomJoinInteractor.RoomCheckCallback() {
             @Override
             public void onRoomChecked(int roomId, boolean exists) {
                 if (!exists) {
-                    interactor.createRoom(roomId);
+                    interactor.createRoom(roomId, username);
                 } else {
                     System.out.println("Room id exists, trying a different one...");
-                    createRoomWithRetry(maxAttempt, currentAttempt + 1);
+                    createRoomWithRetry(maxAttempt, currentAttempt + 1, username);
                 }
             }
 
@@ -60,7 +59,7 @@ public class RoomJoinController implements RoomJoinView.Controller {
             public void onError(String message) {
                 System.out.println("error: " + message);
                 System.out.println("retrying...");
-                createRoomWithRetry(maxAttempt, currentAttempt + 1);
+                createRoomWithRetry(maxAttempt, currentAttempt + 1, username);
             }
         });
 

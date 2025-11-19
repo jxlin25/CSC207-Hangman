@@ -7,22 +7,20 @@ import use_case.Room.RoomJoinInteractor;
 public class RoomJoinView extends JFrame {
 
     private final JTextField roomIdField = new JTextField(20);
+    private final JTextField usernameField = new JTextField(20);
     private final JButton joinButton = new JButton("Join Room");
-    private final JLabel messageLabel = new JLabel();
     private final JButton createButton = new JButton("Create Room");
-//    RoomJoinInteractor interactor = new RoomJoinInteractor();
-//    RoomJoinController controller = new RoomJoinController(interactor);
+    private final JLabel messageLabel = new JLabel();
     private RoomJoinInteractor interactor;
 
     public void RoomJoinController(RoomJoinInteractor interactor) {
         this.interactor = interactor;
     }
 
-
-    // Controller interface to decouple UI from logic
+    // Updated Controller interface to include username
     public interface Controller {
-        void onJoinRoom(int roomId);
-        void onCreateRoom();
+        void onJoinRoom(int roomId, String username);
+        void onCreateRoom(String username);
     }
 
     private Controller controller;
@@ -34,38 +32,57 @@ public class RoomJoinView extends JFrame {
 
     private void setupUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(300, 150);
+        setSize(300, 200); // Increased height to accommodate additional row
         setLocationRelativeTo(null);
 
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3, 1));
+        panel.setLayout(new GridLayout(4, 2)); // Changed to 4 rows, 2 columns
 
-        panel.add(new JLabel("Enter Room ID:"));
+        // Room ID row
+        panel.add(new JLabel("Room ID:"));
         panel.add(roomIdField);
+
+        // Username row
+        panel.add(new JLabel("Username:"));
+        panel.add(usernameField);
+
+        // Buttons row (spanning both columns)
         panel.add(joinButton);
         panel.add(createButton);
+
+        // Message label row (spanning both columns)
         panel.add(messageLabel);
 
         add(panel);
 
-//        createButton.addActionListener();
-
         // Button click event triggers controller method
-        createButton.addActionListener(e -> controller.onCreateRoom());
+        createButton.addActionListener(e -> {
+            String username = usernameField.getText().trim();
+            if (!username.isEmpty()) {
+                controller.onCreateRoom(username);
+            } else {
+                JOptionPane.showMessageDialog(null, "Please enter a username");
+            }
+            this.dispose();
+        });
+
         joinButton.addActionListener(e -> {
             if (controller != null) {
                 int roomId;
+                String username = usernameField.getText().trim();
 
                 try {
                     String text = roomIdField.getText().trim();
                     roomId = Integer.parseInt(text);
-                    controller.onJoinRoom(roomId);
-                    // Use roomId here
-                } catch (NumberFormatException err
-                ) {
-                    // Handle invalid input
-                    JOptionPane.showMessageDialog(null, "Please enter a valid number");
-                    roomId = 0; // or some default value
+
+                    if (!username.isEmpty()) {
+                        controller.onJoinRoom(roomId, username);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Please enter a username");
+                    }
+                    this.dispose();
+                } catch (NumberFormatException err) {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid room number");
                 }
             }
         });
@@ -76,15 +93,15 @@ public class RoomJoinView extends JFrame {
         this.controller = controller;
     }
 
-    // Display messages to the user (success, error, info)
+    // Display messages to the user
     public void showMessage(String message) {
         messageLabel.setText(message);
-
     }
 
-    // Optionally clear input field
+    // Optionally clear input fields
     public void clearInput() {
         roomIdField.setText("");
+        usernameField.setText("");
     }
 
     public static void main(String[] args) {

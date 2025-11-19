@@ -19,6 +19,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import view.RoomJoinView;
+import interface_adapter.Room.RoomJoinController;
+import use_case.Room.RoomJoinInteractor;
 
 
 import view.MakeGuessView;
@@ -43,6 +46,8 @@ public class AppBuilder {
     private MakeGuessViewModel makeGuessViewModel;
     private MakeGuessView makeGuessView;
 
+    private RoomJoinView roomJoinView;
+    private RoomJoinController roomJoinController;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -67,6 +72,15 @@ public class AppBuilder {
         return this;
     }
 
+    public AppBuilder addRoomJoinView() {
+        RoomJoinInteractor interactor = new RoomJoinInteractor();
+        roomJoinController = new RoomJoinController(interactor);
+        roomJoinView = new RoomJoinView();
+        roomJoinView.setController(roomJoinController);
+
+        return this;
+    }
+
     public JFrame build() {
         JFrame application = new JFrame("Hangman");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -74,9 +88,30 @@ public class AppBuilder {
 // disable for demo
 //        viewManagerModel.setState(generateWordView.getViewName());
 //        viewManagerModel.firePropertyChange();
+        JMenuBar menuBar = new JMenuBar();
+        JMenu gameMenu = new JMenu("Multiplayer"); // Changed from "Game" to be more clear
+        JMenuItem roomMenuItem = new JMenuItem("Join/Create Room");
+        roomMenuItem.addActionListener(e -> {
+            if (roomJoinView != null) {
+                roomJoinView.setVisible(true);
+                // Center the room join view
+                roomJoinView.setLocationRelativeTo(application);
+            } else {
+                System.out.println("roomJoinView is null!");
+            }
+        });
 
-        viewManagerModel.setState(makeGuessView.getViewName());
-        viewManagerModel.firePropertyChange();
+        gameMenu.add(roomMenuItem);
+        menuBar.add(gameMenu);
+        application.setJMenuBar(menuBar);
+
+        // Add the main content
+        application.add(cardPanel);
+
+        if (makeGuessView != null) {
+            viewManagerModel.setState(makeGuessView.getViewName());
+            viewManagerModel.firePropertyChange();
+        }
 
         return application;
     }
