@@ -103,6 +103,7 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         System.out.println(state.getRemainingAttempts());
         System.out.println(state.isGuessCorrect());
         System.out.println(state.isGameOver());
+        System.out.println("----------------------------");
 
         if (!state.isGameOver()) {
             int maxAttempts = 6; // can be changed by difficulty level setting
@@ -124,27 +125,8 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
             this.attemptsLabel.setText("Attempts left: " + remainingAttempts);
 
 
-            // Update the word puzzle display
-            char[] letters = state.getLetters();
-            boolean[] revealed = state.getRevealedLettersBooleans();
-            char[] updatedDisplay = new char[letters.length * 2];
-            if (letters != null && revealed != null && letters.length == revealed.length) {
-
-                for (int i = 0; i < letters.length; i++) {
-
-                    // either reveal the letter OR use '_'
-                    if (revealed[i]) {
-                        updatedDisplay[i * 2] = letters[i];
-                    } else {
-                        updatedDisplay[i * 2] = '_';
-                    }
-
-                    // add space after each letter
-                    updatedDisplay[i * 2 + 1] = ' ';
-                }
-            }
-            this.wordPuzzleLabel.setText(String.valueOf(updatedDisplay));
-            System.out.println(state.getRoundStatus());
+            // Update the displayed word
+            this.wordPuzzleLabel.setText(state.getMaskedWord());
         }
         else{
             JOptionPane.showMessageDialog(

@@ -39,6 +39,16 @@ public class HangmanGame {
         return rounds.get(currentRoundIndex);
     }
 
+    public Round getRound(int index){
+        if(index >= 0 && index < this.rounds.size()){
+            return this.rounds.get(index);
+        }
+        else{
+            return null;
+        }
+
+    }
+
 
 
     /**

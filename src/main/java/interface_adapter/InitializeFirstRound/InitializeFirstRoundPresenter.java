@@ -1,28 +1,33 @@
-package interface_adapter.MakeGuess;
+package interface_adapter.InitializeFirstRound;
 
-import use_case.MakeGuess.MakeGuessOutputBoundary;
+import interface_adapter.MakeGuess.MakeGuessState;
+import interface_adapter.MakeGuess.MakeGuessViewModel;
+import use_case.InitializeFirstRound.InitializeFirstRoundOutputBoundary;
+import use_case.InitializeFirstRound.InitializeFirstRoundOutputData;
 import use_case.MakeGuess.MakeGuessOutputData;
 
 import static Constant.StatusConstant.*;
 
-public class MakeGuessPresenter implements MakeGuessOutputBoundary {
+public class InitializeFirstRoundPresenter implements InitializeFirstRoundOutputBoundary {
 
     private final MakeGuessViewModel makeGuessViewModel;
 
-    public MakeGuessPresenter(MakeGuessViewModel makeGuessViewModel) {
+    public InitializeFirstRoundPresenter(MakeGuessViewModel makeGuessViewModel) {
+
         this.makeGuessViewModel = makeGuessViewModel;
     }
 
+
     @Override
-    public void updateView(MakeGuessOutputData outputData) {
+    public void initializeView(InitializeFirstRoundOutputData outputData) {
 
         MakeGuessState state = makeGuessViewModel.getState();
 
 
-        state.setGuessedLetter(String.valueOf(outputData.getGuess().getLetter()));
-        state.setGuessCorrect(outputData.isGuessCorrect());
-        state.setRoundStatus(outputData.getRoundStatus());
-        state.setGameOver(outputData.isGameOver());
+        state.setGuessedLetter(null);
+        state.setGuessCorrect(false);
+        state.setRoundStatus(GUESSING);
+        state.setGameOver(false);
         state.setRemainingAttempts(outputData.getRemainingAttempts());
         state.setCurrentRoundNumber(outputData.getCurrentRoundNumber());
         state.setMaskedWord(outputData.getMaskedWord());
@@ -62,10 +67,10 @@ public class MakeGuessPresenter implements MakeGuessOutputBoundary {
 //                }
 //            }
 //        }
-
-
         makeGuessViewModel.setState(state);
         makeGuessViewModel.firePropertyChanged();
 
     }
+
+
 }
