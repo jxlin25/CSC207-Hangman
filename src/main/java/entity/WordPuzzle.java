@@ -89,7 +89,7 @@ public class WordPuzzle {
     // Reveal all occurrences of a given letter
     public void revealLetter(char letter) {
         for (int i = 0; i < letters.length; i++) {
-            if (letters[i] == letter) {
+            if (Character.toLowerCase(letters[i]) == letter) {
                 this.revealedLettersBooleans[i] = true;
             }
         }
@@ -98,7 +98,7 @@ public class WordPuzzle {
     // Check if a given letter appears in the word
     public boolean isLetterInWord(char letter) {
         for (int i = 0; i < letters.length; i++) {
-            if (letters[i] == letter) {
+            if (Character.toLowerCase(letters[i]) == letter) {
                 return true;
             }
         }
@@ -108,7 +108,7 @@ public class WordPuzzle {
     // Check if a given letter is in the word and is revealed
     public boolean isLetterRevealed(char letter) {
         for (int i = 0; i < letters.length; i++) {
-            if (letters[i] == letter) {
+            if (Character.toLowerCase(letters[i]) == letter) {
                 if (revealedLettersBooleans[i]) {
                     return true;
                 }
@@ -120,7 +120,7 @@ public class WordPuzzle {
     // Check if a given letter is in the word and is hidden
     public boolean isLetterHidden(char letter) {
         for (int i = 0; i < letters.length; i++) {
-            if (letters[i] == letter) {
+            if (Character.toLowerCase(letters[i]) == letter) {
                 if (!revealedLettersBooleans[i]) {
                     return true;
                 }

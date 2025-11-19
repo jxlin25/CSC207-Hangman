@@ -3,6 +3,8 @@ package app;
 import data_access.InMemoryHangmanDataAccessObject;
 //import data_access.InMemoryWordPuzzleDataAccessObject;
 import entity.HangmanGame;
+import interface_adapter.InitializeFirstRound.InitializeFirstRoundController;
+import interface_adapter.InitializeFirstRound.InitializeFirstRoundPresenter;
 import interface_adapter.MakeGuess.MakeGuessState;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.GenerateWord.GenerateWordController;
@@ -12,6 +14,9 @@ import use_case.GenerateWord.GenerateWordInputBoundary;
 import use_case.GenerateWord.GenerateWordInteractor;
 import use_case.GenerateWord.GenerateWordOutputBoundary;
 import data_access.DBGenerateWordDataAccessObject;
+import use_case.InitializeFirstRound.InitializeFirstRoundInputBoundary;
+import use_case.InitializeFirstRound.InitializeFirstRoundInteractor;
+import use_case.InitializeFirstRound.InitializeFirstRoundOutputBoundary;
 import use_case.MakeGuess.*;
 import view.GenerateWordView;
 import view.ViewManager;
@@ -87,6 +92,8 @@ public class AppBuilder {
 
         makeGuessView = new MakeGuessView(makeGuessViewModel);
 
+
+
 //        // Cheat for demo
 //        MakeGuessState initial = makeGuessViewModel.getState();
 //        initial.setLetters("apple".toCharArray());
@@ -103,7 +110,7 @@ public class AppBuilder {
     }
 
     public AppBuilder addMakeGuessUseCase() {
-        ArrayList<String> wordList = new ArrayList<>(Arrays.asList("apple", "cat", "umbrella", "university", "hangman"));
+        ArrayList<String> wordList = new ArrayList<>(Arrays.asList("Charizard", "cat", "umbrella", "university", "hangman"));
         InMemoryHangmanDataAccessObject hangmanGameDAO = new InMemoryHangmanDataAccessObject(new HangmanGame(wordList));
 
         MakeGuessOutputBoundary makeGuessOutputBoundary =
@@ -117,6 +124,25 @@ public class AppBuilder {
 
         makeGuessView.setMakeGuessController(makeGuessController);
 
+        // Initialize the first round to the view
+        InitializeFirstRoundOutputBoundary initializeFirstRoundOutputBoundary =
+                new InitializeFirstRoundPresenter(makeGuessViewModel);
+
+        InitializeFirstRoundInputBoundary initializeFirstRoundInteractor =
+                new InitializeFirstRoundInteractor(initializeFirstRoundOutputBoundary, hangmanGameDAO);
+
+        InitializeFirstRoundController initializeFirstRoundController =
+                new InitializeFirstRoundController(initializeFirstRoundInteractor);
+
+        initializeFirstRoundController.execute();
+
         return this;
     }
+
+//    public AppBuilder addInitializeFirstRoundUseCase() {
+//
+//
+//
+//        return this;
+//    }
 }
