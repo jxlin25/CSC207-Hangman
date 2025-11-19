@@ -4,15 +4,16 @@ import entity.Guess;
 import entity.HangmanGame;
 import entity.Round;
 import entity.WordPuzzle;
+import use_case.GenerateWord.WordPuzzleDataAccessInterface;
 import use_case.MakeGuess.MakeGuessHangmanGameDataAccessInterface;
 
-public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameDataAccessInterface {
+public class InMemoryHangmanDataAccessObject implements WordPuzzleDataAccessInterface,MakeGuessHangmanGameDataAccessInterface {
 
     private HangmanGame currentHangmanGame;
 
-    public InMemoryHangmanDataAccessObject(HangmanGame initialHangmanGame) {
-        this.currentHangmanGame = initialHangmanGame;
-    }
+
+
+    public InMemoryHangmanDataAccessObject() {}
 
     @Override
     public HangmanGame getHangmanGame() {
@@ -22,6 +23,11 @@ public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameData
     @Override
     public Round getCurrentRound() {
         return this.getHangmanGame().getCurrentRound();
+    }
+
+    @Override
+    public void setHangmanGame(HangmanGame hangmanGame) {
+        this.currentHangmanGame = hangmanGame;
     }
 
     @Override
@@ -91,5 +97,25 @@ public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameData
     }
 
 
+    @Override
+    public String getRandomWord() {
+        return "";
+    }
+
+    @Override
+    public void saveRandomWord(String randomWord) {
+
+    }
+
+    @Override
+    public String getSaveRandomWord() {
+        return "";
+    }
+
+    @Override
+    public boolean isValidWord(String word) {
+        //This always return true, because if word is not valid, it will throw error  earlier
+        return true;
+    }
 }
 

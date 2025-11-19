@@ -11,6 +11,8 @@ public interface MakeGuessHangmanGameDataAccessInterface {
 
     Round getCurrentRound();
 
+    void setHangmanGame(HangmanGame hangmanGame);
+
     void decreaseCurrentRoundAttempt();
 
     void addGuessToCurrentRound(Guess guess);

@@ -16,6 +16,7 @@ public class GenerateWordInteractor implements GenerateWordInputBoundary {
     @Override
     public void execute() {
         String word = wordPuzzleDataAccessInterface.getRandomWord();
+        wordPuzzleDataAccessInterface.saveRandomWord(word);
         if (wordPuzzleDataAccessInterface.isValidWord(word)) {
             WordPuzzle puzzle = new WordPuzzle(word.toCharArray());
             generateWordOutputBoundary.prepareSuccessView(new GenerateWordOutputData(puzzle));
