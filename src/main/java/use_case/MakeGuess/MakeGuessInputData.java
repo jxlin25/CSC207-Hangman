@@ -2,13 +2,19 @@ package use_case.MakeGuess;
 
 import entity.Guess;
 
-public class MakeGuessInputData {
+/**
+ * Class representing input data of the Make Guess use case.
+ */
+public final class MakeGuessInputData {
 
-    final  private Guess guess;
+    private final Guess guess;
+
     public MakeGuessInputData(Guess guess) {
         this.guess = guess;
     }
+
     public Guess getGuess() {
         return guess;
     }
+
 }

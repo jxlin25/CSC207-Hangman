@@ -1,8 +1,7 @@
 package use_case.MakeGuess;
 
-import entity.Guess;
-
 import static Constant.StatusConstant.*;
+import entity.Guess;
 
 public class MakeGuessInteractor implements MakeGuessInputBoundary {
 
@@ -17,14 +16,13 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
     @Override
     public void execute(MakeGuessInputData inputData) {
 
-        Guess guess = inputData.getGuess();
-
+        final Guess guess = inputData.getGuess();
 
         // add the guess to the current round
         this.hangmanGameDAO.addGuessToCurrentRound(guess);
 
         // Check if the letter in the guess exist in the word puzzle
-        boolean isGuessCorrect = hangmanGameDAO.isGuessCorrect(guess);
+        final boolean isGuessCorrect = hangmanGameDAO.isGuessCorrect(guess);
 
         String roundStatus = GUESSING;
         boolean isGameOver = false;
@@ -34,7 +32,8 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
             this.hangmanGameDAO.revealLetter(guess);
 
             // If this guess leads to the completion of the puzzle, mark the current round as WON and start next round
-            if (this.hangmanGameDAO.isPuzzleComplete()){
+            if (this.hangmanGameDAO.isPuzzleComplete()) {
+
                 roundStatus = WON;
 
                 if (!this.hangmanGameDAO.setCurrentRoundWonAndStartNextRound()) {
@@ -42,14 +41,14 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
                 }
             }
         }
-        else{
+        else {
             // Deduct 1 attempt if the guess is wrong
             this.hangmanGameDAO.decreaseCurrentRoundAttempt();
         }
-        int remainingAttempts = this.hangmanGameDAO.getCurrentRoundAttempt();
+        final int remainingAttempts = this.hangmanGameDAO.getCurrentRoundAttempt();
 
-
-        // If the guess is the last guess and does not complete the puzzle, mark the current round as LOST and start next round
+        // If the guess is the last guess and does not complete the puzzle,
+        // mark the current round as LOST and start next round
         if (!this.hangmanGameDAO.isPuzzleComplete() && this.hangmanGameDAO.getCurrentRoundAttempt() == 0) {
             roundStatus = LOST;
 
@@ -58,8 +57,14 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
             }
         }
 
-        MakeGuessOutputData outputData =
-                new MakeGuessOutputData(guess, isGuessCorrect, roundStatus, isGameOver, remainingAttempts, this.hangmanGameDAO.getCurrentRoundNumber(), this.hangmanGameDAO.getMaskedWord());
+        final MakeGuessOutputData outputData = new MakeGuessOutputData(
+                guess,
+                isGuessCorrect,
+                roundStatus,
+                isGameOver,
+                remainingAttempts,
+                this.hangmanGameDAO.getCurrentRoundNumber(),
+                this.hangmanGameDAO.getMaskedWord());
 
         presenter.updateView(outputData);
     }
