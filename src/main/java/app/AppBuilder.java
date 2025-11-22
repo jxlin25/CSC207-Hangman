@@ -33,11 +33,15 @@ import interface_adapter.MakeGuess.MakeGuessViewModel;
 import interface_adapter.MakeGuess.MakeGuessController;
 import interface_adapter.MakeGuess.MakeGuessPresenter;
 
+import presenter.MakeGuessPresenter;
+import stats.InMemorySessionStatisticsRepository;
+import view.DifficultyDialog;
+import view.DifficultyDialog.Difficulty;
+
 public class AppBuilder {
 
-    private final JPanel cardPanel = new JPanel();
     private final CardLayout cardLayout = new CardLayout();
-
+    private final JPanel cardPanel = new JPanel(cardLayout);
     private final ViewManagerModel viewManagerModel = new ViewManagerModel();
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
@@ -52,6 +56,10 @@ public class AppBuilder {
 
     private RoomJoinView roomJoinView;
     private RoomJoinController roomJoinController;
+
+    private DBGenerateWordDataAccessObject wordDAO;
+    private MakeGuessPresenter makeGuessPresenter;
+    private Runnable startNewRoundCallback;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -120,6 +128,30 @@ public class AppBuilder {
         return application;
     }
 
+    public AppBuilder addDifficultySelection() {
+        // Show dialog before game starts; store difficulty in DAO and configure attempts mapping
+        JFrame tempOwner = new JFrame(); // or reuse main app frame once built
+        DifficultyDialog dialog = new DifficultyDialog(tempOwner, selection -> {
+            DBGenerateWordDataAccessObject.Difficulty d;
+            int attempts;
+            switch (selection) {
+                case EASY:   d = DBGenerateWordDataAccessObject.Difficulty.EASY;   attempts = 8; break;
+                case MEDIUM: d = DBGenerateWordDataAccessObject.Difficulty.MEDIUM; attempts = 6; break;
+                case HARD:   d = DBGenerateWordDataAccessObject.Difficulty.HARD;   attempts = 5; break;
+                default:     d = DBGenerateWordDataAccessObject.Difficulty.MEDIUM; attempts = 6;
+            }
+            if (wordDAO == null) wordDAO = new DBGenerateWordDataAccessObject(d);
+            else wordDAO.setDifficulty(d);
+
+            // Configure attempts in your HangmanGame / Round builder here
+            // e.g., hangmanGame.setAttemptsPerRound(attempts);
+            // Ensure your current round respects this setting.
+        });
+        dialog.setVisible(true);
+        tempOwner.dispose();
+        return this;
+    }
+
     public AppBuilder addMakeGuessView() {
 
         makeGuessViewModel = new MakeGuessViewModel(MakeGuessViewModel.VIEW_NAME);
@@ -158,7 +190,19 @@ public class AppBuilder {
 
         makeGuessView.setMakeGuessController(makeGuessController);
 
-        // Initialize the first round to the view
+        // assemble interactor with presenter that also handles game over dialog and stats
+        makeGuessPresenter = new MakeGuessPresenter(
+                makeGuessViewModel,
+                statsRepo,
+                () -> {
+                    if (startNewRoundCallback != null) startNewRoundCallback.run();
+                }
+        );
+        MakeGuessInteractor interactor = new MakeGuessInteractor(hangmanGameDAO, wordPuzzleDAO, makeGuessPresenter);
+        MakeGuessController controller = new MakeGuessController(interactor);
+        makeGuessView.setController(controller);
+
+    // Initialize the first round to the view
         InitializeFirstRoundOutputBoundary initializeFirstRoundOutputBoundary =
                 new InitializeFirstRoundPresenter(makeGuessViewModel);
 
@@ -179,4 +223,8 @@ public class AppBuilder {
 //
 //        return this;
 //    }
+    public AppBuilder setStartNewRoundCallback(Runnable startNewRound) {
+        this.startNewRoundCallback = startNewRound;
+        return this;
+        }
 }
