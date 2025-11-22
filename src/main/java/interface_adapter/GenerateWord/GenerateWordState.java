@@ -2,6 +2,10 @@ package interface_adapter.GenerateWord;
 
 import entity.WordPuzzle;
 
+/**
+ * The state for the Generate Word View Model.
+ */
+
 public class GenerateWordState {
     private WordPuzzle wordPuzzle = null;
 

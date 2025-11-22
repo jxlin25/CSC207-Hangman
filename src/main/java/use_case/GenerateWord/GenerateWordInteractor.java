@@ -7,6 +7,9 @@ import use_case.MakeGuess.MakeGuessHangmanGameDataAccessInterface;
 
 import java.util.ArrayList;
 
+/**
+ * The Generate Word Interactor.
+ */
 public class GenerateWordInteractor implements GenerateWordInputBoundary {
 
     private final WordPuzzleDataAccessInterface wordPuzzleDataAccessInterface;
