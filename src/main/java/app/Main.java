@@ -8,15 +8,12 @@ public class Main {
 
         JFrame app = new AppBuilder()
                 .addGenerateWordView()
-                .addGenerateWordUseCase()
                 .addMakeGuessView()
+                .addGenerateWordUseCase()
                 .addMakeGuessUseCase()
-
                 .build();
 
         app.pack();
         app.setVisible(true);
     }
-
-
 }

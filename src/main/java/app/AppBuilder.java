@@ -1,9 +1,6 @@
 package app;
 
 import data_access.InMemoryHangmanDataAccessObject;
-//import data_access.InMemoryWordPuzzleDataAccessObject;
-import entity.HangmanGame;
-import interface_adapter.MakeGuess.MakeGuessState;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.GenerateWord.GenerateWordController;
 import interface_adapter.GenerateWord.GenerateWordPresenter;
@@ -17,9 +14,6 @@ import view.GenerateWordView;
 import view.ViewManager;
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-
 
 import view.MakeGuessView;
 import interface_adapter.MakeGuess.MakeGuessViewModel;
@@ -34,16 +28,16 @@ public class AppBuilder {
     private final ViewManagerModel viewManagerModel = new ViewManagerModel();
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
+    //DAO
     final DBGenerateWordDataAccessObject generateWordAccessObject = new DBGenerateWordDataAccessObject();
     final InMemoryHangmanDataAccessObject hangmanGameDAO = new InMemoryHangmanDataAccessObject();
 
+    //TODO if we need add view
     private GenerateWordViewModel generateWordViewModel;
-    private GenerateWordView generateWordView;
-    private GenerateWordController generateWordController;
-
     private MakeGuessViewModel makeGuessViewModel;
-    private MakeGuessView makeGuessView;
 
+    private GenerateWordView generateWordView;
+    private MakeGuessView makeGuessView;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -56,11 +50,24 @@ public class AppBuilder {
         return this;
     }
 
+    public AppBuilder addMakeGuessView() {
+
+        makeGuessViewModel = new MakeGuessViewModel();
+
+        makeGuessView = new MakeGuessView(makeGuessViewModel);
+
+        cardPanel.add(makeGuessView, makeGuessView.getViewName());
+
+        return this;
+    }
+
+    //TODO if we have any new view, put it aboard, and usecase below
+
     public AppBuilder addGenerateWordUseCase() {
 
-        GenerateWordOutputBoundary GenerateWordOutputBoundary = new GenerateWordPresenter(generateWordViewModel);
+        GenerateWordOutputBoundary GenerateWordOutputBoundary = new GenerateWordPresenter(generateWordViewModel, makeGuessViewModel, viewManagerModel);
 
-        GenerateWordInputBoundary generateWordInteractor = new GenerateWordInteractor(generateWordAccessObject, GenerateWordOutputBoundary);
+        GenerateWordInputBoundary generateWordInteractor = new GenerateWordInteractor(generateWordAccessObject, GenerateWordOutputBoundary,hangmanGameDAO);
 
         GenerateWordController controller = new GenerateWordController(generateWordInteractor);
 
@@ -68,53 +75,26 @@ public class AppBuilder {
         return this;
     }
 
-    public JFrame build() {
-        JFrame application = new JFrame("Hangman");
-        application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        application.add(cardPanel);
-        viewManagerModel.setState(generateWordView.getViewName());
-        viewManagerModel.firePropertyChange();
-
-
-        return application;
-    }
-
-    public AppBuilder addMakeGuessView() {
-
-        makeGuessViewModel = new MakeGuessViewModel(MakeGuessViewModel.VIEW_NAME);
-
-        makeGuessView = new MakeGuessView(makeGuessViewModel);
-
-//        // Cheat for demo
-//        MakeGuessState initial = makeGuessViewModel.getState();
-//        initial.setLetters("apple".toCharArray());
-//        initial.setRevealedLettersBooleans(new boolean[]{false, false, false, false, false});
-//        initial.setRemainingAttempts(6);
-//        initial.setMessage("Game started!");
-//        initial.setCurrentRoundNumber(1);
-//        makeGuessViewModel.setState(initial);
-//        makeGuessViewModel.firePropertyChanged();
-
-        cardPanel.add(makeGuessView, makeGuessView.getViewName());
-
-        return this;
-    }
-
     public AppBuilder addMakeGuessUseCase() {
-        ArrayList<String> wordList = new ArrayList<>(Arrays.asList(generateWordAccessObject.getSaveRandomWord()));
-        hangmanGameDAO.setHangmanGame(new HangmanGame(wordList));
+        MakeGuessOutputBoundary makeGuessPresenter = new MakeGuessPresenter(makeGuessViewModel);
 
-        MakeGuessOutputBoundary makeGuessOutputBoundary =
-                new MakeGuessPresenter(makeGuessViewModel);
+        MakeGuessInputBoundary makeGuessInteractor = new MakeGuessInteractor(makeGuessPresenter, hangmanGameDAO);
 
-        MakeGuessInputBoundary makeGuessInteractor =
-                new MakeGuessInteractor(makeGuessOutputBoundary, hangmanGameDAO);
-
-        MakeGuessController makeGuessController =
-                new MakeGuessController(makeGuessInteractor);
+        MakeGuessController makeGuessController = new MakeGuessController(makeGuessInteractor);
 
         makeGuessView.setMakeGuessController(makeGuessController);
 
         return this;
+    }
+
+    public JFrame build() {
+        JFrame application = new JFrame("Hangman");
+        application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        application.add(cardPanel);
+
+        viewManagerModel.setState(generateWordView.getViewName());
+        viewManagerModel.firePropertyChange();
+
+        return application;
     }
 }
