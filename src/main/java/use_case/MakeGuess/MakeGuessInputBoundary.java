@@ -3,7 +3,7 @@ package use_case.MakeGuess;
 public interface MakeGuessInputBoundary {
 
     /**
-     * Executes the Make Guess use case.
+     * Executes the MakeGuess use case.
      *
      * @param makeGuessInputData the input data that is required for the interactor to process
      */

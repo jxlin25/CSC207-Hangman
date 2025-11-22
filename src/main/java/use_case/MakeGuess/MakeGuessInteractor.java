@@ -3,6 +3,9 @@ package use_case.MakeGuess;
 import static Constant.StatusConstant.*;
 import entity.Guess;
 
+/**
+ * The Interactor for the MakeGuess use case.
+ */
 public class MakeGuessInteractor implements MakeGuessInputBoundary {
 
     private final MakeGuessOutputBoundary presenter;

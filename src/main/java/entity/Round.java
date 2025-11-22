@@ -4,9 +4,12 @@ import java.util.ArrayList;
 
 import static Constant.StatusConstant.*;
 
+/**
+ * Represents a single round of Hangman game, storing the target word,
+ * its status quo, and array of all the guesses been made in the round and the attempts left.
+ */
 public class Round {
-    //leave for multiplayer
-    //private String roundId;
+
     private WordPuzzle wordPuzzle;
     private String status;
     private ArrayList<Guess> guesses;
@@ -17,10 +20,6 @@ public class Round {
         this.status = WAITING;
         this.guesses = new ArrayList<Guess>();
         this.attempt = 6; //can be modified once all the difficulty levels are implemented
-    }
-
-    public boolean isGuessCorrect(Guess guess) {
-        return this.wordPuzzle.isLetterHidden(guess.getLetter());
     }
 
     public String getStatus() {
@@ -61,6 +60,15 @@ public class Round {
 
     public WordPuzzle getWordPuzzle() {
         return wordPuzzle;
+    }
+
+    /**
+     * Checks if a guess is correct to the word puzzle.
+     * @param guess A guess that is going to be assessed
+     * @return boolean of whether the guess is correct
+     */
+    public boolean isGuessCorrect(Guess guess) {
+        return this.wordPuzzle.isLetterHidden(guess.getLetter());
     }
 }
 

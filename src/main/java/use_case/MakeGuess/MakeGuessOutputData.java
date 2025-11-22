@@ -2,7 +2,9 @@ package use_case.MakeGuess;
 
 import entity.Guess;
 
-// With the output data here, the program can determine whether reveal the letter in the guess or not
+/**
+ * Class representing output data of the Make Guess use case.
+ */
 public class MakeGuessOutputData {
     private final Guess guess;
     private final boolean isGuessCorrect;
