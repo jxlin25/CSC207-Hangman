@@ -14,10 +14,10 @@ public class Main {
         server.start();
         JFrame app = new AppBuilder()
                 .addGenerateWordView()
-                .addGenerateWordUseCase()
                 .addMakeGuessView()
-                .addMakeGuessUseCase()
                 .addRoomJoinView()
+                .addGenerateWordUseCase()
+                .addMakeGuessUseCase()
                 .build();
         app.setSize(800, 600);
         app.setLocationRelativeTo(null);
