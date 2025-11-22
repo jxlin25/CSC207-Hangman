@@ -1,15 +1,9 @@
 package view;
 
-import entity.WordPuzzle;
 import interface_adapter.GenerateWord.GenerateWordController;
-import interface_adapter.GenerateWord.GenerateWordState;
 import interface_adapter.GenerateWord.GenerateWordViewModel;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 public class GenerateWordView extends JPanel {
     private final String viewName = "Generate Word";

@@ -80,8 +80,8 @@ public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameData
     }
 
     @Override
-    public char[] getWordPuzzle() {
-        return this.getCurrentWordPuzzle().getLetters();
+    public char[] getCurrentWordPuzzleLetters() {
+        return new char[0];
     }
 
     @Override

@@ -15,15 +15,14 @@ public class Main {
         JFrame app = new AppBuilder()
                 .addGenerateWordView()
                 .addMakeGuessView()
+                .addRoomJoinView()
                 .addGenerateWordUseCase()
                 .addMakeGuessUseCase()
-                .addRoomJoinView()
                 .build();
         app.setSize(800, 600);
         app.setLocationRelativeTo(null);
         app.setVisible(true);
     }
-}
 }
 
 

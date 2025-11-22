@@ -45,19 +45,25 @@ public class AppBuilder {
     final DBGenerateWordDataAccessObject generateWordAccessObject = new DBGenerateWordDataAccessObject();
     final InMemoryHangmanDataAccessObject hangmanGameDAO = new InMemoryHangmanDataAccessObject();
 
-    //TODO if we need add view
+    //View Model
     private GenerateWordViewModel generateWordViewModel;
     private MakeGuessViewModel makeGuessViewModel;
 
+    //View
     private GenerateWordView generateWordView;
     private MakeGuessView makeGuessView;
-
     private RoomJoinView roomJoinView;
+
+    //Controller
     private RoomJoinController roomJoinController;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
     }
+
+    /**
+     * View
+     */
 
     public AppBuilder addGenerateWordView() {
         generateWordViewModel = new GenerateWordViewModel();
@@ -67,27 +73,9 @@ public class AppBuilder {
     }
 
     public AppBuilder addMakeGuessView() {
-
         makeGuessViewModel = new MakeGuessViewModel();
-
         makeGuessView = new MakeGuessView(makeGuessViewModel);
-
         cardPanel.add(makeGuessView, makeGuessView.getViewName());
-
-        return this;
-    }
-
-    //TODO if we have any new view, put it aboard, and usecase below
-
-    public AppBuilder addGenerateWordUseCase() {
-
-        GenerateWordOutputBoundary GenerateWordOutputBoundary = new GenerateWordPresenter(generateWordViewModel, makeGuessViewModel, viewManagerModel);
-
-        GenerateWordInputBoundary generateWordInteractor = new GenerateWordInteractor(generateWordAccessObject, GenerateWordOutputBoundary,hangmanGameDAO);
-
-        GenerateWordController controller = new GenerateWordController(generateWordInteractor);
-
-        generateWordView.setGenerateWordController(controller);
         return this;
     }
 
@@ -96,19 +84,29 @@ public class AppBuilder {
         roomJoinController = new RoomJoinController(interactor);
         roomJoinView = new RoomJoinView();
         roomJoinView.setController(roomJoinController);
+        return this;
+    }
 
+    //TODO if we have any new view, put it aboard, and usecase below
+
+    /**
+     *UseCase
+     */
+
+    public AppBuilder addGenerateWordUseCase() {
+
+        GenerateWordOutputBoundary GenerateWordOutputBoundary = new GenerateWordPresenter(generateWordViewModel, makeGuessViewModel, viewManagerModel);
+        GenerateWordInputBoundary generateWordInteractor = new GenerateWordInteractor(generateWordAccessObject, GenerateWordOutputBoundary,hangmanGameDAO);
+        GenerateWordController controller = new GenerateWordController(generateWordInteractor);
+        generateWordView.setGenerateWordController(controller);
         return this;
     }
 
     public AppBuilder addMakeGuessUseCase() {
         MakeGuessOutputBoundary makeGuessPresenter = new MakeGuessPresenter(makeGuessViewModel);
-
         MakeGuessInputBoundary makeGuessInteractor = new MakeGuessInteractor(makeGuessPresenter, hangmanGameDAO);
-
         MakeGuessController makeGuessController = new MakeGuessController(makeGuessInteractor);
-
         makeGuessView.setMakeGuessController(makeGuessController);
-
         return this;
     }
 
@@ -116,9 +114,11 @@ public class AppBuilder {
         JFrame application = new JFrame("Hangman");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         application.add(cardPanel);
+
 // disable for demo
 //        viewManagerModel.setState(generateWordView.getViewName());
 //        viewManagerModel.firePropertyChange();
+
         JMenuBar menuBar = new JMenuBar();
         JMenu gameMenu = new JMenu("Multiplayer"); // Changed from "Game" to be more clear
         JMenuItem roomMenuItem = new JMenuItem("Join/Create Room");
@@ -139,73 +139,6 @@ public class AppBuilder {
         viewManagerModel.setState(generateWordView.getViewName());
         viewManagerModel.firePropertyChange();
         // Add the main content
-        application.add(cardPanel);
-
-        if (makeGuessView != null) {
-            viewManagerModel.setState(makeGuessView.getViewName());
-            viewManagerModel.firePropertyChange();
-        }
-
         return application;
     }
-
-    public AppBuilder addMakeGuessView() {
-
-        makeGuessViewModel = new MakeGuessViewModel(MakeGuessViewModel.VIEW_NAME);
-
-        makeGuessView = new MakeGuessView(makeGuessViewModel);
-
-
-
-//        // Cheat for demo
-//        MakeGuessState initial = makeGuessViewModel.getState();
-//        initial.setLetters("apple".toCharArray());
-//        initial.setRevealedLettersBooleans(new boolean[]{false, false, false, false, false});
-//        initial.setRemainingAttempts(6);
-//        initial.setMessage("Game started!");
-//        initial.setCurrentRoundNumber(1);
-//        makeGuessViewModel.setState(initial);
-//        makeGuessViewModel.firePropertyChanged();
-
-        cardPanel.add(makeGuessView, makeGuessView.getViewName());
-
-        return this;
-    }
-
-    public AppBuilder addMakeGuessUseCase() {
-        ArrayList<String> wordList = new ArrayList<>(Arrays.asList("Charizard", "cat", "umbrella", "university", "hangman"));
-        InMemoryHangmanDataAccessObject hangmanGameDAO = new InMemoryHangmanDataAccessObject(new HangmanGame(wordList));
-
-        MakeGuessOutputBoundary makeGuessOutputBoundary =
-                new MakeGuessPresenter(makeGuessViewModel);
-
-        MakeGuessInputBoundary makeGuessInteractor =
-                new MakeGuessInteractor(makeGuessOutputBoundary, hangmanGameDAO);
-
-        MakeGuessController makeGuessController =
-                new MakeGuessController(makeGuessInteractor);
-
-        makeGuessView.setMakeGuessController(makeGuessController);
-
-        // Initialize the first round to the view
-        InitializeFirstRoundOutputBoundary initializeFirstRoundOutputBoundary =
-                new InitializeFirstRoundPresenter(makeGuessViewModel);
-
-        InitializeFirstRoundInputBoundary initializeFirstRoundInteractor =
-                new InitializeFirstRoundInteractor(initializeFirstRoundOutputBoundary, hangmanGameDAO);
-
-        InitializeFirstRoundController initializeFirstRoundController =
-                new InitializeFirstRoundController(initializeFirstRoundInteractor);
-
-        initializeFirstRoundController.execute();
-
-        return this;
-    }
-
-//    public AppBuilder addInitializeFirstRoundUseCase() {
-//
-//
-//
-//        return this;
-//    }
 }
