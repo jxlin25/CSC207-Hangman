@@ -14,8 +14,8 @@ public class Main {
         server.start();
         JFrame app = new AppBuilder()
                 .addGenerateWordView()
-                .addGenerateWordUseCase()
                 .addMakeGuessView()
+                .addGenerateWordUseCase()
                 .addMakeGuessUseCase()
                 .addRoomJoinView()
                 .build();
@@ -23,6 +23,7 @@ public class Main {
         app.setLocationRelativeTo(null);
         app.setVisible(true);
     }
+}
 }
 
 

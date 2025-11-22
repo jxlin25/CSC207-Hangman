@@ -1,6 +1,5 @@
 package interface_adapter.GenerateWord;
 
-import entity.WordPuzzle;
 import interface_adapter.ViewModel;
 
 public class GenerateWordViewModel extends ViewModel<GenerateWordState> {

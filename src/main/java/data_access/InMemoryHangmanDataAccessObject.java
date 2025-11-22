@@ -11,9 +11,7 @@ public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameData
 
     private HangmanGame currentHangmanGame;
 
-    public InMemoryHangmanDataAccessObject(HangmanGame initialHangmanGame) {
-        this.currentHangmanGame = initialHangmanGame;
-    }
+    public InMemoryHangmanDataAccessObject() {}
 
     @Override
     public HangmanGame getHangmanGame() {
@@ -23,6 +21,11 @@ public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameData
     @Override
     public Round getCurrentRound() {
         return this.getHangmanGame().getCurrentRound();
+    }
+
+    @Override
+    public void setHangmanGame(HangmanGame hangmanGame) {
+        this.currentHangmanGame = hangmanGame;
     }
 
     @Override
@@ -77,7 +80,7 @@ public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameData
     }
 
     @Override
-    public char[] getCurrentWordPuzzleLetters() {
+    public char[] getWordPuzzle() {
         return this.getCurrentWordPuzzle().getLetters();
     }
 

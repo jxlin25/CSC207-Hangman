@@ -41,13 +41,15 @@ public class AppBuilder {
     private final ViewManagerModel viewManagerModel = new ViewManagerModel();
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
+    //DAO
     final DBGenerateWordDataAccessObject generateWordAccessObject = new DBGenerateWordDataAccessObject();
+    final InMemoryHangmanDataAccessObject hangmanGameDAO = new InMemoryHangmanDataAccessObject();
 
+    //TODO if we need add view
     private GenerateWordViewModel generateWordViewModel;
-    private GenerateWordView generateWordView;
-    private GenerateWordController generateWordController;
-
     private MakeGuessViewModel makeGuessViewModel;
+
+    private GenerateWordView generateWordView;
     private MakeGuessView makeGuessView;
 
     private RoomJoinView roomJoinView;
@@ -64,11 +66,24 @@ public class AppBuilder {
         return this;
     }
 
+    public AppBuilder addMakeGuessView() {
+
+        makeGuessViewModel = new MakeGuessViewModel();
+
+        makeGuessView = new MakeGuessView(makeGuessViewModel);
+
+        cardPanel.add(makeGuessView, makeGuessView.getViewName());
+
+        return this;
+    }
+
+    //TODO if we have any new view, put it aboard, and usecase below
+
     public AppBuilder addGenerateWordUseCase() {
 
-        GenerateWordOutputBoundary GenerateWordOutputBoundary = new GenerateWordPresenter(generateWordViewModel);
+        GenerateWordOutputBoundary GenerateWordOutputBoundary = new GenerateWordPresenter(generateWordViewModel, makeGuessViewModel, viewManagerModel);
 
-        GenerateWordInputBoundary generateWordInteractor = new GenerateWordInteractor(generateWordAccessObject, GenerateWordOutputBoundary);
+        GenerateWordInputBoundary generateWordInteractor = new GenerateWordInteractor(generateWordAccessObject, GenerateWordOutputBoundary,hangmanGameDAO);
 
         GenerateWordController controller = new GenerateWordController(generateWordInteractor);
 
@@ -81,6 +96,18 @@ public class AppBuilder {
         roomJoinController = new RoomJoinController(interactor);
         roomJoinView = new RoomJoinView();
         roomJoinView.setController(roomJoinController);
+
+        return this;
+    }
+
+    public AppBuilder addMakeGuessUseCase() {
+        MakeGuessOutputBoundary makeGuessPresenter = new MakeGuessPresenter(makeGuessViewModel);
+
+        MakeGuessInputBoundary makeGuessInteractor = new MakeGuessInteractor(makeGuessPresenter, hangmanGameDAO);
+
+        MakeGuessController makeGuessController = new MakeGuessController(makeGuessInteractor);
+
+        makeGuessView.setMakeGuessController(makeGuessController);
 
         return this;
     }
@@ -109,6 +136,8 @@ public class AppBuilder {
         menuBar.add(gameMenu);
         application.setJMenuBar(menuBar);
 
+        viewManagerModel.setState(generateWordView.getViewName());
+        viewManagerModel.firePropertyChange();
         // Add the main content
         application.add(cardPanel);
 

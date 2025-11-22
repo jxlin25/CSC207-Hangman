@@ -22,6 +22,10 @@ public abstract class ViewModel<T> {
         support.firePropertyChange("state", null, state);
     }
 
+    public String getViewName() {
+        return viewName;
+    }
+
     public void firePropertyChange(String propertyName) {
         this.support.firePropertyChange(propertyName, null, this.state);
     }
