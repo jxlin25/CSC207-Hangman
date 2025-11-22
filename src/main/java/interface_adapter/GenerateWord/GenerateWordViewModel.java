@@ -2,6 +2,10 @@ package interface_adapter.GenerateWord;
 
 import interface_adapter.ViewModel;
 
+/**
+ * The ViewModel for the Generate Word View.
+ */
+
 public class GenerateWordViewModel extends ViewModel<GenerateWordState> {
 
     public static final String VIEW_NAME = "Generate Word";

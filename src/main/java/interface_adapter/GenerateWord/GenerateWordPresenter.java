@@ -7,6 +7,10 @@ import interface_adapter.MakeGuess.MakeGuessViewModel;
 import use_case.GenerateWord.GenerateWordOutputBoundary;
 import use_case.GenerateWord.GenerateWordOutputData;
 
+/**
+ * The Presenter for the Generate Word Use Case.
+ */
+
 public class GenerateWordPresenter implements GenerateWordOutputBoundary {
 
     private final GenerateWordViewModel generateWordViewModel;
