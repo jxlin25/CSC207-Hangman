@@ -29,8 +29,8 @@ public class GenerateWordView extends JPanel {
 
         startGameButton.addActionListener(evt -> {
             if (evt.getSource().equals(startGameButton)) {
-                generateWordController.execute();
-                initializeFirstRoundController.execute();
+                generateWordController.execute();// Generate the HangmanGame entity for the game
+                initializeFirstRoundController.execute();// Update the data of the first word to the view
             }
         });
 
