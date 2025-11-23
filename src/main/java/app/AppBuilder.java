@@ -1,10 +1,7 @@
 package app;
 
 import data_access.InMemoryHangmanDataAccessObject;
-import entity.HangmanGame;
-import interface_adapter.InitializeFirstRound.InitializeFirstRoundController;
-import interface_adapter.InitializeFirstRound.InitializeFirstRoundPresenter;
-import interface_adapter.MakeGuess.MakeGuessState;
+
 import interface_adapter.ViewManagerModel;
 import interface_adapter.GenerateWord.GenerateWordController;
 import interface_adapter.GenerateWord.GenerateWordPresenter;
@@ -13,9 +10,7 @@ import use_case.GenerateWord.GenerateWordInputBoundary;
 import use_case.GenerateWord.GenerateWordInteractor;
 import use_case.GenerateWord.GenerateWordOutputBoundary;
 import data_access.DBGenerateWordDataAccessObject;
-import use_case.InitializeFirstRound.InitializeFirstRoundInputBoundary;
-import use_case.InitializeFirstRound.InitializeFirstRoundInteractor;
-import use_case.InitializeFirstRound.InitializeFirstRoundOutputBoundary;
+
 import use_case.MakeGuess.*;
 import view.GenerateWordView;
 import view.ViewManager;

@@ -4,10 +4,9 @@ import entity.Guess;
 import entity.HangmanGame;
 import entity.Round;
 import entity.WordPuzzle;
-import use_case.InitializeFirstRound.InitializeFirstRoundDataAccessInterface;
 import use_case.MakeGuess.MakeGuessHangmanGameDataAccessInterface;
 
-public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameDataAccessInterface, InitializeFirstRoundDataAccessInterface {
+public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameDataAccessInterface {
 
     private HangmanGame currentHangmanGame;
 
@@ -99,30 +98,6 @@ public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameData
         return this.getHangmanGame().getCurrentRoundNumber();
     }
 
-    // InitializeFirstRoundDataAccessInterface
-    @Override
-    public Round getFirstRound() {
-        return this.currentHangmanGame.getRound(0);
-    }
 
-    @Override
-    public String getFirstMaskedWord() {
-        return this.getFirstWordPuzzle().getMaskedWord();
-    }
-
-    @Override
-    public WordPuzzle getFirstWordPuzzle() {
-        return this.getFirstRound().getWordPuzzle();
-    }
-
-    @Override
-    public int getFirstRoundNumber() {
-        return 1;
-    }
-
-    @Override
-    public int getFirstRoundAttempt() {
-        return this.getFirstRound().getAttempt();
-    }
 }
 
