@@ -11,6 +11,5 @@ public interface GenerateWordInputBoundary {
      */
 
     //TODO: Later, input numbers will be added and words of the corresponding length will be generated.
-
     void execute();
 }
