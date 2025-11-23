@@ -32,24 +32,11 @@ public class HangmanGame {
 
     /**
      * Gets the currently active round.
-     * @return The current Round object, or null if the game is over.
+     * @return The current Round object.
      */
     public Round getCurrentRound() {
-
         return rounds.get(currentRoundIndex);
     }
-
-    public Round getRound(int index){
-        if(index >= 0 && index < this.rounds.size()){
-            return this.rounds.get(index);
-        }
-        else{
-            return null;
-        }
-
-    }
-
-
 
     /**
      * Attempts to move to the next round.
@@ -73,10 +60,19 @@ public class HangmanGame {
     }
 
     /**
-     * Checks if all rounds have been played.
+     * Checks if all rounds are over.
+     * @return boolean of whether all the rounds are over
      */
     public boolean isGameOver() {
-        return currentRoundIndex >= rounds.size();
+
+        // Check if all the round has the status of either WON or LOST
+        // If not, immediately return false
+        for  (Round round : rounds) {
+            if (!(round.getStatus() == WON || round.getStatus() == LOST)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public int getCurrentRoundNumber() {
@@ -90,6 +86,7 @@ public class HangmanGame {
 
     /**
      * Calculates the total number of rounds won so far.
+     * @return number of won round
      */
     public int getRoundsWon() {
         int wins = 0;
@@ -101,5 +98,15 @@ public class HangmanGame {
         }
 
         return wins;
+    }
+
+    public Round getRound(int index){
+        if(index >= 0 && index < this.rounds.size()){
+            return this.rounds.get(index);
+        }
+        else{
+            return null;
+        }
+
     }
 }

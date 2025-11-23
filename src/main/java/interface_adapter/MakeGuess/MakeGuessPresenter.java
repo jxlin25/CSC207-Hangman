@@ -5,6 +5,8 @@ import use_case.MakeGuess.MakeGuessOutputData;
 
 import static Constant.StatusConstant.*;
 
+/** The Presenter for the MakeGuess use case.
+ */
 public class MakeGuessPresenter implements MakeGuessOutputBoundary {
 
     private final MakeGuessViewModel makeGuessViewModel;

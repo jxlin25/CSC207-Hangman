@@ -2,6 +2,8 @@ package interface_adapter.MakeGuess;
 
 import static Constant.StatusConstant.*;
 
+/** The State object for the MakeGuessViewModel.
+ */
 public class MakeGuessState {
 
     private String guessedLetter = "";
@@ -14,9 +16,7 @@ public class MakeGuessState {
     private String message = "";
 
 
-    public MakeGuessState() {
-
-    }
+    public MakeGuessState() {}
 
     public MakeGuessState(String guessedLetter, boolean isGuessCorrect, boolean isGameOver, String roundStatus, int remainingAttempts, int currentRoundNumber,  String maskedWord) {
         this.guessedLetter = guessedLetter;
