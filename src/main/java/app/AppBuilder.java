@@ -110,6 +110,17 @@ public class AppBuilder {
         return this;
     }
 
+    // Ensure this method is used after the usage of addGenerateWordView
+    public AppBuilder addInitializeFirstRoundUseCase() {
+        InitializeFirstRoundOutputBoundary initializeFirstRoundPresenter = new InitializeFirstRoundPresenter(makeGuessViewModel);
+        InitializeFirstRoundInputBoundary initializeFirstRoundInteractor = new InitializeFirstRoundInteractor(initializeFirstRoundPresenter, hangmanGameDAO);
+        InitializeFirstRoundController initializeFirstRoundController = new InitializeFirstRoundController(initializeFirstRoundInteractor);
+        generateWordView.setInitializeFirstRoundController(initializeFirstRoundController);
+
+
+        return this;
+    }
+
     public JFrame build() {
         JFrame application = new JFrame("Hangman");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

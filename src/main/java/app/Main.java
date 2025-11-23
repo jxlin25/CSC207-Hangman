@@ -17,6 +17,7 @@ public class Main {
                 .addMakeGuessView()
                 .addRoomJoinView()
                 .addGenerateWordUseCase()
+                .addInitializeFirstRoundUseCase() // Please ensure addInitializeFirstRoundUseCase() is after addGenerateWordView()
                 .addMakeGuessUseCase()
                 .build();
         app.setSize(800, 600);

@@ -12,9 +12,12 @@ public class InitializeFirstRoundInteractor implements InitializeFirstRoundInput
 
     public void execute() {
 
-        InitializeFirstRoundOutputData outputData = new InitializeFirstRoundOutputData(this.hangmanGameDAO.getFirstRoundAttempt(),  this.hangmanGameDAO.getFirstRoundNumber(), this.hangmanGameDAO.getFirstMaskedWord());
-
-
+        InitializeFirstRoundOutputData outputData =
+                new InitializeFirstRoundOutputData(
+                        this.hangmanGameDAO.getFirstRoundAttempt(),
+                        this.hangmanGameDAO.getFirstRoundNumber(),
+                        this.hangmanGameDAO.getFirstMaskedWord()
+                );
 
         this.presenter.initializeView(outputData);
     }
