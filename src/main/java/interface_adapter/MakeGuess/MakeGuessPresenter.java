@@ -18,8 +18,7 @@ public class MakeGuessPresenter implements MakeGuessOutputBoundary {
     @Override
     public void updateView(MakeGuessOutputData outputData) {
 
-        MakeGuessState state = makeGuessViewModel.getState();
-
+        final MakeGuessState state = makeGuessViewModel.getState();
 
         state.setGuessedLetter(String.valueOf(outputData.getGuess().getLetter()));
         state.setGuessCorrect(outputData.isGuessCorrect());
@@ -28,8 +27,6 @@ public class MakeGuessPresenter implements MakeGuessOutputBoundary {
         state.setRemainingAttempts(outputData.getRemainingAttempts());
         state.setCurrentRoundNumber(outputData.getCurrentRoundNumber());
         state.setMaskedWord(outputData.getMaskedWord());
-
-
 
 //        // If the game is over...
 //        if (outputData.isGameOver()) {
@@ -64,10 +61,7 @@ public class MakeGuessPresenter implements MakeGuessOutputBoundary {
 //                }
 //            }
 //        }
-
-
         makeGuessViewModel.setState(state);
         makeGuessViewModel.firePropertyChanged();
-
     }
 }

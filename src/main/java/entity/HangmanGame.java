@@ -3,8 +3,6 @@ package entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Constant.StatusConstant.*;
-
 /**
  * Manages the overall game state, including a list of all rounds.
  * This class is the main "entity" for the whole game.
@@ -36,6 +34,16 @@ public class HangmanGame {
      */
     public Round getCurrentRound() {
         return rounds.get(currentRoundIndex);
+    }
+
+    public Round getRound(int index){
+        if(index >= 0 && index < this.rounds.size()){
+            return this.rounds.get(index);
+        }
+        else{
+            return null;
+        }
+
     }
 
     /**
@@ -92,7 +100,7 @@ public class HangmanGame {
         int wins = 0;
 
         for (int i = 0; i < currentRoundIndex; i++) {
-            if (rounds.get(i).getStatus().equals(WON)) {
+            if (rounds.get(i).getStatus().equals(constant.StatusConstant.WON)) {
                 wins++;
             }
         }
