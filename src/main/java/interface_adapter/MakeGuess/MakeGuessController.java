@@ -5,6 +5,8 @@ import use_case.MakeGuess.MakeGuessInputBoundary;
 import use_case.MakeGuess.MakeGuessInputData;
 import use_case.MakeGuess.MakeGuessInteractor;
 
+/** The Controller for the MakeGuess use case.
+ */
 public class MakeGuessController {
 
     private final MakeGuessInputBoundary makeGuessInputBoundary;

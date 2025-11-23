@@ -5,6 +5,9 @@ import entity.HangmanGame;
 import entity.Round;
 import entity.WordPuzzle;
 
+/**
+ * The data access interface for the MakeGuess use case.
+ */
 public interface MakeGuessHangmanGameDataAccessInterface {
 
     /**

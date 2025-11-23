@@ -2,6 +2,9 @@ package use_case.MakeGuess;
 
 import entity.Guess;
 
+/**
+ * The Interactor for the MakeGuess use case.
+ */
 public class MakeGuessInteractor implements MakeGuessInputBoundary {
 
     private final MakeGuessOutputBoundary presenter;

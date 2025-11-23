@@ -1,5 +1,8 @@
 package use_case.MakeGuess;
 
+/**
+ * The Output Boundary of the MakeGuess use case.
+ */
 public interface MakeGuessOutputBoundary {
 
     /**

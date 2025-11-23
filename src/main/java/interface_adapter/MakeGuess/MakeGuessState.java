@@ -1,6 +1,8 @@
 package interface_adapter.MakeGuess;
 
 
+/** The State object for the MakeGuessViewModel.
+ */
 public class MakeGuessState {
 
     private String guessedLetter = "";
