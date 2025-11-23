@@ -1,18 +1,16 @@
 package interface_adapter.MakeGuess;
 
-import static Constant.StatusConstant.*;
 
 public class MakeGuessState {
 
     private String guessedLetter = "";
-    private boolean isGuessCorrect =  false;
-    private String roundStatus = GUESSING;
-    private boolean isGameOver = false;
+    private boolean isGuessCorrect;
+    private String roundStatus = constant.StatusConstant.GUESSING;
+    private boolean isGameOver;
     private int remainingAttempts = 6;
     private int currentRoundNumber = 1;
     private String maskedWord = "";
     private String message = "";
-
 
     public MakeGuessState() {
 
@@ -63,6 +61,7 @@ public class MakeGuessState {
     public boolean isGameOver() {
         return isGameOver;
     }
+
     public void setGameOver(boolean gameOver) {
         this.isGameOver = gameOver;
     }
@@ -78,6 +77,7 @@ public class MakeGuessState {
     public int getCurrentRoundNumber() {
         return currentRoundNumber;
     }
+
     public void setCurrentRoundNumber(int currentRoundNumber) {
         this.currentRoundNumber = currentRoundNumber;
     }
@@ -85,6 +85,7 @@ public class MakeGuessState {
     public String getMaskedWord() {
         return maskedWord;
     }
+
     public void setMaskedWord(String maskedWord) {
         this.maskedWord = maskedWord;
     }

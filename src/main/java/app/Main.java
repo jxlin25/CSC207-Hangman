@@ -6,8 +6,6 @@ import view.RoomJoinView;
 import interface_adapter.Room.RoomJoinController;
 import use_case.Room.RoomJoinInteractor;
 
-
-
 public class Main {
     public static void main(String[] args) {
         HangmanServer server = new HangmanServer(8080);

@@ -12,8 +12,14 @@ public class MakeGuessOutputData {
     private final int currentRoundNumber;
     private final String maskedWord;
 
-
-    public MakeGuessOutputData(Guess guess, boolean isGuessCorrect, String roundStatus, boolean isGameOver, int remainingAttempts, int currentRoundNumber,  String maskedWord) {
+    public MakeGuessOutputData(
+            Guess guess,
+            boolean isGuessCorrect,
+            String roundStatus,
+            boolean isGameOver,
+            int remainingAttempts,
+            int currentRoundNumber,
+            String maskedWord) {
         this.guess = guess;
         this.isGuessCorrect = isGuessCorrect;
         this.roundStatus = roundStatus;

@@ -12,14 +12,13 @@ public class MakeGuessViewModel extends ViewModel<MakeGuessState> {
         super(VIEW_NAME);
         setState(new MakeGuessState());
     }
-    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
+    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     public void firePropertyChanged() {
         // This notifies the View that the state has changed
         support.firePropertyChange("state", null, this.getState());
     }
-
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);

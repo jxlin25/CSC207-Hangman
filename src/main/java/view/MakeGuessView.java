@@ -1,5 +1,6 @@
 package view;
 
+import Constant.Constants;
 import interface_adapter.MakeGuess.MakeGuessViewModel;
 import interface_adapter.MakeGuess.MakeGuessState;
 import interface_adapter.MakeGuess.MakeGuessController;
@@ -12,26 +13,16 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.awt.Component;
 
-import static Constant.StatusConstant.*;
+import static constant.StatusConstant.*;
 
 public class MakeGuessView extends JPanel implements ActionListener, PropertyChangeListener {
 
-    public final String viewName = "Make Guess";
     private final MakeGuessViewModel makeGuessViewModel;
     private MakeGuessController makeGuessController;
     private final HangmanImagePanel hangmanImagePanel = new HangmanImagePanel();
     private final JLabel wordPuzzleLabel = new JLabel("????");
     private final JLabel attemptsLabel = new JLabel("Attempts left: 6");
     private final JLabel roundNumberLabel = new JLabel("Round number: 1");
-
-
-
-
-    //private final JLabel hangmanImageLabel;
-    //private final JLabel messageLabel;
-    //private final JTextField guessInputField;
-    //private final JButton guessButton;
-
     private JPanel alphabetButtonsPanel;
 
     public MakeGuessView(MakeGuessViewModel viewModel) {
@@ -44,49 +35,17 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         wordPuzzleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-
-//        hangmanImageLabel = new JLabel();
-//        hangmanImageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-//        updateImage(0);
-
-
-//        messageLabel = new JLabel("Enter a letter:");
-//        messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-//        guessInputField = new JTextField(5);
-//        guessInputField.setMaximumSize(new Dimension(100, 30));
-//
-//        guessButton = new JButton(MakeGuessViewModel.GUESS_BUTTON_LABEL);
-//        guessButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-//
-//        // Button Action
-//        guessButton.addActionListener(
-//                new ActionListener() {
-//                    public void actionPerformed(ActionEvent evt) {
-//                        if (evt.getSource().equals(guessButton)) {
-//
-//                            String letter = guessInputField.getText();
-//
-//
-//                            guessInputField.setText("");
-//                        }
-//                    }
-//                }
-//        );
-
         // Add everything to the panel
         this.add(hangmanImagePanel);
         this.add(attemptsLabel);
         this.add(roundNumberLabel);
         this.add(Box.createVerticalStrut(20));
-//        this.add(hangmanImageLabel);
-        this.add(Box.createVerticalStrut(20));
-//        this.add(messageLabel);
-//        this.add(guessInputField);
-//        this.add(guessButton);
         this.add(wordPuzzleLabel);
         this.add(alphabetButtonsPanel);
+    }
 
+    public void setMakeGuessController(MakeGuessController controller) {
+        this.makeGuessController = controller;
     }
 
     @Override
@@ -96,7 +55,7 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        MakeGuessState state = (MakeGuessState) evt.getNewValue();
+        final MakeGuessState state = (MakeGuessState) evt.getNewValue();
 
         System.out.println(state.getGuessedLetter());
         System.out.println(state.getRoundStatus());
@@ -106,7 +65,8 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         System.out.println("----------------------------");
 
         if (!state.isGameOver()) {
-            int maxAttempts = 6; // can be changed by difficulty level setting
+            // The maxAttempts can be changed by difficulty level setting
+            final int maxAttempts = 6;
             int remainingAttempts = state.getRemainingAttempts();
 
             if (state.getRoundStatus().equals(WON) || state.getRoundStatus().equals(LOST)) {
@@ -124,37 +84,32 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
             hangmanImagePanel.setIncorrectGuesses(maxAttempts - remainingAttempts);
             this.attemptsLabel.setText("Attempts left: " + remainingAttempts);
 
-
             // Update the displayed word
             this.wordPuzzleLabel.setText(state.getMaskedWord());
         }
-        else{
+        else {
             JOptionPane.showMessageDialog(
-                    this,                   // parent component
-                    "Game Over!",           // message
-                    "Game Over",            // title
+                    this,
+                    "Game Over!",
+                    "Game Over",
                     JOptionPane.INFORMATION_MESSAGE
             );
         }
 
     }
 
-
     private JPanel createNewLetterButtonsPanel() {
-        JPanel lettersPanel = new JPanel(new GridLayout(2, 13, 5, 5));
+        final JPanel lettersPanel = new JPanel(new GridLayout(2, 13, 5, 5));
 
-        for (int i = 0; i < 26; i++) {
+        for (int i = 0; i < Constants.NUMBER_OF_ENGLISH_ALPHABET; i++) {
             final char letter = (char) ('A' + i);
-            JButton button = new JButton(String.valueOf(letter));
+            final JButton button = new JButton(String.valueOf(letter));
 
-            button.addActionListener(e -> {
-
+            button.addActionListener(actionEvent -> {
                 // Make a guess by the letter
                 makeGuessController.execute(Character.toLowerCase(letter));
-
                 // Disable the button so it can't be clicked again
                 button.setEnabled(false);
-
                 // Change the button color
                 button.setBackground(Color.LIGHT_GRAY);
             });
@@ -165,16 +120,12 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         return lettersPanel;
     }
 
+    /**
+     * Gets the name of this view.
+     * @return "Make Guess"
+     */
     public String getViewName() {
-        return viewName;
+        return "Make Guess";
     }
-
-    public void setMakeGuessController(MakeGuessController controller) {
-        this.makeGuessController = controller;
-    }
-
-//    public String getViewName() {
-//        return viewName;
-//    }
 
 }

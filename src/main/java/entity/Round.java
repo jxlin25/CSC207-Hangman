@@ -2,8 +2,6 @@ package entity;
 
 import java.util.ArrayList;
 
-import static Constant.StatusConstant.*;
-
 public class Round {
     //leave for multiplayer
     //private String roundId;
@@ -14,7 +12,7 @@ public class Round {
 
     public Round(WordPuzzle wordPuzzle) {
         this.wordPuzzle = wordPuzzle;
-        this.status = WAITING;
+        this.status = constant.StatusConstant.WAITING;
         this.guesses = new ArrayList<Guess>();
         this.attempt = 6; //can be modified once all the difficulty levels are implemented
     }
@@ -32,15 +30,15 @@ public class Round {
     }
 
     public void setWON() {
-        this.setStatus(WON);
+        this.setStatus(constant.StatusConstant.WON);
     }
 
     public void setLOST() {
-        this.setStatus(LOST);
+        this.setStatus(constant.StatusConstant.LOST);
     }
 
     public void startRound() {
-        this.setStatus(GUESSING);
+        this.setStatus(constant.StatusConstant.GUESSING);
     }
 
     public void addGuess(Guess guess) {

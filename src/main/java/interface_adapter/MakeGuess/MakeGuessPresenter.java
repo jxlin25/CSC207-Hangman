@@ -3,8 +3,6 @@ package interface_adapter.MakeGuess;
 import use_case.MakeGuess.MakeGuessOutputBoundary;
 import use_case.MakeGuess.MakeGuessOutputData;
 
-import static Constant.StatusConstant.*;
-
 public class MakeGuessPresenter implements MakeGuessOutputBoundary {
 
     private final MakeGuessViewModel makeGuessViewModel;
@@ -16,8 +14,7 @@ public class MakeGuessPresenter implements MakeGuessOutputBoundary {
     @Override
     public void updateView(MakeGuessOutputData outputData) {
 
-        MakeGuessState state = makeGuessViewModel.getState();
-
+        final MakeGuessState state = makeGuessViewModel.getState();
 
         state.setGuessedLetter(String.valueOf(outputData.getGuess().getLetter()));
         state.setGuessCorrect(outputData.isGuessCorrect());
@@ -26,8 +23,6 @@ public class MakeGuessPresenter implements MakeGuessOutputBoundary {
         state.setRemainingAttempts(outputData.getRemainingAttempts());
         state.setCurrentRoundNumber(outputData.getCurrentRoundNumber());
         state.setMaskedWord(outputData.getMaskedWord());
-
-
 
 //        // If the game is over...
 //        if (outputData.isGameOver()) {
@@ -62,10 +57,7 @@ public class MakeGuessPresenter implements MakeGuessOutputBoundary {
 //                }
 //            }
 //        }
-
-
         makeGuessViewModel.setState(state);
         makeGuessViewModel.firePropertyChanged();
-
     }
 }
