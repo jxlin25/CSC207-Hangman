@@ -1,6 +1,6 @@
 package interface_adapter.InitializeFirstRound;
 
-import constant.StatusConstant;
+import Constant.StatusConstant;
 import interface_adapter.MakeGuess.MakeGuessState;
 import interface_adapter.MakeGuess.MakeGuessViewModel;
 import use_case.InitializeFirstRound.InitializeFirstRoundOutputBoundary;

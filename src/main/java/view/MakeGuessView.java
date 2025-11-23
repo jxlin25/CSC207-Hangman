@@ -13,7 +13,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.awt.Component;
 
-import static constant.StatusConstant.*;
+import static Constant.StatusConstant.*;
 
 public class MakeGuessView extends JPanel implements ActionListener, PropertyChangeListener {
 

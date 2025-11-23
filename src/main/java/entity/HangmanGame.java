@@ -76,7 +76,7 @@ public class HangmanGame {
         // Check if all the round has the status of either WON or LOST
         // If not, immediately return false
         for  (Round round : rounds) {
-            if (!(round.getStatus() == WON || round.getStatus() == LOST)) {
+            if (!(round.getStatus() == Constant.StatusConstant.WON || round.getStatus() == Constant.StatusConstant.LOST)) {
                 return false;
             }
         }
@@ -100,7 +100,7 @@ public class HangmanGame {
         int wins = 0;
 
         for (int i = 0; i < currentRoundIndex; i++) {
-            if (rounds.get(i).getStatus().equals(constant.StatusConstant.WON)) {
+            if (rounds.get(i).getStatus().equals(Constant.StatusConstant.WON)) {
                 wins++;
             }
         }
@@ -108,13 +108,4 @@ public class HangmanGame {
         return wins;
     }
 
-    public Round getRound(int index){
-        if(index >= 0 && index < this.rounds.size()){
-            return this.rounds.get(index);
-        }
-        else{
-            return null;
-        }
-
-    }
 }

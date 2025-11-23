@@ -1,8 +1,9 @@
 package entity;
 
-import java.util.ArrayList;
+import Constant.Constants;
+import Constant.StatusConstant;
 
-import static Constant.StatusConstant.*;
+import java.util.ArrayList;
 
 /**
  * Represents a single round of Hangman game, storing the target word,
@@ -17,7 +18,7 @@ public class Round {
 
     public Round(WordPuzzle wordPuzzle) {
         this.wordPuzzle = wordPuzzle;
-        this.status = constant.StatusConstant.WAITING;
+        this.status = Constant.StatusConstant.WAITING;
         this.guesses = new ArrayList<Guess>();
         this.attempt = 6; //can be modified once all the difficulty levels are implemented
     }
@@ -31,15 +32,15 @@ public class Round {
     }
 
     public void setWON() {
-        this.setStatus(constant.StatusConstant.WON);
+        this.setStatus(Constant.StatusConstant.WON);
     }
 
     public void setLOST() {
-        this.setStatus(constant.StatusConstant.LOST);
+        this.setStatus(StatusConstant.LOST);
     }
 
     public void startRound() {
-        this.setStatus(constant.StatusConstant.GUESSING);
+        this.setStatus(Constant.StatusConstant.GUESSING);
     }
 
     public void addGuess(Guess guess) {

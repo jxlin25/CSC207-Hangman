@@ -26,7 +26,7 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
         // Check if the letter in the guess exist in the word puzzle
         final boolean isGuessCorrect = hangmanGameDAO.isGuessCorrectToCurrentWordPuzzle(guess);
 
-        String roundStatus = constant.StatusConstant.GUESSING;
+        String roundStatus = Constant.StatusConstant.GUESSING;
         boolean isGameOver = false;
 
         // If the guess is correct, reveal the correctly guessed letter and check if the puzzle is complete
@@ -36,7 +36,7 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
             // If this guess leads to the completion of the puzzle, mark the current round as WON and start next round
             if (this.hangmanGameDAO.isCurrentWordPuzzleComplete()) {
 
-                roundStatus = constant.StatusConstant.WON;
+                roundStatus = Constant.StatusConstant.WON;
 
                 if (!this.hangmanGameDAO.setCurrentRoundWonAndStartNextRound()) {
                     isGameOver = true;
@@ -52,7 +52,7 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
         // If the guess is the last guess and does not complete the puzzle,
         // mark the current round as LOST and start next round
         if (!this.hangmanGameDAO.isCurrentWordPuzzleComplete() && this.hangmanGameDAO.getCurrentRoundAttempt() == 0) {
-            roundStatus = constant.StatusConstant.LOST;
+            roundStatus = Constant.StatusConstant.LOST;
 
             if (!this.hangmanGameDAO.setCurrentRoundLostAndStartNextRound()) {
                 isGameOver = true;
