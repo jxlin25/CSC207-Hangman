@@ -26,6 +26,8 @@ public class GenerateWordInteractor implements GenerateWordInputBoundary {
     @Override
     public void execute(GenerateWordInputData inputData) {
         int n = inputData.getNumbers();
+        int attempts = inputData.getAttempts(); // attempts added here
+
         if (n < 0) {
             //This situation won't occur, but to prevent any accidents
             generateWordOutputBoundary.prepareFailureView("Number of words must be langer than 0!!");
@@ -54,7 +56,7 @@ public class GenerateWordInteractor implements GenerateWordInputBoundary {
 
         //TODO this part maybe can change, now, we don't use OutPutData
         hangmanGameDAO.setHangmanGame(new HangmanGame(words));
-        GenerateWordOutputData outputData = new GenerateWordOutputData(words);
+        GenerateWordOutputData outputData = new GenerateWordOutputData(words, attempts);
         generateWordOutputBoundary.prepareSuccessView(outputData);
     }
 
