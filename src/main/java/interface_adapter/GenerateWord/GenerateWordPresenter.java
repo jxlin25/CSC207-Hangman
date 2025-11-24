@@ -45,7 +45,7 @@ public class GenerateWordPresenter implements GenerateWordOutputBoundary {
     public void prepareFailureView(String error) {
         final GenerateWordState state = generateWordViewModel.getState();
         state.setError(error);
-        //TODO I am not sure maybe we don't need this one
+        //TODO I am not sure maybe we don't need this one, I also cannot test it(actually just change DAO return false but I still have another homework I don't want to test it rember delete it before submit)
         generateWordViewModel.setState(state);
         generateWordViewModel.firePropertyChange();
     }

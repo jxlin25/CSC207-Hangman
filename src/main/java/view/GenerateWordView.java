@@ -17,7 +17,7 @@ public class GenerateWordView extends JPanel implements PropertyChangeListener {
     private InitializeFirstRoundController initializeFirstRoundController;
 
     private final JButton startGameButton;
-    private JComboBox<Integer> numberSelector;
+    private final JComboBox<Integer> numberSelector;
 
     public GenerateWordView(GenerateWordViewModel viewModel) {
         this.generateWordViewModel = viewModel;
@@ -28,9 +28,8 @@ public class GenerateWordView extends JPanel implements PropertyChangeListener {
         final JLabel title = new JLabel("Let's Start Game!");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JComboBox<Integer> numberSelector = new JComboBox<>(new Integer[]{1, 2, 3, 4, 5, 6});
+        numberSelector = new JComboBox<>(new Integer[]{1, 2, 3, 4, 5, 6});
         numberSelector.setAlignmentX(Component.CENTER_ALIGNMENT);
-        numberSelector.setMaximumSize(new Dimension(100, 30));
         numberSelector.setSelectedItem(1);
 
         JLabel numberLabel = new JLabel("Number of Words:");

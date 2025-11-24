@@ -103,6 +103,7 @@ public class AppBuilder {
         MakeGuessOutputBoundary makeGuessPresenter = new MakeGuessPresenter(makeGuessViewModel);
         MakeGuessInputBoundary makeGuessInteractor = new MakeGuessInteractor(makeGuessPresenter, hangmanGameDAO);
         MakeGuessController makeGuessController = new MakeGuessController(makeGuessInteractor);
+        makeGuessView.setViewManagerModel(viewManagerModel);
         makeGuessView.setMakeGuessController(makeGuessController);
         return this;
     }
