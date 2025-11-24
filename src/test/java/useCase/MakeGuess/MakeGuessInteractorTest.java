@@ -15,14 +15,12 @@ import static org.junit.Assert.*;
 /**
  * Unit tests for {@link MakeGuessInteractor}.
  *
- * These tests use a fake in-memory implementation of
- * {@link HangmanGameDataAccessInterface} and a stub presenter
- * that simply captures the last {@link MakeGuessOutputData} passed to it.
+ * These tests use a dummy presenter that implements {@link MakeGuessOutputBoundary}
+ * that simply captures the {@link MakeGuessOutputData} passed to it.
  */
 public class MakeGuessInteractorTest {
-
     /**
-     * A simple presenter test double that captures the last output data.
+     * A dummy presenter that can only return the outputData that was passed to it.
      */
     private static class DummyMakeGuessPresenter implements MakeGuessOutputBoundary {
         private MakeGuessOutputData outputData;
