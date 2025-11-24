@@ -37,9 +37,6 @@ public class GenerateWordInteractor implements GenerateWordInputBoundary {
             System.out.println("The Generate Words is :" + words);
             System.out.println("----------------------------");
 
-            // Test
-            words.add("world");
-
             hangmanGameDAO.setHangmanGame(new HangmanGame(words));
 
             WordPuzzle puzzle = new WordPuzzle(word.toCharArray());
