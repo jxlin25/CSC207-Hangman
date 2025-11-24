@@ -1,4 +1,4 @@
-package interface_adapter.stats;
+package stats;
 
 public class InMemorySessionStatisticsRepository {
     private final SessionStatistics stats = new SessionStatistics();

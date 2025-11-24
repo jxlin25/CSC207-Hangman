@@ -2,70 +2,66 @@ package use_case.MakeGuess;
 
 import static Constant.StatusConstant.*;
 import entity.Guess;
+import entity.Round;
 
 public class MakeGuessInteractor implements MakeGuessInputBoundary {
 
+    private final MakeGuessHangmanGameDataAccessInterface repo;
     private final MakeGuessOutputBoundary presenter;
-    private final MakeGuessHangmanGameDataAccessInterface hangmanGameDAO;
 
-    public MakeGuessInteractor(MakeGuessOutputBoundary presenter, MakeGuessHangmanGameDataAccessInterface hangmanGameDAO) {
+    public MakeGuessInteractor(MakeGuessHangmanGameDataAccessInterface repo,
+                               MakeGuessOutputBoundary presenter) {
+        this.repo = repo;
         this.presenter = presenter;
-        this.hangmanGameDAO = hangmanGameDAO;
     }
 
     @Override
-    public void execute(MakeGuessInputData inputData) {
-
-        final Guess guess = inputData.getGuess();
-
-        // add the guess to the current round
-        this.hangmanGameDAO.addGuessToCurrentRound(guess);
-
-        // Check if the letter in the guess exist in the word puzzle
-        final boolean isGuessCorrect = hangmanGameDAO.isGuessCorrect(guess);
-
-        String roundStatus = GUESSING;
-        boolean isGameOver = false;
-
-        // If the guess is correct, reveal the correctly guessed letter and check if the puzzle is complete
-        if (isGuessCorrect) {
-            this.hangmanGameDAO.revealLetter(guess);
-
-            // If this guess leads to the completion of the puzzle, mark the current round as WON and start next round
-            if (this.hangmanGameDAO.isPuzzleComplete()) {
-
-                roundStatus = WON;
-
-                if (!this.hangmanGameDAO.setCurrentRoundWonAndStartNextRound()) {
-                    isGameOver = true;
-                }
-            }
-        }
-        else {
-            // Deduct 1 attempt if the guess is wrong
-            this.hangmanGameDAO.decreaseCurrentRoundAttempt();
-        }
-        final int remainingAttempts = this.hangmanGameDAO.getCurrentRoundAttempt();
-
-        // If the guess is the last guess and does not complete the puzzle,
-        // mark the current round as LOST and start next round
-        if (!this.hangmanGameDAO.isPuzzleComplete() && this.hangmanGameDAO.getCurrentRoundAttempt() == 0) {
-            roundStatus = LOST;
-
-            if (!this.hangmanGameDAO.setCurrentRoundLostAndStartNextRound()) {
-                isGameOver = true;
-            }
+    public void execute(MakeGuessInputData input) {
+        String raw = input.getGuess();
+        if (raw == null || raw.trim().isEmpty()) {
+            emit("", "", repo.getCurrentRoundAttempt(),
+                    "Please enter a letter.", null);
+            return;
         }
 
-        final MakeGuessOutputData outputData = new MakeGuessOutputData(
-                guess,
-                isGuessCorrect,
-                roundStatus,
-                isGameOver,
-                remainingAttempts,
-                this.hangmanGameDAO.getCurrentRoundNumber(),
-                this.hangmanGameDAO.getMaskedWord());
+        String normalized = raw.trim().toLowerCase();
+        // Adjust if your Guess entity requires a different constructor
+        Guess guess = new Guess(normalized);
+        repo.addGuessToCurrentRound(guess);
 
-        presenter.updateView(outputData);
+        // If your DAO automatically reduces attempts only for incorrect guesses,
+        // you can remove this line. Otherwise, you can decide when to call it.
+        // repo.decreaseCurrentRoundAttempt();
+
+        int attemptsLeft = repo.getCurrentRoundAttempt();
+        Round round = repo.getCurrentRound();
+
+        String maskedWord = "";      // fill from your domain when available
+        String guessedLetters = "";  // fill from your domain when available
+        String roundStatus = "IN_PROGRESS";
+        String correctWordOnLoss = null;
+
+        boolean won = false;                 // compute from your domain when available
+        boolean lost = attemptsLeft <= 0;    // safe fallback
+
+        if (won) {
+            roundStatus = "WON";
+            repo.setCurrentRoundWonAndStartNextRound();
+        } else if (lost) {
+            roundStatus = "LOST";
+            repo.setCurrentRoundLostAndStartNextRound();
+            correctWordOnLoss = ""; // set real solution when domain provides it
+        }
+
+        emit(maskedWord, guessedLetters, attemptsLeft, roundStatus, correctWordOnLoss);
+    }
+
+    private void emit(String maskedWord,
+                      String guessedLetters,
+                      int remainingAttempts,
+                      String roundStatus,
+                      String correctWordOnLoss) {
+        presenter.updateView(new MakeGuessOutputData(
+                maskedWord, guessedLetters, remainingAttempts, roundStatus, correctWordOnLoss));
     }
 }

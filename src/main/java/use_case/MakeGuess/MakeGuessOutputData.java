@@ -11,9 +11,11 @@ public class MakeGuessOutputData {
     private final int remainingAttempts;
     private final int currentRoundNumber;
     private final String maskedWord;
+    private final String guessedLetters;
+    private final String correctWordOnLoss;
 
 
-    public MakeGuessOutputData(Guess guess, boolean isGuessCorrect, String roundStatus, boolean isGameOver, int remainingAttempts, int currentRoundNumber,  String maskedWord) {
+    public MakeGuessOutputData(Guess guess, boolean isGuessCorrect, String roundStatus, boolean isGameOver, int remainingAttempts, int currentRoundNumber,  String maskedWord, String guessedLetters, String correctWordOnLoss) {
         this.guess = guess;
         this.isGuessCorrect = isGuessCorrect;
         this.roundStatus = roundStatus;
@@ -21,6 +23,8 @@ public class MakeGuessOutputData {
         this.remainingAttempts = remainingAttempts;
         this.currentRoundNumber = currentRoundNumber;
         this.maskedWord = maskedWord;
+        this.guessedLetters = guessedLetters;
+        this.correctWordOnLoss = correctWordOnLoss;
     }
 
     public Guess getGuess() {
@@ -50,4 +54,6 @@ public class MakeGuessOutputData {
     public String getMaskedWord() {
         return this.maskedWord;
     }
+    public String getGuessedLetters() { return guessedLetters; }
+    public String getCorrectWordOnLoss() { return correctWordOnLoss; }
 }

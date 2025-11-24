@@ -2,59 +2,65 @@ package interface_adapter.MakeGuess;
 
 import entity.Guess;
 import entity.WordPuzzle;
+import java.util.ArrayList;
+import use_case.MakeGuess.MakeGuessOutputBoundary;
 
-public class MakeGuessInteractor {
-    private static final String GUESSING = "GUESSING";
-    private static final String WON = "WON";
-    private static final String LOST = "LOST";
+public class MakeGuessInteractor implements MakeGuessInputBoundary {
 
-    private final MakeGuessHangmanGameDataAccessInterface hangmanGameDAO;
-    private final MakeGuessWordPuzzleDataAccessInterface wordPuzzleDAO;
+    private final MakeGuessHangmanGameDataAccessInterface hangmanDAO;
     private final MakeGuessOutputBoundary presenter;
 
-    public MakeGuessInteractor(MakeGuessHangmanGameDataAccessInterface hangmanGameDAO,
-                               MakeGuessWordPuzzleDataAccessInterface wordPuzzleDAO,
+    public MakeGuessInteractor(MakeGuessHangmanGameDataAccessInterface hangmanDAO,
                                MakeGuessOutputBoundary presenter) {
-        this.hangmanGameDAO = hangmanGameDAO;
-        this.wordPuzzleDAO = wordPuzzleDAO;
+        this.hangmanDAO = hangmanDAO;
         this.presenter = presenter;
     }
 
-    public void execute(MakeGuessInputData inputData) {
-        Guess guess = inputData.getGuess();
-
-        // decrement attempt and record guess in current round
-        hangmanGameDAO.decreaseCurrentRoundAttempt();
-        hangmanGameDAO.addGuessToCurrentRound(guess);
-
-        boolean correct = wordPuzzleDAO.isGuessCorrect(guess);
-
-        String status = GUESSING;
-        boolean gameOver = false;
-
-        if (correct) {
-            wordPuzzleDAO.revealLetter(guess);
-            if (wordPuzzleDAO.isPuzzleComplete()) {
-                gameOver = hangmanGameDAO.setCurrentRoundWonAndStartNextRound();
-                status = WON;
-            }
-        } else {
-            int remaining = hangmanGameDAO.getCurrentRoundAttempt();
-            if (remaining <= 0) {
-                gameOver = hangmanGameDAO.setCurrentRoundLostAndStartNextRound();
-                status = LOST;
-            }
+    @Override
+    public void execute(MakeGuessInputData input) {
+        String raw = input.getGuess();
+        if (raw == null || raw.trim().isEmpty()) {
+            emit("", "", hangmanDAO.getCurrentRoundAttempt(),
+                    "Please enter a letter.", null);
+            return;
         }
 
-        WordPuzzle puzzle = wordPuzzleDAO.getCurrentWordPuzzle();
-        String masked = puzzle.getMaskedWord();
-        String guessed = puzzle.getGuessedLettersString();
-        int remaining = hangmanGameDAO.getCurrentRoundAttempt();
-        String correctWordOnLoss = LOST.equals(status) ? puzzle.getSolution() : null;
+        char normalized = raw.trim().toLowerCase();
+        Guess guess = new Guess(normalized);
+        hangmanDAO.addGuessToCurrentRound(guess);
 
-        MakeGuessOutputData out = new MakeGuessOutputData(
-                status, masked, remaining, guessed, correctWordOnLoss, gameOver
-        );
-        presenter.present(out);
+
+        hangmanDAO.decreaseCurrentRoundAttempt();
+
+        int attemptsLeft = hangmanDAO.getCurrentRoundAttempt();
+        Round round = hangmanDAO.getCurrentRound();
+
+        String maskedWord = "";      // fill from your domain when available
+        String guessedLetters = "";  // fill from your domain when available
+        String roundStatus = "IN_PROGRESS";
+        String correctWordOnLoss = null;
+
+        boolean won = false;                 // compute from your domain when available
+        boolean lost = attemptsLeft <= 0;    // safe fallback
+
+        if (won) {
+            roundStatus = "WON";
+            hangmanDAO.setCurrentRoundWonAndStartNextRound();
+        } else if (lost) {
+            roundStatus = "LOST";
+            hangmanDAO.setCurrentRoundLostAndStartNextRound();
+            correctWordOnLoss = ""; // set real solution when domain provides it
+        }
+
+        emit(maskedWord, guessedLetters, attemptsLeft, roundStatus, correctWordOnLoss);
+    }
+
+    private void emit(String maskedWord,
+                      String guessedLetters,
+                      int remainingAttempts,
+                      String roundStatus,
+                      String correctWordOnLoss) {
+        presenter.updateView(new MakeGuessOutputData(
+                maskedWord, guessedLetters, remainingAttempts, roundStatus, correctWordOnLoss));
     }
 }

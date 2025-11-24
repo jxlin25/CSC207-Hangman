@@ -33,7 +33,6 @@ import interface_adapter.MakeGuess.MakeGuessViewModel;
 import interface_adapter.MakeGuess.MakeGuessController;
 import interface_adapter.MakeGuess.MakeGuessPresenter;
 
-import presenter.MakeGuessPresenter;
 import stats.InMemorySessionStatisticsRepository;
 import view.DifficultyDialog;
 import view.DifficultyDialog.Difficulty;

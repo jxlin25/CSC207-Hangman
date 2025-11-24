@@ -1,7 +1,7 @@
 package view;
 
-import javax.swing.;
-import java.awt.;
+import javax.swing.*;
+import java.awt.*;
 import java.util.function.Consumer;
 
 public class DifficultyDialog extends JDialog {

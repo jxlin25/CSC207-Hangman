@@ -16,5 +16,4 @@ public final class MakeGuessInputData {
     public Guess getGuess() {
         return guess;
     }
-
 }

@@ -1,8 +1,7 @@
 package view;
 
-import javax.swing.;
-import java.awt.;
-import java.util.Objects;
+import javax.swing.*;
+import java.awt.*;
 
 public class GameOverDialog extends JDialog {
     public GameOverDialog(JFrame owner, String message, Runnable onPlayAgain, Runnable onQuit) {

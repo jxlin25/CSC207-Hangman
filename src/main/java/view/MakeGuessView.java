@@ -25,8 +25,6 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
     private final JLabel roundNumberLabel = new JLabel("Round number: 1");
 
 
-
-
     //private final JLabel hangmanImageLabel;
     //private final JLabel messageLabel;
     //private final JTextField guessInputField;
