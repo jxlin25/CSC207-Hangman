@@ -28,8 +28,7 @@ public class GenerateWordPresenter implements GenerateWordOutputBoundary {
     @Override
     public void prepareSuccessView(GenerateWordOutputData outputData) {
         final GenerateWordState state = generateWordViewModel.getState();
-        state.setWords(outputData.getWords());
-        state.setError(null);
+        state.setWordPuzzle(outputData.getPuzzle());
         generateWordViewModel.setState(state);
         generateWordViewModel.firePropertyChange();
 
