@@ -3,6 +3,7 @@ package view;
 import interface_adapter.MakeGuess.MakeGuessViewModel;
 import interface_adapter.MakeGuess.MakeGuessState;
 import interface_adapter.MakeGuess.MakeGuessController;
+import interface_adapter.ViewManagerModel;
 
 import java.awt.*;
 import javax.swing.*;
@@ -19,10 +20,13 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
     public final String viewName = "Make Guess";
     private final MakeGuessViewModel makeGuessViewModel;
     private MakeGuessController makeGuessController;
+    private ViewManagerModel viewManagerModel;
+
     private final HangmanImagePanel hangmanImagePanel = new HangmanImagePanel();
     private final JLabel wordPuzzleLabel = new JLabel("????");
     private final JLabel attemptsLabel = new JLabel("Attempts left: 6");
     private final JLabel roundNumberLabel = new JLabel("Round number: 1");
+    private final JButton restartButton;
 
 
 
@@ -43,6 +47,20 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         wordPuzzleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        restartButton = new JButton("Restart");
+        restartButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        restartButton.addActionListener(e -> {
+            int option = JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you want to restart the game?",
+                    "Confirm Restart",
+                    JOptionPane.YES_NO_OPTION
+            );
+            if (option == JOptionPane.YES_OPTION) {
+                returnToStartView();
+            }
+        });
 
 
 //        hangmanImageLabel = new JLabel();
@@ -84,6 +102,7 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
 //        this.add(messageLabel);
 //        this.add(guessInputField);
 //        this.add(guessButton);
+        this.add(restartButton);
         this.add(wordPuzzleLabel);
         this.add(alphabetButtonsPanel);
 
@@ -165,8 +184,26 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         return lettersPanel;
     }
 
+    private void returnToStartView() {
+        if (viewManagerModel != null) {
+            viewManagerModel.setState("Generate Word");
+            viewManagerModel.firePropertyChange();
+        } else {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Navigation error: viewManagerModel not set.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
     public String getViewName() {
         return viewName;
+    }
+
+    public void setViewManagerModel(ViewManagerModel viewManagerModel) {
+        this.viewManagerModel = viewManagerModel;
     }
 
     public void setMakeGuessController(MakeGuessController controller) {
