@@ -39,12 +39,12 @@ public class GenerateWordInteractor implements GenerateWordInputBoundary {
                 word = generateWordDataAccessInterface.getRandomWord();
                 generateWordDataAccessInterface.saveRandomWord(word);
                 if (generateWordDataAccessInterface.isValidWord(word)) {
-                    break;
                 }
                 tries++;
             }
             if (word == null || !generateWordDataAccessInterface.isValidWord(word)) {
-                generateWordOutputBoundary.prepareFailureView("Failed to generate a valid word after 10 attempts");
+                generateWordOutputBoundary.prepareFailureView("Failed to generate a valid word after 10 attempts, please try again!");
+                return;
             }
             words.add(word);
         }
