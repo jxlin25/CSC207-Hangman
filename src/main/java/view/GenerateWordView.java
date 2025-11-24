@@ -2,7 +2,7 @@ package view;
 
 import interface_adapter.GenerateWord.GenerateWordController;
 import interface_adapter.GenerateWord.GenerateWordViewModel;
-import interface_adapter.InitializeFirstRound.InitializeFirstRoundController;
+import interface_adapter.InitializeRound.InitializeRoundController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +12,7 @@ public class GenerateWordView extends JPanel {
 
     private GenerateWordController generateWordController;
     private final GenerateWordViewModel generateWordViewModel;
-    private InitializeFirstRoundController initializeFirstRoundController;
+    private InitializeRoundController initializeRoundController;
 
     private final JButton startGameButton;
 
@@ -30,7 +30,7 @@ public class GenerateWordView extends JPanel {
         startGameButton.addActionListener(evt -> {
             if (evt.getSource().equals(startGameButton)) {
                 generateWordController.execute();// Generate the HangmanGame entity for the game
-                initializeFirstRoundController.execute();// Update the data of the first word to the view
+                initializeRoundController.execute();// Update the data of the first word to the view
             }
         });
 
@@ -50,7 +50,7 @@ public class GenerateWordView extends JPanel {
         this.generateWordController = generateWordController;
     }
 
-    public void setInitializeFirstRoundController(InitializeFirstRoundController initializeFirstRoundController) {
-        this.initializeFirstRoundController = initializeFirstRoundController;
+    public void setInitializeFirstRoundController(InitializeRoundController initializeRoundController) {
+        this.initializeRoundController = initializeRoundController;
     }
 }

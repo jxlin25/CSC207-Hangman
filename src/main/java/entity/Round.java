@@ -1,6 +1,5 @@
 package entity;
 
-import Constant.Constants;
 import Constant.StatusConstant;
 
 import java.util.ArrayList;
@@ -31,11 +30,11 @@ public class Round {
         this.status = status;
     }
 
-    public void setWON() {
+    public void setWon() {
         this.setStatus(Constant.StatusConstant.WON);
     }
 
-    public void setLOST() {
+    public void setLost() {
         this.setStatus(StatusConstant.LOST);
     }
 

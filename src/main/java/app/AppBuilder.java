@@ -1,10 +1,8 @@
 package app;
 
 import data_access.InMemoryHangmanDataAccessObject;
-import entity.HangmanGame;
-import interface_adapter.InitializeFirstRound.InitializeFirstRoundController;
-import interface_adapter.InitializeFirstRound.InitializeFirstRoundPresenter;
-import interface_adapter.MakeGuess.MakeGuessState;
+import interface_adapter.InitializeRound.InitializeRoundController;
+import interface_adapter.InitializeRound.InitializeRoundPresenter;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.GenerateWord.GenerateWordController;
 import interface_adapter.GenerateWord.GenerateWordPresenter;
@@ -13,16 +11,15 @@ import use_case.GenerateWord.GenerateWordInputBoundary;
 import use_case.GenerateWord.GenerateWordInteractor;
 import use_case.GenerateWord.GenerateWordOutputBoundary;
 import data_access.DBGenerateWordDataAccessObject;
-import use_case.InitializeFirstRound.InitializeFirstRoundInputBoundary;
-import use_case.InitializeFirstRound.InitializeFirstRoundInteractor;
-import use_case.InitializeFirstRound.InitializeFirstRoundOutputBoundary;
+import use_case.InitializeRound.InitializeRoundInputBoundary;
+import use_case.InitializeRound.InitializeRoundInteractor;
+import use_case.InitializeRound.InitializeRoundOutputBoundary;
 import use_case.MakeGuess.*;
 import view.GenerateWordView;
 import view.ViewManager;
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import view.RoomJoinView;
 import interface_adapter.Room.RoomJoinController;
 import use_case.Room.RoomJoinInteractor;
@@ -103,21 +100,19 @@ public class AppBuilder {
     }
 
     public AppBuilder addMakeGuessUseCase() {
-        MakeGuessOutputBoundary makeGuessPresenter = new MakeGuessPresenter(makeGuessViewModel);
-        MakeGuessInputBoundary makeGuessInteractor = new MakeGuessInteractor(makeGuessPresenter, hangmanGameDAO);
-        MakeGuessController makeGuessController = new MakeGuessController(makeGuessInteractor);
+        final MakeGuessOutputBoundary makeGuessPresenter = new MakeGuessPresenter(makeGuessViewModel);
+        final MakeGuessInputBoundary makeGuessInteractor = new MakeGuessInteractor(makeGuessPresenter, hangmanGameDAO);
+        final MakeGuessController makeGuessController = new MakeGuessController(makeGuessInteractor);
         makeGuessView.setMakeGuessController(makeGuessController);
         return this;
     }
 
-    // Ensure this method is used after the usage of addGenerateWordView
-    public AppBuilder addInitializeFirstRoundUseCase() {
-        InitializeFirstRoundOutputBoundary initializeFirstRoundPresenter = new InitializeFirstRoundPresenter(makeGuessViewModel);
-        InitializeFirstRoundInputBoundary initializeFirstRoundInteractor = new InitializeFirstRoundInteractor(initializeFirstRoundPresenter, hangmanGameDAO);
-        InitializeFirstRoundController initializeFirstRoundController = new InitializeFirstRoundController(initializeFirstRoundInteractor);
-        generateWordView.setInitializeFirstRoundController(initializeFirstRoundController);
-
-
+    public AppBuilder addInitializeRoundUseCase() {
+        final InitializeRoundOutputBoundary initializeFirstRoundPresenter = new InitializeRoundPresenter(makeGuessViewModel);
+        final InitializeRoundInputBoundary initializeFirstRoundInteractor = new InitializeRoundInteractor(initializeFirstRoundPresenter, hangmanGameDAO);
+        final InitializeRoundController initializeRoundController = new InitializeRoundController(initializeFirstRoundInteractor);
+        generateWordView.setInitializeFirstRoundController(initializeRoundController);
+        makeGuessView.setInitializeRoundController(initializeRoundController);
         return this;
     }
 
@@ -138,7 +133,8 @@ public class AppBuilder {
                 roomJoinView.setVisible(true);
                 // Center the room join view
                 roomJoinView.setLocationRelativeTo(application);
-            } else {
+            }
+            else {
                 System.out.println("roomJoinView is null!");
             }
         });

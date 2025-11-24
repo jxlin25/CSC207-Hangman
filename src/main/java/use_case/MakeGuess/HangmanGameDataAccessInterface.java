@@ -8,7 +8,7 @@ import entity.WordPuzzle;
 /**
  * The data access interface for the MakeGuess use case.
  */
-public interface MakeGuessHangmanGameDataAccessInterface {
+public interface HangmanGameDataAccessInterface {
 
     /**
      * Gets the HangmanGame entity.
@@ -64,6 +64,12 @@ public interface MakeGuessHangmanGameDataAccessInterface {
     int getCurrentRoundNumber();
 
     /**
+     * Checks if current Round is the last round.
+     * @return true if current Round is the last round
+     */
+    boolean isCurrentRoundTheLastRound();
+
+    /**
      * Gets the WordPuzzle object of the current Round.
      * @return the WordPuzzle object of the current Round
      */
@@ -92,7 +98,7 @@ public interface MakeGuessHangmanGameDataAccessInterface {
      * Gets the string of the masked word of the current WordPuzzle.
      * @return the string of the masked word of the current WordPuzzle
      */
-    String getMaskedWord();
+    String getCurrentMaskedWord();
 
     /**
      * Gets the array of Chars of the word in the current WordPuzzle.

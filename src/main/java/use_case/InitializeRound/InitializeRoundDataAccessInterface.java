@@ -1,9 +1,9 @@
-package use_case.InitializeFirstRound;
+package use_case.InitializeRound;
 
 import entity.Round;
 import entity.WordPuzzle;
 
-public interface InitializeFirstRoundDataAccessInterface {
+public interface InitializeRoundDataAccessInterface {
 
     /**
      * Gets the first Round object in the rounds of HangmanGame.
