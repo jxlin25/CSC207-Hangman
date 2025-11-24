@@ -9,5 +9,7 @@ public interface GenerateWordInputBoundary {
     /**
      * Execute the Generate Word Use Case.
      */
-    void execute(GenerateWordInputData inputData);
+
+    //TODO: Later, input numbers will be added and words of the corresponding length will be generated.
+    void execute();
 }

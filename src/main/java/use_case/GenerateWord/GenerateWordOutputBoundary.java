@@ -10,6 +10,4 @@ public interface GenerateWordOutputBoundary {
      * @param outputData the output data
      */
     void prepareSuccessView(GenerateWordOutputData outputData);
-
-    void prepareFailureView(String error);
 }
