@@ -5,10 +5,6 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 
-
-
-
-
 public class HangmanClient extends WebSocketClient {
 
     public HangmanClient(int roomId) throws Exception {

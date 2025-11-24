@@ -1,5 +1,8 @@
 package entity;
 
+/**
+ * Represents a single word puzzle in a round of Hangman game, storing the target word.
+ */
 public class WordPuzzle {
 
     private char[] letters;
@@ -13,7 +16,6 @@ public class WordPuzzle {
      */
     private boolean[] revealedLettersBooleans;
 
-    // Constructor of WordPuzzle with no letters revealed
     public WordPuzzle(char[] letters) {
         this.letters = letters;
         this.revealedLettersBooleans = new boolean[letters.length];
@@ -30,64 +32,73 @@ public class WordPuzzle {
         return revealedLettersBooleans.clone();
     }
 
-    public char[] getRevealedLetters() {
+//    /**
+//     * Gets the revealed letters in the WordPuzzle
+//     * @return array of chars that have been revealed in the WordPuzzle
+//     */
+//    public char[] getRevealedLetters() {
+//
+//        // Count how many letters have been revealed
+//        int revealedLettersCount = 0;
+//        for (boolean a : this.revealedLettersBooleans) {
+//            if (a) {
+//                revealedLettersCount++;
+//            }
+//        }
+//
+//        final char[] revealedLetters = new char[revealedLettersCount];
+//        int index = 0;
+//
+//        for (int i = 0; i < revealedLettersBooleans.length; i++) {
+//            if (revealedLettersBooleans[i]) {
+//                revealedLetters[index] = letters[i];
+//                index++;
+//            }
+//        }
+//
+//        return revealedLetters;
+//    }
+//
+//    public char[] getHiddenLetters() {
+//
+//        // Count how many letters have not been revealed
+//        int hiddenLettersCount = 0;
+//        for (boolean a : this.revealedLettersBooleans) {
+//            if (!a) {
+//                hiddenLettersCount++;
+//            }
+//        }
+//
+//        char[] hiddenLetters = new char[hiddenLettersCount];
+//        int index = 0;
+//
+//        for (int i = 0; i < revealedLettersBooleans.length; i++) {
+//            if (!this.revealedLettersBooleans[i]) {
+//                hiddenLetters[index] = letters[i];
+//                index++;
+//            }
+//        }
+//
+//        return hiddenLetters;
+//    }
 
-        // Count how many letters have been revealed
-        int revealedLettersCount = 0;
-        for (boolean a : this.revealedLettersBooleans) {
-            if (a == true) {
-                revealedLettersCount++;
-            }
-        }
-
-        char[] revealedLetters = new char[revealedLettersCount];
-        int index = 0;
-
-        for (int i = 0; i < revealedLettersBooleans.length; i++) {
-            if (revealedLettersBooleans[i] == true) {
-                revealedLetters[index] = letters[i];
-                index++;
-            }
-        }
-
-        return revealedLetters;
-    }
-
-    public char[] getHiddenLetters() {
-
-        // Count how many letters have not been revealed
-        int hiddenLettersCount = 0;
+    /**
+     * Checks if the puzzle is completed by check if all the letter has been revealed in the WordPuzzle.
+     * @return boolean of whether all the letters have been marked as revealed,
+     * which is an indication of whether the puzzle is completed or not
+     */    public boolean isPuzzleComplete() {
         for (boolean a : this.revealedLettersBooleans) {
             if (!a) {
-                hiddenLettersCount++;
-            }
-        }
-
-        char[] hiddenLetters = new char[hiddenLettersCount];
-        int index = 0;
-
-        for (int i = 0; i < revealedLettersBooleans.length; i++) {
-            if (!this.revealedLettersBooleans[i]) {
-                hiddenLetters[index] = letters[i];
-                index++;
-            }
-        }
-
-        return hiddenLetters;
-    }
-
-    // Check if all letters have been revealed
-    public boolean isPuzzleComplete() {
-        for (boolean a : this.revealedLettersBooleans) {
-            if (a == false) {
                 return false;
             }
         }
         return true;
     }
 
-    // Reveal all occurrences of a given letter
-    public void revealLetter(char letter) {
+    /**
+     * Mark all the occurrences of the letter in the word as revealed.
+     * @param letter A letter that is going to be assessed
+     */    public void revealLetter(char letter) {
         for (int i = 0; i < letters.length; i++) {
             if (Character.toLowerCase(letters[i]) == letter) {
                 this.revealedLettersBooleans[i] = true;
@@ -95,17 +106,24 @@ public class WordPuzzle {
         }
     }
 
-    // Check if a given letter appears in the word
-    public boolean isLetterInWord(char letter) {
-        for (int i = 0; i < letters.length; i++) {
-            if (Character.toLowerCase(letters[i]) == letter) {
+    /**
+     * Checks if the letter is in the WordPuzzle.
+     * @param letter A letter that is going to be assessed
+     * @return boolean of whether the letter exists in the word
+     */    public boolean isLetterInWord(char letter) {
+        for (char c : letters) {
+            if (Character.toLowerCase(c) == letter) {
                 return true;
             }
         }
         return false;
     }
 
-    // Check if a given letter is in the word and is revealed
+    /**
+     * Checks if the letter is revealed in the WordPuzzle.
+     * @param letter A letter that is going to be assessed
+     * @return boolean of whether the letter is revealed
+     */
     public boolean isLetterRevealed(char letter) {
         for (int i = 0; i < letters.length; i++) {
             if (Character.toLowerCase(letters[i]) == letter) {
@@ -117,7 +135,11 @@ public class WordPuzzle {
         return false;
     }
 
-    // Check if a given letter is in the word and is hidden
+    /**
+     * Checks if the letter is not revealed in the WordPuzzle.
+     * @param letter A letter that is going to be assessed
+     * @return boolean of whether the letter is not revealed
+     */
     public boolean isLetterHidden(char letter) {
         for (int i = 0; i < letters.length; i++) {
             if (Character.toLowerCase(letters[i]) == letter) {
@@ -128,6 +150,11 @@ public class WordPuzzle {
         }
         return false;
     }
+
+    /**
+     * Gets the masked string of the word.
+     * @return String of the masked word with unrevealed character being replaced by '_'
+     */
     public String getMaskedWord() {
         StringBuilder masked = new StringBuilder();
 

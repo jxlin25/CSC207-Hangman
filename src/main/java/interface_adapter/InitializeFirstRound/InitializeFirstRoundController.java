@@ -10,6 +10,9 @@ public class InitializeFirstRoundController {
         this.initializeFirstRoundInputBoundary = initializeFirstRoundInputBoundary;
     }
 
+    /**
+     * Execute the Initialize First Round use case.
+     */
     public void execute() {
         this.initializeFirstRoundInputBoundary.execute();
 
