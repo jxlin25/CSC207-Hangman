@@ -6,8 +6,10 @@ import interface_adapter.InitializeFirstRound.InitializeFirstRoundController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
-public class GenerateWordView extends JPanel {
+public class GenerateWordView extends JPanel implements PropertyChangeListener {
     private final String viewName = "Generate Word";
 
     private GenerateWordController generateWordController;
@@ -19,6 +21,7 @@ public class GenerateWordView extends JPanel {
 
     public GenerateWordView(GenerateWordViewModel viewModel) {
         this.generateWordViewModel = viewModel;
+        this.generateWordViewModel.addPropertyChangeListener(this);
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -44,10 +47,16 @@ public class GenerateWordView extends JPanel {
         });
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        JPanel numberPanel = new JPanel();
+        numberPanel.add(numberLabel);
+        numberPanel.add(numberSelector);
+
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(startGameButton);
 
         this.add(title);
+        this.add(numberPanel);
         this.add(buttonPanel);
     }
 
@@ -61,5 +70,17 @@ public class GenerateWordView extends JPanel {
 
     public void setInitializeFirstRoundController(InitializeFirstRoundController initializeFirstRoundController) {
         this.initializeFirstRoundController = initializeFirstRoundController;
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        final var state = generateWordViewModel.getState();
+
+        if (state.getError() != null) {
+            JOptionPane.showMessageDialog(this,
+                    state.getError(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
