@@ -10,6 +10,7 @@ public class InitializeFirstRoundInteractor implements InitializeFirstRoundInput
         this.hangmanGameDAO = hangmanGameDAO;
     }
 
+    @Override
     public void execute() {
 
         InitializeFirstRoundOutputData outputData =

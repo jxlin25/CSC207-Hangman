@@ -1,12 +1,10 @@
 package interface_adapter.InitializeFirstRound;
 
+import Constant.StatusConstant;
 import interface_adapter.MakeGuess.MakeGuessState;
 import interface_adapter.MakeGuess.MakeGuessViewModel;
 import use_case.InitializeFirstRound.InitializeFirstRoundOutputBoundary;
 import use_case.InitializeFirstRound.InitializeFirstRoundOutputData;
-import use_case.MakeGuess.MakeGuessOutputData;
-
-import static Constant.StatusConstant.*;
 
 public class InitializeFirstRoundPresenter implements InitializeFirstRoundOutputBoundary {
 
@@ -17,22 +15,18 @@ public class InitializeFirstRoundPresenter implements InitializeFirstRoundOutput
         this.makeGuessViewModel = makeGuessViewModel;
     }
 
-
     @Override
     public void initializeView(InitializeFirstRoundOutputData outputData) {
 
-        MakeGuessState state = makeGuessViewModel.getState();
-
+        final MakeGuessState state = makeGuessViewModel.getState();
 
         state.setGuessedLetter(null);
         state.setGuessCorrect(false);
-        state.setRoundStatus(GUESSING);
+        state.setRoundStatus(StatusConstant.GUESSING);
         state.setGameOver(false);
         state.setRemainingAttempts(outputData.getRemainingAttempts());
         state.setCurrentRoundNumber(outputData.getCurrentRoundNumber());
         state.setMaskedWord(outputData.getMaskedWord());
-
-
 
 //        // If the game is over...
 //        if (outputData.isGameOver()) {
@@ -69,7 +63,6 @@ public class InitializeFirstRoundPresenter implements InitializeFirstRoundOutput
 //        }
         makeGuessViewModel.setState(state);
         makeGuessViewModel.firePropertyChanged();
-
     }
 
 

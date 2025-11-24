@@ -33,7 +33,7 @@ public class GenerateWordPresenter implements GenerateWordOutputBoundary {
         generateWordViewModel.setState(state);
         generateWordViewModel.firePropertyChange();
 
-        MakeGuessState makeGuessState = makeGuessViewModel.getState();
+        final MakeGuessState makeGuessState = makeGuessViewModel.getState();
         makeGuessViewModel.setState(makeGuessState);
         makeGuessViewModel.firePropertyChange();
 

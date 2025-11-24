@@ -3,8 +3,6 @@ package entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Constant.StatusConstant.*;
-
 /**
  * Manages the overall game state, including a list of all rounds.
  * This class is the main "entity" for the whole game.
@@ -32,10 +30,9 @@ public class HangmanGame {
 
     /**
      * Gets the currently active round.
-     * @return The current Round object, or null if the game is over.
+     * @return The current Round object.
      */
     public Round getCurrentRound() {
-
         return rounds.get(currentRoundIndex);
     }
 
@@ -48,8 +45,6 @@ public class HangmanGame {
         }
 
     }
-
-
 
     /**
      * Attempts to move to the next round.
@@ -73,10 +68,19 @@ public class HangmanGame {
     }
 
     /**
-     * Checks if all rounds have been played.
+     * Checks if all rounds are over.
+     * @return boolean of whether all the rounds are over
      */
     public boolean isGameOver() {
-        return currentRoundIndex >= rounds.size();
+
+        // Check if all the round has the status of either WON or LOST
+        // If not, immediately return false
+        for  (Round round : rounds) {
+            if (!(round.getStatus() == Constant.StatusConstant.WON || round.getStatus() == Constant.StatusConstant.LOST)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public int getCurrentRoundNumber() {
@@ -90,16 +94,18 @@ public class HangmanGame {
 
     /**
      * Calculates the total number of rounds won so far.
+     * @return number of won round
      */
     public int getRoundsWon() {
         int wins = 0;
 
         for (int i = 0; i < currentRoundIndex; i++) {
-            if (rounds.get(i).getStatus().equals(WON)) {
+            if (rounds.get(i).getStatus().equals(Constant.StatusConstant.WON)) {
                 wins++;
             }
         }
 
         return wins;
     }
+
 }

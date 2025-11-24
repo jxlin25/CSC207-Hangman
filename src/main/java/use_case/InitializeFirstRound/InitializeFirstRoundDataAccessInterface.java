@@ -6,8 +6,8 @@ import entity.WordPuzzle;
 public interface InitializeFirstRoundDataAccessInterface {
 
     /**
-     * Gets the first Round object in the HangmanGame.rounds.
-     * @return the first Round object in the HangmanGame.rounds
+     * Gets the first Round object in the rounds of HangmanGame.
+     * @return the first Round object in the rounds of HangmanGame
      */
     Round getFirstRound();
 
@@ -18,13 +18,21 @@ public interface InitializeFirstRoundDataAccessInterface {
     String getFirstMaskedWord();
 
     /**
-     * Returns the first Round object in the HangmanGame.
-     * @return the round number of the first Round
+     * Returns the round number of the first round in the HangmanGame.
+     * @return the round number of the first round in the HangmanGame
      */
     int getFirstRoundNumber();
 
+    /**
+     * Gets the remaining attempts of the first Round.
+     * @return the remaining attempts of the first Round
+     */
     int getFirstRoundAttempt();
 
+    /**
+     * Gets the WordPuzzle object of the first Round.
+     * @return the WordPuzzle object of the first Round
+     */
     WordPuzzle getFirstWordPuzzle();
 
 }
