@@ -28,7 +28,8 @@ public class GenerateWordPresenter implements GenerateWordOutputBoundary {
     @Override
     public void prepareSuccessView(GenerateWordOutputData outputData) {
         final GenerateWordState state = generateWordViewModel.getState();
-        state.setWordPuzzle(outputData.getPuzzle());
+        state.setWords(outputData.getWords());
+        state.setError(null);
         generateWordViewModel.setState(state);
         generateWordViewModel.firePropertyChange();
 
@@ -40,5 +41,12 @@ public class GenerateWordPresenter implements GenerateWordOutputBoundary {
         viewManagerModel.firePropertyChange();
     }
 
-    //TODO fail view
+    @Override
+    public void prepareFailureView(String error) {
+        final GenerateWordState state = generateWordViewModel.getState();
+        state.setError(error);
+        //TODO I am not sure maybe we don't need this one
+        generateWordViewModel.setState(state);
+        generateWordViewModel.firePropertyChange();
+    }
 }

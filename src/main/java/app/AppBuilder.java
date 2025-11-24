@@ -1,10 +1,8 @@
 package app;
 
 import data_access.InMemoryHangmanDataAccessObject;
-import entity.HangmanGame;
 import interface_adapter.InitializeFirstRound.InitializeFirstRoundController;
 import interface_adapter.InitializeFirstRound.InitializeFirstRoundPresenter;
-import interface_adapter.MakeGuess.MakeGuessState;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.GenerateWord.GenerateWordController;
 import interface_adapter.GenerateWord.GenerateWordPresenter;
@@ -21,8 +19,7 @@ import view.GenerateWordView;
 import view.ViewManager;
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import view.RoomJoinView;
 import interface_adapter.Room.RoomJoinController;
 import use_case.Room.RoomJoinInteractor;
