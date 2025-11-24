@@ -39,6 +39,7 @@ public class GenerateWordInteractor implements GenerateWordInputBoundary {
                 word = generateWordDataAccessInterface.getRandomWord();
                 generateWordDataAccessInterface.saveRandomWord(word);
                 if (generateWordDataAccessInterface.isValidWord(word)) {
+                    break;
                 }
                 tries++;
             }
