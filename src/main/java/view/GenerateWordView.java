@@ -15,6 +15,7 @@ public class GenerateWordView extends JPanel {
     private InitializeFirstRoundController initializeFirstRoundController;
 
     private final JButton startGameButton;
+    private final JComboBox<Integer> numberSelector;
 
     public GenerateWordView(GenerateWordViewModel viewModel) {
         this.generateWordViewModel = viewModel;
@@ -24,12 +25,20 @@ public class GenerateWordView extends JPanel {
         final JLabel title = new JLabel("Let's Start Game!");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        numberSelector = new JComboBox<>(new Integer[]{1, 2, 3, 4, 5, 6});
+        numberSelector.setAlignmentX(Component.CENTER_ALIGNMENT);
+        numberSelector.setSelectedItem(1);
+
+        JLabel numberLabel = new JLabel("Number of Words:");
+        numberLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         startGameButton = new JButton("START");
         startGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         startGameButton.addActionListener(evt -> {
             if (evt.getSource().equals(startGameButton)) {
-                generateWordController.execute();// Generate the HangmanGame entity for the game
+                int numberOfWords = (Integer) numberSelector.getSelectedItem();
+                generateWordController.execute(numberOfWords);// Generate the HangmanGame entity for the game
                 initializeFirstRoundController.execute();// Update the data of the first word to the view
             }
         });
