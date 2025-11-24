@@ -1,6 +1,6 @@
 package use_case.GenerateWord;
 
-import java.util.ArrayList;
+import entity.WordPuzzle;
 
 /**
  * Output Data for the Generate Word Use Case.
@@ -8,13 +8,13 @@ import java.util.ArrayList;
 
 public class GenerateWordOutputData {
 
-    private final ArrayList<String> words;
+    private final WordPuzzle puzzle;
 
-    public GenerateWordOutputData(ArrayList<String> words) {
-        this.words = words;
+    public GenerateWordOutputData(WordPuzzle puzzle) {
+        this.puzzle = puzzle;
     }
 
-    public ArrayList<String> getWords() {
-        return words;
+    public WordPuzzle getPuzzle() {
+        return puzzle;
     }
 }

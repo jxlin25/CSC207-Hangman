@@ -1,6 +1,7 @@
 package use_case.GenerateWord;
 
 import entity.HangmanGame;
+import entity.WordPuzzle;
 
 import use_case.MakeGuess.MakeGuessHangmanGameDataAccessInterface;
 
@@ -11,51 +12,37 @@ import java.util.ArrayList;
  */
 public class GenerateWordInteractor implements GenerateWordInputBoundary {
 
-    private final GenerateWordDataAccessInterface generateWordDataAccessInterface;
+    private final WordPuzzleDataAccessInterface wordPuzzleDataAccessInterface;
     private final GenerateWordOutputBoundary generateWordOutputBoundary;
     private final MakeGuessHangmanGameDataAccessInterface hangmanGameDAO;
 
-    public GenerateWordInteractor(GenerateWordDataAccessInterface generateWordDataAccessInterface,
+    public GenerateWordInteractor(WordPuzzleDataAccessInterface wordPuzzleDataAccessInterface,
                                   GenerateWordOutputBoundary generateWordOutputBoundary,
                                   MakeGuessHangmanGameDataAccessInterface hangmanGameDAO) {
-        this.generateWordDataAccessInterface = generateWordDataAccessInterface;
+        this.wordPuzzleDataAccessInterface = wordPuzzleDataAccessInterface;
         this.generateWordOutputBoundary = generateWordOutputBoundary;
         this.hangmanGameDAO = hangmanGameDAO;
     }
 
     @Override
-    public void execute(GenerateWordInputData inputData) {
-        int n = inputData.getNumbers();
-        if (n < 0) {
-            //This situation won't occur, but to prevent any accidents
-            generateWordOutputBoundary.prepareFailureView("Number of words must be langer than 0!!");
-            return;
-        }
-        ArrayList<String> words = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            int tries = 0;
-            String word = null;
-            while (tries < 10) {
-                word = generateWordDataAccessInterface.getRandomWord();
-                generateWordDataAccessInterface.saveRandomWord(word);
-                if (generateWordDataAccessInterface.isValidWord(word)) {
-                    break;
-                }
-                tries++;
-            }
-            if (word == null || !generateWordDataAccessInterface.isValidWord(word)) {
-                generateWordOutputBoundary.prepareFailureView("Failed to generate a valid word after 10 attempts");
-            }
+    public void execute() {
+        String word = wordPuzzleDataAccessInterface.getRandomWord();
+        wordPuzzleDataAccessInterface.saveRandomWord(word);
+        if (wordPuzzleDataAccessInterface.isValidWord(word)) {
+
+            //TODO We need to think about, use words? or word
+            ArrayList<String> words = new ArrayList<>();
             words.add(word);
+            System.out.println("----------------------------");
+            System.out.println("The Generate Words is :" + words);
+            System.out.println("----------------------------");
+            hangmanGameDAO.setHangmanGame(new HangmanGame(words));
+
+            WordPuzzle puzzle = new WordPuzzle(word.toCharArray());
+            GenerateWordOutputData outputData = new GenerateWordOutputData(puzzle);
+            generateWordOutputBoundary.prepareSuccessView(outputData);
         }
-        System.out.println("----------------------------");
-        System.out.println("The Generate Words is :" + words);
-        System.out.println("----------------------------");
-
-        //TODO this part maybe can change, now, we don't use OutPutData
-        hangmanGameDAO.setHangmanGame(new HangmanGame(words));
-        GenerateWordOutputData outputData = new GenerateWordOutputData(words);
-        generateWordOutputBoundary.prepareSuccessView(outputData);
+        //TODO here must be pass because isValidWord only return true now.
+        return;
     }
-
 }
