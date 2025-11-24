@@ -5,7 +5,7 @@ import entity.WordPuzzle;
 import java.util.ArrayList;
 import use_case.MakeGuess.MakeGuessOutputBoundary;
 
-public class MakeGuessInteractor implements MakeGuessInputBoundary {
+public class MakeGuessInteractor implements lsMakeGuessInputBoundary {
 
     private final MakeGuessHangmanGameDataAccessInterface hangmanDAO;
     private final MakeGuessOutputBoundary presenter;
