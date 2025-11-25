@@ -4,6 +4,7 @@ import network.HangmanClient;
 import org.java_websocket.handshake.ServerHandshake;
 import view.LobbyView;
 import javax.swing.SwingUtilities;
+import entity.Player;
 
 public class RoomJoinInteractor {
     public static void main(String[] args) {
@@ -16,7 +17,6 @@ public class RoomJoinInteractor {
                 public void onMessage(String message) {
                     if (message.contains("\"type\":\"room_check\"")) {
                         boolean exists = message.contains("\"exists\":true");
-
                         callback.onRoomChecked(roomId, exists);
                         this.close();
                     }
@@ -51,6 +51,9 @@ public class RoomJoinInteractor {
 
     public void joinRoom(int roomId, String username) {
         final String finalUser = username;
+//        final Player player = new Player(username);
+//        player.setRoomId(roomId);
+
         try {
             HangmanClient client = new HangmanClient(roomId) {
                 @Override
@@ -73,6 +76,7 @@ public class RoomJoinInteractor {
 
                     }
                 }
+
             };
 
             client.connectBlocking();

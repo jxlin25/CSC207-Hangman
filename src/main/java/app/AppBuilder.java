@@ -1,14 +1,19 @@
 package app;
 
 import data_access.InMemoryHangmanDataAccessObject;
+import data_access.InMemoryLobbyDataAccessObject;
 import entity.HangmanGame;
 import interface_adapter.InitializeFirstRound.InitializeFirstRoundController;
 import interface_adapter.InitializeFirstRound.InitializeFirstRoundPresenter;
 import interface_adapter.MakeGuess.MakeGuessState;
+import interface_adapter.Room.LobbyController;
+import interface_adapter.Room.LobbyPresenter;
+import interface_adapter.Room.LobbyViewModel;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.GenerateWord.GenerateWordController;
 import interface_adapter.GenerateWord.GenerateWordPresenter;
 import interface_adapter.GenerateWord.GenerateWordViewModel;
+import manager.GameSessionManager;
 import use_case.GenerateWord.GenerateWordInputBoundary;
 import use_case.GenerateWord.GenerateWordInteractor;
 import use_case.GenerateWord.GenerateWordOutputBoundary;
@@ -17,18 +22,19 @@ import use_case.InitializeFirstRound.InitializeFirstRoundInputBoundary;
 import use_case.InitializeFirstRound.InitializeFirstRoundInteractor;
 import use_case.InitializeFirstRound.InitializeFirstRoundOutputBoundary;
 import use_case.MakeGuess.*;
-import view.GenerateWordView;
-import view.ViewManager;
+import use_case.Room.LobbyDataAccessInterface;
+import use_case.Room.LobbyInteractor;
+import view.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import view.RoomJoinView;
+
 import interface_adapter.Room.RoomJoinController;
 import use_case.Room.RoomJoinInteractor;
 
 
-import view.MakeGuessView;
 import interface_adapter.MakeGuess.MakeGuessViewModel;
 import interface_adapter.MakeGuess.MakeGuessController;
 import interface_adapter.MakeGuess.MakeGuessPresenter;
@@ -84,6 +90,20 @@ public class AppBuilder {
         roomJoinController = new RoomJoinController(interactor);
         roomJoinView = new RoomJoinView();
         roomJoinView.setController(roomJoinController);
+
+        LobbyViewModel lobbyViewModel = new LobbyViewModel();
+        ViewManagerModel viewManagerModel = new ViewManagerModel();
+
+        LobbyPresenter presenter = new LobbyPresenter(lobbyViewModel, viewManagerModel);
+        LobbyDataAccessInterface dataAccess = new InMemoryLobbyDataAccessObject();
+        GameSessionManager sessionManager = GameSessionManager.getInstance();
+
+        LobbyInteractor lobbyInteractor = new LobbyInteractor(presenter, dataAccess, sessionManager);
+        LobbyController controller = new LobbyController(lobbyInteractor);
+
+        // Now pass the fully-built controller to LobbyView
+        LobbyView lobbyView = new LobbyView(lobbyViewModel, controller);
+
         return this;
     }
 

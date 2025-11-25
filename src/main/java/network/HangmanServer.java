@@ -1,11 +1,15 @@
 package network;
 
+import entity.Player;
+import entity.game_session.GameState;
+import interface_adapter.GameSession.GameSessionController;
+import manager.GameSessionManager;
 import org.java_websocket.server.WebSocketServer;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
-
 import java.net.InetSocketAddress;
 import java.util.*;
+import entity.game_session.GamePhase;
 
 
 
@@ -15,6 +19,12 @@ public class HangmanServer extends WebSocketServer {
     // roomId -> set of sockets
     private final Map<String, Set<WebSocket>> rooms = new HashMap<>();
     private final Set<String> establishedRooms = new HashSet<>();
+    private final Map<String, Set<WebSocket>> rooms; // No player info!
+    private final Map<String, GameState> gameStates;
+    private final Map<String, Map<WebSocket, Player>> roomPlayers = new HashMap<>();
+    private final Map<String, GameState> gameStates = new HashMap<>();
+
+
 
     public HangmanServer(int port) {
         super(new InetSocketAddress(port));
@@ -48,7 +58,14 @@ public class HangmanServer extends WebSocketServer {
             case "check_room" -> handleCheckRoom(conn, room);
             case "create" -> handleCreateRoom(conn, room);
             case "join" -> handleJoin(conn, room);
-            case "guess" -> broadcastToRoom(room, message);
+            case "submit_word" -> {
+                GameSessionController controller = GameSessionManager.getController(room);
+                controller.handleWordSubmission(senderId, msg.get("word"));
+            }
+            case "make_guess" -> {
+                GameSessionController controller = GameSessionManager.getController(room);
+                controller.handleGuess(senderId, msg.get("letter"));
+            }
             case "state" -> broadcastToRoom(room, message); // for spectators
         }
     }
@@ -72,6 +89,11 @@ public class HangmanServer extends WebSocketServer {
 
 
     private void handleJoin(WebSocket conn, String room) {
+        if (rooms.get(room).size() >= 2) { // Enforce 2-player limit
+            conn.send("{\"type\":\"error\",\"message\":\"Room full\"}");
+            return;
+        }
+
         if (!establishedRooms.contains(room)) {
             conn.send("{\"type\":\"error\",\"message\":\"Room does not exist\"}");
             return;

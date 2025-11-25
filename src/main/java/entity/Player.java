@@ -1,10 +1,12 @@
 package entity;
+import java.util.UUID;
 
 public class Player {
 
     private String name;
     //leave for multiplayer mode
-    //private String uid;
+    private final String id;
+    private Integer roomId;
     private int score;
     private String status;
     private long timeTaken;
@@ -15,6 +17,8 @@ public class Player {
         this.score = 0;
         this.timeTaken = 0;
         this.status = "Waiting";
+        this.id = UUID.randomUUID().toString();
+        
     }
 
     public String getName() {
@@ -52,4 +56,17 @@ public class Player {
     public void setAttempt(int attempt) {
         this.attempt = attempt;
     }
+
+    public void setRoomId(int roomId) {
+        if (this.roomId == null) {
+            this.roomId = roomId;
+        }
+    }
+
+    public void addToScore(int points) {
+        this.score += points;
+    }
+
+    public int getRoomId() {return roomId;}
+    public String getId() {return id;}
 }

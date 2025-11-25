@@ -1,7 +1,10 @@
 package view;
 import javax.swing.*;
 import java.awt.*;
+
+import interface_adapter.Room.LobbyController;
 import network.HangmanClient;
+import use_case.Room.LobbyInteractor;
 
 public class LobbyView extends JFrame {
     private int roomId;
@@ -36,6 +39,8 @@ public class LobbyView extends JFrame {
             startGameButton = new JButton("Start Game");
             //startGameButton.addActionListener(e -> startGame());
             add(startGameButton, BorderLayout.SOUTH);
+
+            new LobbyController(new LobbyInteractor()).startGame(roomId);
         } else {
             // Show waiting message for players
             JLabel waitingLabel = new JLabel("Waiting for host to start the game...",

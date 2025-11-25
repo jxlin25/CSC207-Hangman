@@ -1,0 +1,103 @@
+# Hangman Game Project Overview
+
+This document provides a detailed explanation of the Hangman game project, its architecture, and key functionalities. It is intended for developers who are new to the codebase.
+
+## 1. Project Overview
+
+This is a multiplayer Hangman game developed in Java with a GUI built using the Swing framework. The project is structured following the principles of Clean Architecture, which separates concerns into distinct layers. This design allows for both a self-contained single-player mode and a networked multiplayer mode using WebSockets. The project uses Maven for dependency management and building.
+
+## 2. Core Architecture
+
+The project's structure is a practical application of Clean Architecture. The main packages in `src/main/java` map to the different layers of this architecture.
+
+### a. `entity` (Enterprise Business Rules)
+
+This layer contains the core data structures of the application. These are plain Java objects (POJOs) that represent the fundamental concepts of Hangman.
+- **`Player.java`**: Represents a player with a username.
+- **`WordPuzzle.java`**: Represents the secret word to be guessed.
+- **`HangmanGame.java`**: Encapsulates the state of a single Hangman game instance (the word puzzle, guesses made, etc.).
+- **`Round.java`**: Represents a single round of gameplay.
+- **`game_session/GameState.java`**: A crucial data object for multiplayer, holding the entire state of a game room, including players, scores, the current word, and game phase.
+
+### b. `use_case` (Application Business Rules)
+
+This layer contains the "interactors" that execute specific application logic. They are triggered by controllers and orchestrate the flow of data between entities and data access layers.
+- **`GenerateWord/GenerateWordInteractor.java`**: Handles the logic for fetching a new secret word for a game.
+- **`InitializeFirstRound/InitializeFirstRoundInteractor.java`**: Sets up the initial state for a new game session.
+- **`MakeGuess/MakeGuessInteractor.java`**: Processes a player's guess, updates the game state, and determines the outcome (correct, incorrect, win, loss).
+- **`Room/RoomJoinInteractor.java`**: Manages the logic for a player creating or joining a multiplayer room.
+- **`game_session/GameInteractor.java` (Conceptual)**: A planned stateless "rules engine" containing pure functions for multiplayer logic like `processGuess`, `checkWinCondition`, and `calculateRoundScores`.
+
+### c. `interface_adapter` (Interface Adapters)
+
+This layer acts as a bridge between the business logic (use cases) and the UI/frameworks.
+- **Controllers**: They receive input from the UI and trigger the appropriate use case.
+  - `GenerateWord/GenerateWordController.java`
+  - `MakeGuess/MakeGuessController.java`
+  - `Room/RoomJoinController.java`
+- **ViewModels**: They hold the state that the UI needs to display. The UI observes these for changes.
+  - `ViewModel.java` (abstract base class)
+  - `GenerateWord/GenerateWordViewModel.java`
+  - `MakeGuess/MakeGuessViewModel.java`
+- **Presenters**: They are called by interactors after a use case is executed. They format the output data and update the ViewModels.
+  - `GenerateWord/GenerateWordPresenter.java`
+  - `MakeGuess/MakeGuessPresenter.java`
+- **`ViewManagerModel.java`**: A special ViewModel that manages which view is currently active.
+
+### d. `view`, `data_access`, `network` (Frameworks and Drivers)
+
+This is the outermost layer, containing implementation details like the UI, database access, and network communication.
+- **`view`**: Contains all the Swing UI components.
+  - `GenerateWordView.java`: The initial screen for starting a game.
+  - `MakeGuessView.java`: The main gameplay screen, showing the hangman, word, and letter buttons.
+  - `RoomJoinView.java`: The UI for entering a username and room ID for multiplayer.
+  - `LobbyView.java`: The waiting room for a multiplayer match.
+  - `ViewManager.java`: Manages the card layout to switch between different views.
+- **`data_access`**: Contains concrete implementations for data persistence.
+  - `InMemoryHangmanDataAccessObject.java`: A simple in-memory "database" used for managing the state of the single-player game.
+  - `DBGenerateWordDataAccessObject.java`: Fetches words from an external source/database (implementation details may vary).
+- **`network`**: Contains the WebSocket communication logic for multiplayer.
+  - `HangmanServer.java`: The central server that manages game rooms and communication between players. It listens for connections and messages.
+  - `HangmanClient.java`: The client that connects to the `HangmanServer`. Each player's application instance has one.
+
+## 3. Key Functionalities & Flow
+
+### Single-Player Mode
+
+1.  **Start**: The application launches, showing `GenerateWordView`.
+2.  **Word Generation**: The user clicks a button, which triggers `GenerateWordController` -> `GenerateWordInteractor`. A word is fetched using an implementation of `WordPuzzleDataAccessInterface`.
+3.  **Initialization**: The `InitializeFirstRoundInteractor` sets up a `HangmanGame` object and stores it in the `InMemoryHangmanDataAccessObject`.
+4.  **Gameplay**: The `ViewManager` switches to `MakeGuessView`. The player clicks letter buttons. Each click follows this cycle:
+    `MakeGuessView` -> `MakeGuessController` -> `MakeGuessInteractor` (retrieves and updates game state from `InMemoryHangmanDataAccessObject`) -> `MakeGuessPresenter` -> `MakeGuessViewModel` (which the view is listening to).
+5.  **End**: The cycle repeats until the game is won or lost.
+
+### Multiplayer Mode
+
+1.  **Connection**: A player enters a username and room ID in `RoomJoinView`. This triggers `RoomJoinController` -> `RoomJoinInteractor`.
+2.  **WebSocket Handshake**: The `RoomJoinInteractor` creates a `HangmanClient` instance, which connects to the `HangmanServer`. Upon connecting, it sends a "join" or "create" room message with the player's info.
+3.  **Lobby**: The server adds the player to the room, and the client's UI switches to `LobbyView`.
+4.  **Game Logic (Server-Side)**: The entire multiplayer match is orchestrated by the server.
+    - One player (the "Setter") provides a word.
+    - The server uses this word to start the round.
+    - The other player (the "Guesser") sends guess messages.
+    - The server receives guess messages, processes them using the rules in `GameInteractor`, updates the central `GameState` for that room, and **broadcasts** the new `GameState` to all clients in the room.
+    - The clients' UIs (e.g., `MakeGuessView`) simply listen for these broadcasted state updates from the server and render them. They do not contain any game logic themselves.
+5.  **Scoring and Rounds**: At the end of a round, the server calculates scores, checks if the match is over, and manages swapping roles, all based on the logic defined in `GameInteractor` and orchestrated by a server-side controller.
+
+## 4. How to Build and Run
+
+This project uses Apache Maven.
+
+1.  **Build the project**:
+    ```sh
+    mvn clean install
+    ```
+2.  **Run the application**:
+    - To run the main application (client):
+      ```sh
+      mvn exec:java -Dexec.mainClass="app.Main"
+      ```
+    - To run the multiplayer server:
+      ```sh
+      mvn exec:java -Dexec.mainClass="network.HangmanServer"
+      ```
