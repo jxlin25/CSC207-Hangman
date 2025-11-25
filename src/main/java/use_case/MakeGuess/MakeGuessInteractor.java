@@ -29,6 +29,9 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
         String roundStatus = Constant.StatusConstant.GUESSING;
         boolean isGameOver = false;
 
+        // Word of the round that just ended (for win/lose dialogs)
+        String endedRoundWord = null;
+
         // If the guess is correct, reveal the correctly guessed letter and check if the puzzle is complete
         if (isGuessCorrect) {
             this.hangmanGameDAO.revealLetterInCurrentWordPuzzle(guess);
@@ -36,6 +39,8 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
             // If this guess leads to the completion of the puzzle, mark the current round as WON and start next round
             if (this.hangmanGameDAO.isCurrentWordPuzzleComplete()) {
 
+                // Capture current round's word BEFORE moving to the next round
+                endedRoundWord = hangmanGameDAO.getCurrentWord();
                 roundStatus = Constant.StatusConstant.WON;
 
                 if (!this.hangmanGameDAO.setCurrentRoundWonAndStartNextRound()) {
@@ -52,11 +57,21 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
         // If the guess is the last guess and does not complete the puzzle,
         // mark the current round as LOST and start next round
         if (!this.hangmanGameDAO.isCurrentWordPuzzleComplete() && this.hangmanGameDAO.getCurrentRoundAttempt() == 0) {
+            if (endedRoundWord == null) {
+                // capture word BEFORE switching to next round
+                endedRoundWord = hangmanGameDAO.getCurrentWord();
+            }
+
             roundStatus = Constant.StatusConstant.LOST;
 
             if (!this.hangmanGameDAO.setCurrentRoundLostAndStartNextRound()) {
                 isGameOver = true;
             }
+        }
+
+        // If still guessing, we can still pass current word (optional).
+        if (endedRoundWord == null) {
+            endedRoundWord = hangmanGameDAO.getCurrentWord();
         }
 
         final MakeGuessOutputData outputData = new MakeGuessOutputData(
@@ -66,7 +81,9 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
                 isGameOver,
                 remainingAttempts,
                 this.hangmanGameDAO.getCurrentRoundNumber(),
-                this.hangmanGameDAO.getMaskedWord());
+                this.hangmanGameDAO.getMaskedWord(),
+                endedRoundWord
+        );
 
         presenter.updateView(outputData);
     }

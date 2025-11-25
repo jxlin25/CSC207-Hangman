@@ -3,6 +3,8 @@ package interface_adapter.MakeGuess;
 import use_case.MakeGuess.MakeGuessOutputBoundary;
 import use_case.MakeGuess.MakeGuessOutputData;
 
+import static Constant.StatusConstant.*;
+
 /** The Presenter for the MakeGuess use case.
  */
 public class MakeGuessPresenter implements MakeGuessOutputBoundary {
@@ -26,6 +28,31 @@ public class MakeGuessPresenter implements MakeGuessOutputBoundary {
         state.setCurrentRoundNumber(outputData.getCurrentRoundNumber());
         state.setMaskedWord(outputData.getMaskedWord());
 
+        // new
+        state.setCorrectWord(outputData.getCorrectWord());
+
+        String message = "";
+        if (outputData.isGameOver()) {
+            if (WON.equals(outputData.getRoundStatus())) {
+                message = "You won the game! Final word: " + outputData.getCorrectWord();
+            } else if (LOST.equals(outputData.getRoundStatus())) {
+                message = "Game over. The correct word was: " + outputData.getCorrectWord();
+            } else {
+                message = "Game over!";
+            }
+        } else {
+            if (GUESSING.equals(outputData.getRoundStatus())) {
+                if (outputData.isGuessCorrect()) {
+                    message = "Correct guess! " + outputData.getRemainingAttempts() + " attempts left.";
+                } else {
+                    message = "Wrong guess. " + outputData.getRemainingAttempts() + " attempts left.";
+                }
+            } else if (WON.equals(outputData.getRoundStatus())) {
+                message = "You won this round! The word was: " + outputData.getCorrectWord();
+            } else if (LOST.equals(outputData.getRoundStatus())) {
+                message = "You lost this round. The correct word was: " + outputData.getCorrectWord();
+            }
+        }
 //        // If the game is over...
 //        if (outputData.isGameOver()) {
 //            state.setMessage("Game Over!");

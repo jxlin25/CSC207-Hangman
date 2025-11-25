@@ -28,7 +28,9 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
     private final JLabel roundNumberLabel = new JLabel("Round number: 1");
     private final JButton restartButton;
 
-
+    // new
+    private final JLabel messageLabel = new JLabel(" ");
+    private int lastRoundNumber = 1;
 
 
     //private final JLabel hangmanImageLabel;
@@ -47,6 +49,9 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         wordPuzzleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // new
+        messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         restartButton = new JButton("Restart");
         restartButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -99,7 +104,7 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         this.add(Box.createVerticalStrut(20));
 //        this.add(hangmanImageLabel);
         this.add(Box.createVerticalStrut(20));
-//        this.add(messageLabel);
+        this.add(messageLabel);
 //        this.add(guessInputField);
 //        this.add(guessButton);
         this.add(restartButton);
@@ -124,38 +129,91 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         System.out.println(state.isGameOver());
         System.out.println("----------------------------");
 
+        int maxAttempts = 6;
+
         if (!state.isGameOver()) {
-            int maxAttempts = 6; // can be changed by difficulty level setting
             int remainingAttempts = state.getRemainingAttempts();
 
+            // Detect if we just started a new round or a new game
+            int currentRound = state.getCurrentRoundNumber();
+
+            // New game: round goes back to 1, so reset lastRoundNumber and clear message
+            if (currentRound == 1 && lastRoundNumber != 1) {
+                lastRoundNumber = 1;
+                messageLabel.setText(" ");
+            }
+            // New round within the same game: round number increases
+            else if (currentRound != lastRoundNumber) {
+                messageLabel.setText(" ");
+                lastRoundNumber = currentRound;
+            }
+
+            // Round just ended (win or loss)
             if (state.getRoundStatus().equals(WON) || state.getRoundStatus().equals(LOST)) {
                 System.out.println("triggered");
 
+                // Show round end dialog WITH the word
+                if (state.getRoundStatus().equals(WON)) {
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "You won this round! The word was: " + state.getCorrectWord(),
+                            "Round Result",
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
+                } else {
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "You lost this round. The correct word was: " + state.getCorrectWord(),
+                            "Round Result",
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
+                }
+
+                // Show the presenter's message (which can still include the word)
+                if (state.getMessage() != null && !state.getMessage().isEmpty()) {
+                    messageLabel.setText(state.getMessage());
+                }
+
+                // Reset attempts for the NEXT round
                 remainingAttempts = maxAttempts;
-                // renew the buttons
+
+                // Renew the letter buttons for the next round
                 this.remove(this.alphabetButtonsPanel);
                 this.alphabetButtonsPanel = this.createNewLetterButtonsPanel();
                 this.add(alphabetButtonsPanel);
                 this.revalidate();
                 this.repaint();
+            } else {
+                // Still guessing in current round (normal letter click)
+                if (state.getMessage() != null && !state.getMessage().isEmpty()) {
+                    messageLabel.setText(state.getMessage());
+                }
             }
-            this.roundNumberLabel.setText("Round number: " + state.getCurrentRoundNumber());
+
+            this.roundNumberLabel.setText("Round number: " + currentRound);
             hangmanImagePanel.setIncorrectGuesses(maxAttempts - remainingAttempts);
             this.attemptsLabel.setText("Attempts left: " + remainingAttempts);
-
 
             // Update the displayed word
             this.wordPuzzleLabel.setText(state.getMaskedWord());
         }
-        else{
+        else {
+            // GAME OVER (no more rounds)
+            if (state.getMessage() != null && !state.getMessage().isEmpty()) {
+                messageLabel.setText(state.getMessage());
+            } else if (state.getCorrectWord() != null && !state.getCorrectWord().isEmpty()) {
+                messageLabel.setText("Game Over. The correct word was: " + state.getCorrectWord());
+            } else {
+                messageLabel.setText("Game Over!");
+            }
+
             JOptionPane.showMessageDialog(
-                    this,                   // parent component
-                    "Game Over!",           // message
-                    "Game Over",            // title
+                    this,
+                    "Game Over!",
+                    "Game Over",
                     JOptionPane.INFORMATION_MESSAGE
             );
         }
-
     }
 
 
@@ -185,6 +243,14 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
     }
 
     private void returnToStartView() {
+        // Clear UI state for a fresh game
+        messageLabel.setText(" ");
+        lastRoundNumber = 1;
+        wordPuzzleLabel.setText("????");
+        attemptsLabel.setText("Attempts left: 6");
+        roundNumberLabel.setText("Round number: 1");
+        hangmanImagePanel.setIncorrectGuesses(0);
+
         if (viewManagerModel != null) {
             viewManagerModel.setState("Generate Word");
             viewManagerModel.firePropertyChange();

@@ -106,4 +106,9 @@ public interface MakeGuessHangmanGameDataAccessInterface {
      */
     boolean[] getCurrentWordPuzzleRevealedLettersBooleans();
 
+    /**
+     * Gets the full word of the current WordPuzzle.
+     * @return the full word of the current WordPuzzle as a String
+     */
+    String getCurrentWord();
 }

@@ -81,7 +81,8 @@ public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameData
 
     @Override
     public char[] getCurrentWordPuzzleLetters() {
-        return new char[0];
+        // WordPuzzle exposes the underlying letters via getLetters()
+        return this.getCurrentWordPuzzle().getLetters();
     }
 
     @Override
@@ -97,6 +98,13 @@ public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameData
     @Override
     public int getCurrentRoundNumber() {
         return this.getHangmanGame().getCurrentRoundNumber();
+    }
+
+    // full word string for the *current* round
+    @Override
+    public String getCurrentWord() {
+        char[] letters = this.getCurrentWordPuzzleLetters();
+        return new String(letters);
     }
 
     // InitializeFirstRoundDataAccessInterface

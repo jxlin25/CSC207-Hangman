@@ -13,6 +13,8 @@ public class MakeGuessState {
     private int currentRoundNumber = 1;
     private String maskedWord = "";
     private String message = "";
+    // New word for the round that just ended
+    private String correctWord = "";
 
     public MakeGuessState() {
     }
@@ -90,6 +92,10 @@ public class MakeGuessState {
     public void setMaskedWord(String maskedWord) {
         this.maskedWord = maskedWord;
     }
+
+    // new
+    public String getCorrectWord() {return correctWord;}
+    public void setCorrectWord(String correctWord) {this.correctWord = correctWord;}
 }
 
 
