@@ -1,10 +1,8 @@
 package app;
 
 import data_access.InMemoryHangmanDataAccessObject;
-import entity.HangmanGame;
 import interface_adapter.InitializeFirstRound.InitializeFirstRoundController;
 import interface_adapter.InitializeFirstRound.InitializeFirstRoundPresenter;
-import interface_adapter.MakeGuess.MakeGuessState;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.GenerateWord.GenerateWordController;
 import interface_adapter.GenerateWord.GenerateWordPresenter;
@@ -17,21 +15,20 @@ import use_case.InitializeFirstRound.InitializeFirstRoundInputBoundary;
 import use_case.InitializeFirstRound.InitializeFirstRoundInteractor;
 import use_case.InitializeFirstRound.InitializeFirstRoundOutputBoundary;
 import use_case.MakeGuess.*;
-import view.GenerateWordView;
-import view.ViewManager;
+import view.*;
+
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import view.RoomJoinView;
+
 import interface_adapter.Room.RoomJoinController;
 import use_case.Room.RoomJoinInteractor;
 
 
-import view.MakeGuessView;
 import interface_adapter.MakeGuess.MakeGuessViewModel;
 import interface_adapter.MakeGuess.MakeGuessController;
 import interface_adapter.MakeGuess.MakeGuessPresenter;
+
+import interface_adapter.EndGameResults.EndGameResultsViewModel;
 
 public class AppBuilder {
 
@@ -48,11 +45,13 @@ public class AppBuilder {
     //View Model
     private GenerateWordViewModel generateWordViewModel;
     private MakeGuessViewModel makeGuessViewModel;
+    private EndGameResultsViewModel endGameResultsViewModel;
 
     //View
     private GenerateWordView generateWordView;
     private MakeGuessView makeGuessView;
     private RoomJoinView roomJoinView;
+    private EndGameResultsView endGameResultsView;
 
     //Controller
     private RoomJoinController roomJoinController;
@@ -106,6 +105,7 @@ public class AppBuilder {
         MakeGuessOutputBoundary makeGuessPresenter = new MakeGuessPresenter(makeGuessViewModel);
         MakeGuessInputBoundary makeGuessInteractor = new MakeGuessInteractor(makeGuessPresenter, hangmanGameDAO);
         MakeGuessController makeGuessController = new MakeGuessController(makeGuessInteractor);
+        makeGuessView.setViewManagerModel(viewManagerModel);
         makeGuessView.setMakeGuessController(makeGuessController);
         return this;
     }
@@ -118,6 +118,17 @@ public class AppBuilder {
         generateWordView.setInitializeFirstRoundController(initializeFirstRoundController);
 
 
+        return this;
+    }
+
+    public AppBuilder addEndGameResultsViewModel() {
+        this.endGameResultsViewModel = new EndGameResultsViewModel();
+        return this;
+    }
+
+    public AppBuilder addEndGameResultsView() {
+        endGameResultsView = new EndGameResultsView(endGameResultsViewModel);
+        cardPanel.add(endGameResultsView, endGameResultsView.getViewName());
         return this;
     }
 
