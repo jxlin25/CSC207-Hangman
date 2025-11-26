@@ -2,7 +2,7 @@ package view;
 
 import interface_adapter.GenerateWord.GenerateWordController;
 import interface_adapter.GenerateWord.GenerateWordViewModel;
-import interface_adapter.InitializeFirstRound.InitializeFirstRoundController;
+import interface_adapter.InitializeRound.InitializeRoundController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +14,7 @@ public class GenerateWordView extends JPanel implements PropertyChangeListener {
 
     private GenerateWordController generateWordController;
     private final GenerateWordViewModel generateWordViewModel;
-    private InitializeFirstRoundController initializeFirstRoundController;
+    private InitializeRoundController initializeRoundController;
 
     private final JButton startGameButton;
     private final JComboBox<Integer> numberSelector;
@@ -42,7 +42,7 @@ public class GenerateWordView extends JPanel implements PropertyChangeListener {
             if (evt.getSource().equals(startGameButton)) {
                 int numberOfWords = (Integer) numberSelector.getSelectedItem();
                 generateWordController.execute(numberOfWords);// Generate the HangmanGame entity for the game
-                initializeFirstRoundController.execute();// Update the data of the first word to the view
+                initializeRoundController.execute();// Update the data of the first word to the view
             }
         });
 
@@ -68,8 +68,8 @@ public class GenerateWordView extends JPanel implements PropertyChangeListener {
         this.generateWordController = generateWordController;
     }
 
-    public void setInitializeFirstRoundController(InitializeFirstRoundController initializeFirstRoundController) {
-        this.initializeFirstRoundController = initializeFirstRoundController;
+    public void setInitializeFirstRoundController(InitializeRoundController initializeRoundController) {
+        this.initializeRoundController = initializeRoundController;
     }
 
     @Override

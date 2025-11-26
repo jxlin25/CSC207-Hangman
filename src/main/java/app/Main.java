@@ -2,9 +2,6 @@ package app;
 
 import javax.swing.*;
 import network.*;
-import view.RoomJoinView;
-import interface_adapter.Room.RoomJoinController;
-import use_case.Room.RoomJoinInteractor;
 
 public class Main {
     public static void main(String[] args) {
@@ -15,7 +12,7 @@ public class Main {
                 .addMakeGuessView()
                 .addRoomJoinView()
                 .addGenerateWordUseCase()
-                .addInitializeFirstRoundUseCase() // Please ensure addInitializeFirstRoundUseCase() is after addGenerateWordView()
+                .addInitializeRoundUseCase() // Please ensure addInitializeFirstRoundUseCase() is after addGenerateWordView()
                 .addMakeGuessUseCase()
                 .build();
         app.setSize(800, 600);
