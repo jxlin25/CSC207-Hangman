@@ -11,7 +11,7 @@ public class GameSessionController {
     private final GameState gameState;
     private final GameInteractor gameInteractor;
 
-    public GameSession
+//    public GameSession
 
     public void handleGuess(String playerId, char letter) {
         if (!gameState.getCurrentGuesserId().equals(playerId)) {

@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameSessionManager {
-    public class GameSessionManager {
+//    public class GameSessionManager {
         private static GameSessionManager instance;
         private final Map<String, GameSessionController> sessions = new HashMap<>();
 
