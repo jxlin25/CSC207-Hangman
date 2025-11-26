@@ -1,22 +1,22 @@
-package interface_adapter.InitializeFirstRound;
+package interface_adapter.InitializeRound;
 
 import Constant.StatusConstant;
 import interface_adapter.MakeGuess.MakeGuessState;
 import interface_adapter.MakeGuess.MakeGuessViewModel;
-import use_case.InitializeFirstRound.InitializeFirstRoundOutputBoundary;
-import use_case.InitializeFirstRound.InitializeFirstRoundOutputData;
+import use_case.InitializeRound.InitializeRoundOutputBoundary;
+import use_case.InitializeRound.InitializeRoundOutputData;
 
-public class InitializeFirstRoundPresenter implements InitializeFirstRoundOutputBoundary {
+public class InitializeRoundPresenter implements InitializeRoundOutputBoundary {
 
     private final MakeGuessViewModel makeGuessViewModel;
 
-    public InitializeFirstRoundPresenter(MakeGuessViewModel makeGuessViewModel) {
+    public InitializeRoundPresenter(MakeGuessViewModel makeGuessViewModel) {
 
         this.makeGuessViewModel = makeGuessViewModel;
     }
 
     @Override
-    public void initializeView(InitializeFirstRoundOutputData outputData) {
+    public void initializeView(InitializeRoundOutputData outputData) {
 
         final MakeGuessState state = makeGuessViewModel.getState();
 
