@@ -56,55 +56,22 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         restartButton.addActionListener(e -> {
             int option = JOptionPane.showConfirmDialog(
                     this,
-                    "Are you want to restart the game?",
+                    "Do you want to restart the game?",
                     "Confirm Restart",
                     JOptionPane.YES_NO_OPTION
             );
+            this.resetLetterButtonsPanel();
             if (option == JOptionPane.YES_OPTION) {
                 returnToStartView();
             }
         });
-
-
-//        hangmanImageLabel = new JLabel();
-//        hangmanImageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-//        updateImage(0);
-
-
-//        messageLabel = new JLabel("Enter a letter:");
-//        messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-//        guessInputField = new JTextField(5);
-//        guessInputField.setMaximumSize(new Dimension(100, 30));
-//
-//        guessButton = new JButton(MakeGuessViewModel.GUESS_BUTTON_LABEL);
-//        guessButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-//
-//        // Button Action
-//        guessButton.addActionListener(
-//                new ActionListener() {
-//                    public void actionPerformed(ActionEvent evt) {
-//                        if (evt.getSource().equals(guessButton)) {
-//
-//                            String letter = guessInputField.getText();
-//
-//
-//                            guessInputField.setText("");
-//                        }
-//                    }
-//                }
-//        );
 
         // Add everything to the panel
         this.add(hangmanImagePanel);
         this.add(attemptsLabel);
         this.add(roundNumberLabel);
         this.add(Box.createVerticalStrut(20));
-//        this.add(hangmanImageLabel);
         this.add(Box.createVerticalStrut(20));
-//        this.add(messageLabel);
-//        this.add(guessInputField);
-//        this.add(guessButton);
         this.add(restartButton);
         this.add(wordPuzzleLabel);
         this.add(alphabetButtonsPanel);
