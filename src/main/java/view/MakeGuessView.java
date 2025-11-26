@@ -75,10 +75,7 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         this.add(restartButton);
         this.add(wordPuzzleLabel);
         this.add(alphabetButtonsPanel);
-    }
 
-    public void setMakeGuessController(MakeGuessController controller) {
-        this.makeGuessController = controller;
     }
 
     public void setInitializeRoundController(InitializeRoundController controller) {
@@ -92,7 +89,7 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        final MakeGuessState state = (MakeGuessState) evt.getNewValue();
+        MakeGuessState state = (MakeGuessState) evt.getNewValue();
 
         System.out.println("Guessed letter: " + state.getGuessedLetter());
         System.out.println("Status: " + state.getRoundStatus());
@@ -134,18 +131,22 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         }
     }
 
+
     private JPanel createNewLetterButtonsPanel() {
-        final JPanel lettersPanel = new JPanel(new GridLayout(2, 13, 5, 5));
+        JPanel lettersPanel = new JPanel(new GridLayout(2, 13, 5, 5));
 
-        for (int i = 0; i < Constants.NUMBER_OF_ENGLISH_ALPHABET; i++) {
+        for (int i = 0; i < 26; i++) {
             final char letter = (char) ('A' + i);
-            final JButton button = new JButton(String.valueOf(letter));
+            JButton button = new JButton(String.valueOf(letter));
 
-            button.addActionListener(actionEvent -> {
+            button.addActionListener(e -> {
+
                 // Make a guess by the letter
                 makeGuessController.execute(Character.toLowerCase(letter));
+
                 // Disable the button so it can't be clicked again
                 button.setEnabled(false);
+
                 // Change the button color
                 button.setBackground(Color.LIGHT_GRAY);
             });
@@ -189,6 +190,10 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
 
     public void setViewManagerModel(ViewManagerModel viewManagerModel) {
         this.viewManagerModel = viewManagerModel;
+    }
+
+    public void setMakeGuessController(MakeGuessController controller) {
+        this.makeGuessController = controller;
     }
 
 //    public String getViewName() {

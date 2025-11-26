@@ -1,6 +1,8 @@
 package app;
 
 import data_access.InMemoryHangmanDataAccessObject;
+import interface_adapter.InitializeFirstRound.InitializeFirstRoundController;
+import interface_adapter.InitializeFirstRound.InitializeFirstRoundPresenter;
 import interface_adapter.InitializeRound.InitializeRoundController;
 import interface_adapter.InitializeRound.InitializeRoundPresenter;
 import interface_adapter.ViewManagerModel;
@@ -15,21 +17,20 @@ import use_case.InitializeRound.InitializeRoundInputBoundary;
 import use_case.InitializeRound.InitializeRoundInteractor;
 import use_case.InitializeRound.InitializeRoundOutputBoundary;
 import use_case.MakeGuess.*;
-import view.GenerateWordView;
-import view.ViewManager;
+import view.*;
+
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import view.RoomJoinView;
+
 import interface_adapter.Room.RoomJoinController;
 import use_case.Room.RoomJoinInteractor;
 
 
-import view.MakeGuessView;
 import interface_adapter.MakeGuess.MakeGuessViewModel;
 import interface_adapter.MakeGuess.MakeGuessController;
 import interface_adapter.MakeGuess.MakeGuessPresenter;
+
+import interface_adapter.EndGameResults.EndGameResultsViewModel;
 
 public class AppBuilder {
 
@@ -46,11 +47,13 @@ public class AppBuilder {
     //View Model
     private GenerateWordViewModel generateWordViewModel;
     private MakeGuessViewModel makeGuessViewModel;
+    private EndGameResultsViewModel endGameResultsViewModel;
 
     //View
     private GenerateWordView generateWordView;
     private MakeGuessView makeGuessView;
     private RoomJoinView roomJoinView;
+    private EndGameResultsView endGameResultsView;
 
     //Controller
     private RoomJoinController roomJoinController;
@@ -115,6 +118,17 @@ public class AppBuilder {
         final InitializeRoundController initializeRoundController = new InitializeRoundController(initializeFirstRoundInteractor);
         generateWordView.setInitializeFirstRoundController(initializeRoundController);
         makeGuessView.setInitializeRoundController(initializeRoundController);
+        return this;
+    }
+
+    public AppBuilder addEndGameResultsViewModel() {
+        this.endGameResultsViewModel = new EndGameResultsViewModel();
+        return this;
+    }
+
+    public AppBuilder addEndGameResultsView() {
+        endGameResultsView = new EndGameResultsView(endGameResultsViewModel);
+        cardPanel.add(endGameResultsView, endGameResultsView.getViewName());
         return this;
     }
 

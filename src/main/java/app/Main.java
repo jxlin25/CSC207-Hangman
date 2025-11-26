@@ -10,6 +10,8 @@ public class Main {
         JFrame app = new AppBuilder()
                 .addGenerateWordView()
                 .addMakeGuessView()
+                .addEndGameResultsViewModel()
+                .addEndGameResultsView()
                 .addRoomJoinView()
                 .addGenerateWordUseCase()
                 .addInitializeRoundUseCase() // Please ensure addInitializeFirstRoundUseCase() is after addGenerateWordView()
