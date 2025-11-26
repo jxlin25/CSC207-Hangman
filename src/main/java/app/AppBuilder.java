@@ -1,8 +1,8 @@
 package app;
 
 import data_access.InMemoryHangmanDataAccessObject;
-import interface_adapter.InitializeFirstRound.InitializeFirstRoundController;
-import interface_adapter.InitializeFirstRound.InitializeFirstRoundPresenter;
+import interface_adapter.InitializeRound.InitializeRoundController;
+import interface_adapter.InitializeRound.InitializeRoundPresenter;
 import interface_adapter.InitializeRound.InitializeRoundController;
 import interface_adapter.InitializeRound.InitializeRoundPresenter;
 import interface_adapter.ViewManagerModel;
