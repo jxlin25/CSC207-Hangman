@@ -23,6 +23,7 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
     private final MakeGuessViewModel makeGuessViewModel;
     private MakeGuessController makeGuessController;
     private ViewManagerModel viewManagerModel;
+    private InitializeRoundController initializeRoundController;
 
     private final HangmanImagePanel hangmanImagePanel = new HangmanImagePanel();
     private final JLabel wordPuzzleLabel = new JLabel("????");
@@ -164,42 +165,7 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
 
             }
         }
-
-//        if (!state.isGameOver()) {
-//            // The maxAttempts can be changed by difficulty level setting
-//            final int maxAttempts = 6;
-//            int remainingAttempts = state.getRemainingAttempts();
-//
-//            this.roundNumberLabel.setText("Round number: " + state.getCurrentRoundNumber());
-//            hangmanImagePanel.setIncorrectGuesses(maxAttempts - remainingAttempts);
-//            this.attemptsLabel.setText("Attempts left: " + remainingAttempts);
-//
-//            if (state.getRoundStatus().equals(WON) || state.getRoundStatus().equals(LOST)) {
-//                System.out.println("Round over");
-//
-//                remainingAttempts = maxAttempts;
-//                // renew the buttons
-//                this.remove(this.alphabetButtonsPanel);
-//                this.alphabetButtonsPanel = this.createNewLetterButtonsPanel();
-//                this.add(alphabetButtonsPanel);
-//                this.revalidate();
-//                this.repaint();
-//            }
-//
-//            // Update the displayed word
-//            this.wordPuzzleLabel.setText(state.getMaskedWord());
-//        }
-//        else {
-//            JOptionPane.showMessageDialog(
-//                    this,
-//                    "Game Over!",
-//                    "Game Over",
-//                    JOptionPane.INFORMATION_MESSAGE
-//            );
-//        }
-
     }
-
 
     private JPanel createNewLetterButtonsPanel() {
         final JPanel lettersPanel = new JPanel(new GridLayout(2, 13, 5, 5));
@@ -239,7 +205,8 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         if (viewManagerModel != null) {
             viewManagerModel.setState("Generate Word");
             viewManagerModel.firePropertyChange();
-        } else {
+        }
+        else {
             JOptionPane.showMessageDialog(
                     this,
                     "Navigation error: viewManagerModel not set.",
@@ -255,10 +222,6 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
 
     public void setViewManagerModel(ViewManagerModel viewManagerModel) {
         this.viewManagerModel = viewManagerModel;
-    }
-
-    public void setMakeGuessController(MakeGuessController controller) {
-        this.makeGuessController = controller;
     }
 
 //    public String getViewName() {
