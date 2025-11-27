@@ -2,18 +2,19 @@ package app;
 
 import data_access.InMemoryHangmanDataAccessObject;
 import data_access.InMemoryLobbyDataAccessObject;
+import data_access.InMemoryRoomJoinDataAccessObject;
 import entity.HangmanGame;
 import interface_adapter.InitializeFirstRound.InitializeFirstRoundController;
 import interface_adapter.InitializeFirstRound.InitializeFirstRoundPresenter;
 import interface_adapter.MakeGuess.MakeGuessState;
-import interface_adapter.Room.LobbyController;
-import interface_adapter.Room.LobbyPresenter;
-import interface_adapter.Room.LobbyViewModel;
+import interface_adapter.Room.*;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.GenerateWord.GenerateWordController;
 import interface_adapter.GenerateWord.GenerateWordPresenter;
 import interface_adapter.GenerateWord.GenerateWordViewModel;
 import manager.GameSessionManager;
+import network.HangmanClient;
+import org.java_websocket.client.WebSocketClient;
 import use_case.GenerateWord.GenerateWordInputBoundary;
 import use_case.GenerateWord.GenerateWordInteractor;
 import use_case.GenerateWord.GenerateWordOutputBoundary;
@@ -24,6 +25,7 @@ import use_case.InitializeFirstRound.InitializeFirstRoundOutputBoundary;
 import use_case.MakeGuess.*;
 import use_case.Room.LobbyDataAccessInterface;
 import use_case.Room.LobbyInteractor;
+import use_case.Room.RoomJoinInputData;
 import view.*;
 
 import javax.swing.*;
@@ -31,7 +33,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import interface_adapter.Room.RoomJoinController;
 import use_case.Room.RoomJoinInteractor;
 
 
@@ -86,25 +87,34 @@ public class AppBuilder {
     }
 
     public AppBuilder addRoomJoinView() {
-        RoomJoinInteractor interactor = new RoomJoinInteractor();
-        roomJoinController = new RoomJoinController(interactor);
-        roomJoinView = new RoomJoinView();
-        roomJoinView.setController(roomJoinController);
+        try {
+            HangmanClient hangmanClient = new HangmanClient();
+            RoomJoinViewModel roomJoinViewModel = new RoomJoinViewModel();
+            ViewManagerModel viewManagerModel = new ViewManagerModel();
+            LobbyViewModel lobbyViewModel = new LobbyViewModel();
+            RoomJoinPresenter roomJoinPresenter = new RoomJoinPresenter(roomJoinViewModel, lobbyViewModel, viewManagerModel);
+            InMemoryRoomJoinDataAccessObject inMemoryRoomDataAccess = new InMemoryRoomJoinDataAccessObject(hangmanClient);
+            RoomJoinInteractor interactor = new RoomJoinInteractor(inMemoryRoomDataAccess, roomJoinPresenter);
+            roomJoinController = new RoomJoinController();
+            roomJoinView = new RoomJoinView();
+            roomJoinView.setController(roomJoinController);
+            roomJoinView.getController().setInputBoundary(interactor);
+//
+//            LobbyPresenter presenter = new LobbyPresenter(lobbyViewModel, viewManagerModel);
+//            LobbyDataAccessInterface dataAccess = new InMemoryLobbyDataAccessObject();
+//            GameSessionManager sessionManager = GameSessionManager.getInstance();
+//
+//            LobbyInteractor lobbyInteractor = new LobbyInteractor(presenter, dataAccess, sessionManager);
+//            LobbyController controller = new LobbyController(lobbyInteractor);
+//
+//            LobbyView lobbyView = new LobbyView(lobbyViewModel, controller);
 
-        LobbyViewModel lobbyViewModel = new LobbyViewModel();
-        ViewManagerModel viewManagerModel = new ViewManagerModel();
+            return this;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return this;
+        }
 
-        LobbyPresenter presenter = new LobbyPresenter(lobbyViewModel, viewManagerModel);
-        LobbyDataAccessInterface dataAccess = new InMemoryLobbyDataAccessObject();
-        GameSessionManager sessionManager = GameSessionManager.getInstance();
-
-        LobbyInteractor lobbyInteractor = new LobbyInteractor(presenter, dataAccess, sessionManager);
-        LobbyController controller = new LobbyController(lobbyInteractor);
-
-        // Now pass the fully-built controller to LobbyView
-        LobbyView lobbyView = new LobbyView(lobbyViewModel, controller);
-
-        return this;
     }
 
     //TODO if we have any new view, put it aboard, and usecase below

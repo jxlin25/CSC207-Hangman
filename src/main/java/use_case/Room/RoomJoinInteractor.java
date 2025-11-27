@@ -1,128 +1,36 @@
 package use_case.Room;
-import interface_adapter.Room.RoomJoinPresenter;
-import interface_adapter.ViewManagerModel;
-import network.HangmanServer;
-import network.HangmanClient;
-import org.java_websocket.handshake.ServerHandshake;
-import view.LobbyView;
-import javax.swing.SwingUtilities;
+import data_access.InMemoryRoomJoinDataAccessObject;
 import entity.Player;
+import entity.Room;
 
-public class RoomJoinInteractor {
+public class RoomJoinInteractor implements RoomJoinInputBoundary {
 
-    private HangmanClient hangmanClient;
-    private RoomJoinPresenter roomJoinPresenter;
-    private ViewManagerModel viewManagerModel;
-    public RoomJoinInteractor(HangmanClient hangmanClient, RoomJoinPresenter roomJoinPresenter, ViewManagerModel viewManagerModel) {
-        this.hangmanClient = hangmanClient;
-        this.roomJoinPresenter = roomJoinPresenter;
-        this.viewManagerModel = viewManagerModel;
+    private final InMemoryRoomJoinDataAccessObject dao;
+    private final RoomJoinOutputBoundary presenter;
+
+    public RoomJoinInteractor(InMemoryRoomJoinDataAccessObject dao,
+                              RoomJoinOutputBoundary presenter) {
+        this.dao = dao;
+        this.presenter = presenter;
     }
-    public void checkRoomExists(int roomId, RoomCheckCallback callback) {
-        try {
-            HangmanClient client = new HangmanClient(roomId) {
-                @Override
-                public void onMessage(String message) {
-                    if (message.contains("\"type\":\"room_check\"")) {
-                        boolean exists = message.contains("\"exists\":true");
-                        callback.onRoomChecked(roomId, exists);
-                        this.close();
-                    }
-                }
 
-                @Override
-                public void onOpen(ServerHandshake handshake) {
-                    this.send("{\"type\":\"check_room\",\"room\":\"" + roomId + "\"}");
-                }
-            };
+    @Override
+    public void execute(RoomJoinInputData input) {
+        int roomId = input.getRoomId();
+        Player player = input.getPlayer();
 
-            client.connect();
+        if (roomId == -1) {
+            roomId = dao.createRoom(player);
+        } else {
+            if (!dao.roomExists(roomId)) {
+                presenter.prepareFail("Room does not exist");
+                return;
+            }
 
-        } catch (Exception e) {
-            callback.onError("Connection failed: " + e.getMessage());
+            dao.addUser(roomId, player);
         }
-    }
-    public interface RoomCheckCallback {
-        void onRoomChecked(int roomId, boolean exists);
-        void onError(String message);
-    }
-
-    public interface RoomJoinCallback {
-        void onJoinSuccess(int roomId);
-        void onError(String message);
-    }
-
-    public interface RoomCreateCallback {
-        void onCreateSuccess(int roomId);
-        void onError(String message);
-    }
-
-    public void joinRoom(int roomId, String username) {
-        final String finalUser = username;
-//        final Player player = new Player(username);
-//        player.setRoomId(roomId);
-
-        try {
-            HangmanClient client = new HangmanClient(roomId) {
-                @Override
-                public void onOpen(ServerHandshake handshake) {
-                    System.out.println("Connected to server");
-                    send("{\"type\":\"join\", \"room\":\"" + roomId + "\", \"username\":\"" + finalUser + "\"}");
-                }
-
-                @Override
-                public void onMessage(String message) {
-                    System.out.println("Received: " + message);
-                    if (message.contains("\"type\":\"joined\"")) {
-                        System.out.println("Room joined successfully: " + roomId);
-                        System.out.println(finalUser);
-                        SwingUtilities.invokeLater(() -> {
-
-                        });
-                    } else if (message.contains("\"type\":\"error\"")) {
-                        System.out.println("Room join failed: " + message);
-
-                    }
-                }
-
-            };
-
-            client.connectBlocking();
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-    public void createRoom(int roomId, String username) {
-        final String finalUser = username;
-        try {
-            HangmanClient client = new HangmanClient(roomId) {
-                @Override
-                public void onOpen(ServerHandshake handshake) {
-                    System.out.println("Connected to server");
-                    send("{\"type\":\"create\", \"room\":\"" + roomId + "\", \"username\":\"" + finalUser + "\"}");
-
-                }
-
-                @Override
-                public void onMessage(String message) {
-                    System.out.println("Received: " + message);
-                    if (message.contains("\"type\":\"created\"")) {
-                        System.out.println("Room created successfully: " + roomId);
-                        System.out.println(finalUser);
-                        SwingUtilities.invokeLater(() -> {
-                            new LobbyView(roomId, this, true, finalUser).setVisible(true);
-                        });
-                    } else if (message.contains("\"type\":\"error\"")) {
-                        System.out.println("Room creation failed: " + message);
-                    }
-                }
-            };
-
-            client.connectBlocking();
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        Room currentRoom = dao.getRoom(roomId);
+        RoomJoinOutputData roomJoinOutputData = new RoomJoinOutputData(roomId, input.getPlayer(), currentRoom.getUsers());
+        presenter.present(roomJoinOutputData);
     }
 }

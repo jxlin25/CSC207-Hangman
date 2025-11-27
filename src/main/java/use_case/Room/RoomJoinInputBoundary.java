@@ -1,4 +1,6 @@
 package use_case.Room;
 
-public class RoomJoinInputBoundary {
+
+public interface RoomJoinInputBoundary {
+    void execute(RoomJoinInputData roomJoinInputData);
 }

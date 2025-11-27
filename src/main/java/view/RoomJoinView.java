@@ -11,16 +11,14 @@ public class RoomJoinView extends JFrame {
     private final JButton joinButton = new JButton("Join Room");
     private final JButton createButton = new JButton("Create Room");
     private final JLabel messageLabel = new JLabel();
-    private RoomJoinInteractor interactor;
 
-    public void RoomJoinController(RoomJoinInteractor interactor) {
-        this.interactor = interactor;
-    }
 
     // Updated Controller interface to include username
     public interface Controller {
         void onJoinRoom(int roomId, String username);
         void onCreateRoom(String username);
+
+        void setInputBoundary(RoomJoinInteractor interactor);
     }
 
     private Controller controller;
@@ -92,6 +90,8 @@ public class RoomJoinView extends JFrame {
     public void setController(Controller controller) {
         this.controller = controller;
     }
+
+    public Controller getController() {return this.controller;}
 
     // Display messages to the user
     public void showMessage(String message) {

@@ -5,19 +5,15 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 
-
-
-
-
 public class HangmanClient extends WebSocketClient {
-
-    public HangmanClient(int roomId) throws Exception {
+    private int roomId;
+    public HangmanClient() throws Exception {
         super(new URI("ws://localhost:8080"));
-        this.roomId = roomId;
     }
 
-    private final int roomId;
-
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
+    }
     @Override
     public void onOpen(ServerHandshake handshake) {
         System.out.println("Connected to server");

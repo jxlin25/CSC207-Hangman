@@ -20,8 +20,10 @@ public class RoomJoinPresenter implements RoomJoinOutputBoundary {
         this.viewManagerModel = viewManagerModel;
     }
 
+    public void present(RoomJoinOutputData roomJoinOutputData) {}
+
     @Override
-    public void prepareSuccessView(RoomJoinOutputData outputData) {
+    public void prepareSuccess(RoomJoinOutputData outputData) {
         // On successful room join, switch to lobby view
         lobbyViewModel.setRoomId(outputData.getRoomId());
         lobbyViewModel.setPlayers(outputData.getPlayers()); // If you have player list
@@ -32,7 +34,7 @@ public class RoomJoinPresenter implements RoomJoinOutputBoundary {
     }
 
     @Override
-    public void prepareFailView(String error) {
+    public void prepareFail(String error) {
         // Update RoomJoinViewModel with error message
         RoomJoinState currentState = roomJoinViewModel.getState();
         currentState.setError(error);

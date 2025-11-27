@@ -14,11 +14,11 @@ public class GameSessionManager {
         private static GameSessionManager instance;
         private final Map<String, GameSessionController> sessions = new HashMap<>();
 
-        public GameSessionController createSession(String roomId, List<Player> players) {
-            GameState gameState = new GameState(roomId, players);
-            GameSessionController controller = new GameSessionController(gameState);
-            sessions.put(roomId, controller);
-            return controller;
+        public void createSession(String roomId, List<Player> players) {
+//            GameState gameState = new GameState(roomId, players);
+//            GameSessionController controller = new GameSessionController(gameState);
+//            sessions.put(roomId, controller);
+//            return controller;
         }
 
         public manager.GameSessionManager getInstance() {

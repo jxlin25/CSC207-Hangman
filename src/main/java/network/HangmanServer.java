@@ -58,14 +58,14 @@ public class HangmanServer extends WebSocketServer {
             case "check_room" -> handleCheckRoom(conn, room);
             case "create" -> handleCreateRoom(conn, room);
             case "join" -> handleJoin(conn, room);
-            case "submit_word" -> {
-                GameSessionController controller = GameSessionManager.getController(room);
-                controller.handleWordSubmission(senderId, msg.get("word"));
-            }
-            case "make_guess" -> {
-                GameSessionController controller = GameSessionManager.getController(room);
-                controller.handleGuess(senderId, msg.get("letter"));
-            }
+//            case "submit_word" -> {
+//                GameSessionController controller = GameSessionManager.getController(room);
+//                controller.handleWordSubmission(senderId, msg.get("word"));
+//            }
+//            case "make_guess" -> {
+//                GameSessionController controller = GameSessionManager.getController(room);
+//                controller.handleGuess(senderId, msg.get("letter"));
+//            }
             case "state" -> broadcastToRoom(room, message); // for spectators
         }
     }

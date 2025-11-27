@@ -1,52 +1,69 @@
-@startuml Room Join Workflow
+@startuml RoomJoinWorkflow
 
-package "View Layer" {
-  [RoomJoinView] as View
+title Room Join Workflow
+
+skinparam nodesep 10
+skinparam ranksep 50
+
+actor "User" as user
+
+rectangle "View Layer" {
+  component "RoomJoinView" as roomView
 }
 
-package "Interface Adapter Layer" {
-  [RoomJoinController] as Controller
-  [RoomJoinPresenter] as Presenter
-  [RoomJoinViewModel] as JoinVM
-  [LobbyViewModel] as LobbyVM
-  [ViewManagerModel] as ViewManager
+rectangle "Interface Adapter Layer" {
+  component "RoomJoinController" as controller
+  component "RoomJoinPresenter" as presenter
+  component "RoomJoinViewModel" as joinVM
+  component "LobbyViewModel" as lobbyVM
+  component "ViewManagerModel" as viewManager
 }
 
-package "Use Case Layer" {
-  [RoomJoinInteractor] as Interactor
-  [RoomJoinInputData] as InputData
-  [RoomJoinOutputData] as OutputData
+rectangle "Use Case Layer" {
+  component "RoomJoinInteractor" as interactor
+  component "RoomJoinInputData" as inputData
+  component "RoomJoinOutputData" as outputData
 }
 
-package "Framework Layer" {
-  [HangmanClient] as Client
+rectangle "Framework Layer" {
+  component "HangmanClient" as client
 }
 
-' Room Join Flow
-View -> Controller : execute(username, roomId)
-Controller -> Interactor : execute(inputData)
-Interactor -> InputData : **create**
-Controller -> InputData : username, roomId
+' Vertical layout - top to bottom flow
+user -> roomView : enters username & roomId
+user -> roomView : clicks "Join Room"
 
-Interactor -> Client : joinRoom(roomId, username)
-Client --> Interactor : success/failure
+roomView -> controller : execute(username, roomId)
 
-Interactor -> OutputData : **create** with roomId, players
-Interactor -> Presenter : prepareSuccessView(outputData)
+controller -> interactor : execute(inputData)
 
-Presenter -> LobbyVM : setRoomId(roomId)
-Presenter -> LobbyVM : setPlayers(players)
-Presenter -> LobbyVM : firePropertyChanged()
-Presenter -> ViewManager : setActiveView("lobby")
-Presenter -> ViewManager : firePropertyChanged()
+interactor -> inputData : **create** with username, roomId
+
+interactor -> client : joinRoom(roomId, username)
+
+client --> interactor : success = true
+
+interactor -> outputData : **create** with roomId, players
+
+interactor -> presenter : prepareSuccessView(outputData)
+
+presenter -> lobbyVM : setRoomId(roomId)
+presenter -> lobbyVM : setPlayers(players)
+presenter -> lobbyVM : firePropertyChanged()
+
+presenter -> viewManager : setActiveView("lobby")
+presenter -> viewManager : firePropertyChanged()
+
+lobbyVM -> roomView : propertyChange event\n(switch to lobby)
+
+viewManager -> roomView : propertyChange event\n(view change)
 
 ' Error Flow
-Interactor -> Presenter : prepareFailView(error)
-Presenter -> JoinVM : setError(error)
-Presenter -> JoinVM : firePropertyChanged()
+interactor -> presenter : prepareFailView("Room full")
 
-' View Updates
-JoinVM -> View : propertyChange event
-LobbyVM -> [LobbyView] : propertyChange event
+presenter -> joinVM : setError("Room full")
+presenter -> joinVM : firePropertyChanged()
+
+joinVM -> roomView : propertyChange event\n(show error)
 
 @enduml
