@@ -1,5 +1,4 @@
 package interface_adapter.Room;
 
-public class LobbyViewModel {
-
+public class RoomJoinViewModel {
 }

@@ -1,0 +1,52 @@
+@startuml Room Join Workflow
+
+package "View Layer" {
+  [RoomJoinView] as View
+}
+
+package "Interface Adapter Layer" {
+  [RoomJoinController] as Controller
+  [RoomJoinPresenter] as Presenter
+  [RoomJoinViewModel] as JoinVM
+  [LobbyViewModel] as LobbyVM
+  [ViewManagerModel] as ViewManager
+}
+
+package "Use Case Layer" {
+  [RoomJoinInteractor] as Interactor
+  [RoomJoinInputData] as InputData
+  [RoomJoinOutputData] as OutputData
+}
+
+package "Framework Layer" {
+  [HangmanClient] as Client
+}
+
+' Room Join Flow
+View -> Controller : execute(username, roomId)
+Controller -> Interactor : execute(inputData)
+Interactor -> InputData : **create**
+Controller -> InputData : username, roomId
+
+Interactor -> Client : joinRoom(roomId, username)
+Client --> Interactor : success/failure
+
+Interactor -> OutputData : **create** with roomId, players
+Interactor -> Presenter : prepareSuccessView(outputData)
+
+Presenter -> LobbyVM : setRoomId(roomId)
+Presenter -> LobbyVM : setPlayers(players)
+Presenter -> LobbyVM : firePropertyChanged()
+Presenter -> ViewManager : setActiveView("lobby")
+Presenter -> ViewManager : firePropertyChanged()
+
+' Error Flow
+Interactor -> Presenter : prepareFailView(error)
+Presenter -> JoinVM : setError(error)
+Presenter -> JoinVM : firePropertyChanged()
+
+' View Updates
+JoinVM -> View : propertyChange event
+LobbyVM -> [LobbyView] : propertyChange event
+
+@enduml

@@ -1,4 +1,6 @@
 package use_case.Room;
+import interface_adapter.Room.RoomJoinPresenter;
+import interface_adapter.ViewManagerModel;
 import network.HangmanServer;
 import network.HangmanClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -7,8 +9,14 @@ import javax.swing.SwingUtilities;
 import entity.Player;
 
 public class RoomJoinInteractor {
-    public static void main(String[] args) {
 
+    private HangmanClient hangmanClient;
+    private RoomJoinPresenter roomJoinPresenter;
+    private ViewManagerModel viewManagerModel;
+    public RoomJoinInteractor(HangmanClient hangmanClient, RoomJoinPresenter roomJoinPresenter, ViewManagerModel viewManagerModel) {
+        this.hangmanClient = hangmanClient;
+        this.roomJoinPresenter = roomJoinPresenter;
+        this.viewManagerModel = viewManagerModel;
     }
     public void checkRoomExists(int roomId, RoomCheckCallback callback) {
         try {
@@ -69,7 +77,7 @@ public class RoomJoinInteractor {
                         System.out.println("Room joined successfully: " + roomId);
                         System.out.println(finalUser);
                         SwingUtilities.invokeLater(() -> {
-                            new LobbyView(roomId, this, false, finalUser).setVisible(true);
+
                         });
                     } else if (message.contains("\"type\":\"error\"")) {
                         System.out.println("Room join failed: " + message);

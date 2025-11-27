@@ -3,24 +3,17 @@ import javax.swing.*;
 import java.awt.*;
 
 import interface_adapter.Room.LobbyController;
+import interface_adapter.Room.LobbyViewModel;
 import network.HangmanClient;
 import use_case.Room.LobbyInteractor;
 
 public class LobbyView extends JFrame {
-    private int roomId;
-    private HangmanClient client;
-    private Boolean createRoom;
-    private JButton startGameButton;
-    private String username;
+    private LobbyViewModel lobbyViewModel;
+    private LobbyController lobbyController;
 
-    public LobbyView(int roomId, HangmanClient client, Boolean createRoom, String username) {
-        this.roomId = roomId;
-        this.client = client;
-        this.createRoom = createRoom;
-        this.username = username;
-        initializeUI();
-        setupMessageHandling();
-        System.out.println(username);
+    public LobbyView(LobbyViewModel lobbyViewModel, LobbyController lobbyController) {
+        this.lobbyViewModel = lobbyViewModel;
+        this.lobbyController = lobbyController;
     }
 
     private void initializeUI() {
@@ -40,7 +33,7 @@ public class LobbyView extends JFrame {
             //startGameButton.addActionListener(e -> startGame());
             add(startGameButton, BorderLayout.SOUTH);
 
-            new LobbyController(new LobbyInteractor()).startGame(roomId);
+            lobbyController.startGame(roomId);
         } else {
             // Show waiting message for players
             JLabel waitingLabel = new JLabel("Waiting for host to start the game...",

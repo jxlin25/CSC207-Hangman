@@ -8,6 +8,7 @@ public class RoomJoinController implements RoomJoinView.Controller {
     private RoomJoinInteractor interactor;
     private String username;
 
+
     public RoomJoinController(RoomJoinInteractor interactor) {
         this.interactor = interactor;
 //        this.username = username;
