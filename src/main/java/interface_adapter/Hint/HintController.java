@@ -10,7 +10,7 @@ public class HintController {
     }
 
     public void execute(String word) {
-        // HintInputData hintInputData = new HintInputData(word);
-        // HintInputBoundary.execute(hintInputData);
+        HintInputData hintInputData = new HintInputData(word);
+        hintInputBoundary.execute(hintInputData);
     }
 }

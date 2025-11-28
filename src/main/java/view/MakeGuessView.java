@@ -1,6 +1,7 @@
 package view;
 
 import Constant.Constants;
+import interface_adapter.Hint.HintController;
 import interface_adapter.InitializeRound.InitializeRoundController;
 import interface_adapter.MakeGuess.MakeGuessViewModel;
 import interface_adapter.MakeGuess.MakeGuessState;
@@ -24,12 +25,15 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
     private MakeGuessController makeGuessController;
     private ViewManagerModel viewManagerModel;
     private InitializeRoundController initializeRoundController;
+    private HintController hintController;
 
     private final HangmanImagePanel hangmanImagePanel = new HangmanImagePanel();
     private final JLabel wordPuzzleLabel = new JLabel("????");
     private final JLabel attemptsLabel = new JLabel("Attempts left: 6");
     private final JLabel roundNumberLabel = new JLabel("Round number: 1");
     private final JButton restartButton;
+    private final JButton hintButton = new JButton("Hint");
+    private final JLabel hintLabel = new JLabel("Hint: ");
 
 
 
@@ -44,11 +48,11 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
     public MakeGuessView(MakeGuessViewModel viewModel) {
 
         this.alphabetButtonsPanel = this.createNewLetterButtonsPanel();
-
         this.makeGuessViewModel = viewModel;
         this.makeGuessViewModel.addPropertyChangeListener(this);
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
         wordPuzzleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         restartButton = new JButton("Restart");
@@ -66,6 +70,13 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
             }
         });
 
+        JPanel hintPanel = new JPanel();
+        hintPanel.setLayout(new BoxLayout(hintPanel, BoxLayout.Y_AXIS));
+        hintButton.addActionListener(e -> hintController.execute("apple"));
+        hintPanel.add(hintButton);
+        hintPanel.add(hintLabel);
+
+
         // Add everything to the panel
         this.add(hangmanImagePanel);
         this.add(attemptsLabel);
@@ -75,11 +86,16 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         this.add(restartButton);
         this.add(wordPuzzleLabel);
         this.add(alphabetButtonsPanel);
+        this.add(hintPanel);
 
     }
 
     public void setInitializeRoundController(InitializeRoundController controller) {
         this.initializeRoundController = controller;
+    }
+
+    public void setHintController(HintController hintController) {
+        this.hintController = hintController;
     }
 
     @Override
@@ -126,8 +142,12 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
                 System.out.println("Moving to next round");
                 this.initializeRoundController.execute();
                 this.resetLetterButtonsPanel();
-
             }
+        }
+        if (state.getHintText() != null) {
+            hintLabel.setText("Hint: " + state.getHintText());
+        } else {
+            hintLabel.setText("Hint: ");
         }
     }
 

@@ -13,6 +13,7 @@ public class MakeGuessState {
     private int currentRoundNumber = 1;
     private String maskedWord = "";
     private String message = "";
+    private String hintText;
 
     public MakeGuessState() {
 
@@ -90,6 +91,13 @@ public class MakeGuessState {
 
     public void setMaskedWord(String maskedWord) {
         this.maskedWord = maskedWord;
+    }
+
+    public String getHintText() {
+        return hintText;
+    }
+    public void setHintText(String hint) {
+        this.hintText = hint;
     }
 }
 
