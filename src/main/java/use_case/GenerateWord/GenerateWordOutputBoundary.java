@@ -11,5 +11,9 @@ public interface GenerateWordOutputBoundary {
      */
     void prepareSuccessView(GenerateWordOutputData outputData);
 
+    /**
+     * Prepares the Failure view for the Generate Word Use Case.
+     * @param error the explanation of the failure
+     */
     void prepareFailureView(String error);
 }

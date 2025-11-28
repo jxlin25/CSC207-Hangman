@@ -37,7 +37,6 @@ public class GenerateWordInteractor implements GenerateWordInputBoundary {
             String word = null;
             while (tries < 10) {
                 word = generateWordDataAccessInterface.getRandomWord();
-                generateWordDataAccessInterface.saveRandomWord(word);
                 if (generateWordDataAccessInterface.isValidWord(word)) {
                     break;
                 }
@@ -58,5 +57,4 @@ public class GenerateWordInteractor implements GenerateWordInputBoundary {
         GenerateWordOutputData outputData = new GenerateWordOutputData(words);
         generateWordOutputBoundary.prepareSuccessView(outputData);
     }
-
 }

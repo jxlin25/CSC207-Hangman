@@ -1,27 +1,36 @@
 package app;
 
 import data_access.InMemoryHangmanDataAccessObject;
+import data_access.DBHintDataAccessObject;
+import data_access.DBGenerateWordDataAccessObject;
+
 import interface_adapter.EndGameResults.EndGameResultsController;
 import interface_adapter.EndGameResults.EndGameResultsPresenter;
-import interface_adapter.InitializeRound.InitializeRoundController;
-import interface_adapter.InitializeRound.InitializeRoundPresenter;
 import interface_adapter.InitializeRound.InitializeRoundController;
 import interface_adapter.InitializeRound.InitializeRoundPresenter;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.GenerateWord.GenerateWordController;
 import interface_adapter.GenerateWord.GenerateWordPresenter;
 import interface_adapter.GenerateWord.GenerateWordViewModel;
+import interface_adapter.Hint.HintPresenter;
+import interface_adapter.Hint.HintController;
+
 import use_case.EndGameResults.EndGameResultsInputBoundary;
 import use_case.EndGameResults.EndGameResultsInteractor;
 import use_case.EndGameResults.EndGameResultsOutputBoundary;
+import use_case.Hint.HintInteractor;
+
 import use_case.GenerateWord.GenerateWordInputBoundary;
 import use_case.GenerateWord.GenerateWordInteractor;
 import use_case.GenerateWord.GenerateWordOutputBoundary;
-import data_access.DBGenerateWordDataAccessObject;
+import use_case.Hint.HintDataAccessInterface;
+import use_case.Hint.HintInputBoundary;
+import use_case.Hint.HintOutputBoundary;
 import use_case.InitializeRound.InitializeRoundInputBoundary;
 import use_case.InitializeRound.InitializeRoundInteractor;
 import use_case.InitializeRound.InitializeRoundOutputBoundary;
 import use_case.MakeGuess.*;
+
 import view.*;
 
 import javax.swing.*;
@@ -48,6 +57,7 @@ public class AppBuilder {
     //DAO
     final DBGenerateWordDataAccessObject generateWordAccessObject = new DBGenerateWordDataAccessObject();
     final InMemoryHangmanDataAccessObject hangmanGameDAO = new InMemoryHangmanDataAccessObject();
+    final HintDataAccessInterface hintDAO = new DBHintDataAccessObject();
 
     //View Model
     private GenerateWordViewModel generateWordViewModel;
@@ -135,6 +145,18 @@ public class AppBuilder {
         final InitializeRoundController initializeRoundController = new InitializeRoundController(initializeFirstRoundInteractor);
         generateWordView.setInitializeRoundController(initializeRoundController);
         makeGuessView.setInitializeRoundController(initializeRoundController);
+        return this;
+    }
+
+    public AppBuilder addHintUseCase() {
+        HintOutputBoundary hintPresenter = new HintPresenter(makeGuessViewModel);
+
+        HintInputBoundary hintInteractor = new HintInteractor(hintDAO, hintPresenter);
+
+        HintController hintController = new HintController(hintInteractor);
+
+        makeGuessView.setHintController(hintController);
+
         return this;
     }
 
