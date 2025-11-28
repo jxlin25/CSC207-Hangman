@@ -11,6 +11,8 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.awt.Component;
@@ -30,12 +32,11 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
     private final JLabel attemptsLabel = new JLabel("Attempts left: 6");
     private final JLabel roundNumberLabel = new JLabel("Round number: 1");
     private final JButton restartButton;
-    private final JButton nextRoundButton;
+    private final JButton popupRestartButton;
+    private final JButton popupShowResultButton;
 
-    //private final JLabel hangmanImageLabel;
-    //private final JLabel messageLabel;
-    //private final JTextField guessInputField;
-    //private final JButton guessButton;
+    private final JButton nextRoundButton;
+    private JDialog endGameDialog = new JDialog();
 
     private JPanel alphabetButtonsPanel;
 
@@ -60,8 +61,31 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
             );
             this.resetLetterButtonsPanel();
             if (option == JOptionPane.YES_OPTION) {
+                this.endGameDialog.setVisible(false);
                 returnToStartView();
             }
+        });
+
+        this.popupRestartButton = new JButton("Restart");
+        this.popupRestartButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.popupRestartButton.addActionListener(e -> {
+            int option = JOptionPane.showConfirmDialog(
+                    this,
+                    "Do you want to restart the game?",
+                    "Confirm Restart",
+                    JOptionPane.YES_NO_OPTION
+            );
+            this.resetLetterButtonsPanel();
+            if (option == JOptionPane.YES_OPTION) {
+                this.endGameDialog.setVisible(false);
+                returnToStartView();
+            }
+        });
+
+        this.popupShowResultButton = new JButton("Show Result");
+        this.popupShowResultButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.popupShowResultButton.addActionListener(e -> {
+            // TODO: switch to EndGameResultView
         });
 
         this.nextRoundButton = new JButton("Next Round");
@@ -73,6 +97,8 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
             this.resetLetterButtonsPanel();
             this.nextRoundButton.setEnabled(false);
         });
+
+        this.endGameDialog.setVisible(false);
 
         // Add everything to the panel
         this.add(hangmanImagePanel);
@@ -98,7 +124,7 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        MakeGuessState state = (MakeGuessState) evt.getNewValue();
+        final MakeGuessState state = (MakeGuessState) evt.getNewValue();
 
         System.out.println("Guessed letter: " + state.getGuessedLetter());
         System.out.println("Status: " + state.getRoundStatus());
@@ -125,16 +151,31 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
 
             // If the current ended round is the last round, the game also ends
             if (state.isGameOver()) {
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Game Over!",
-                        "Game Over",
-                        JOptionPane.INFORMATION_MESSAGE
+//                JOptionPane.showMessageDialog(
+//                        this,
+//                        "Game Over!",
+//                        "Game Over",
+//                        JOptionPane.INFORMATION_MESSAGE
+//                );
+                final JOptionPane endGamePane = new JOptionPane(
+                        "Game Over! Do you want to restart?",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.DEFAULT_OPTION,
+                        null,
+                        new Object[]{this.popupRestartButton, this.popupShowResultButton}
                 );
-            }
-            else {
-                // TODO: put these code into the action listener of 'Next Round' JButton
 
+                this.endGameDialog = endGamePane.createDialog(this, "Game Over!");
+
+                // Close the program when the endGameDialog is closed
+                endGameDialog.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+
+                endGameDialog.setVisible(true);
 
             }
         }
