@@ -41,7 +41,6 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
 
     private final JButton nextRoundButton;
     private JDialog endGameDialog = new JDialog();
-    private final JButton nextRoundButton;
     private final JButton hintButton = new JButton("Hint");
     private final JLabel hintLabel = new JLabel("Hint: ");
 
@@ -93,6 +92,9 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         this.popupShowResultButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.popupShowResultButton.addActionListener(e -> {
             // TODO: switch to EndGameResultView
+            if (endGameResultsController != null) {
+                endGameResultsController.execute();
+            }
         });
         // Hint Panel Setup
         JPanel hintPanel = new JPanel();
@@ -203,9 +205,6 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
                 });
 
                 endGameDialog.setVisible(true);
-                if (endGameResultsController != null) {
-                    endGameResultsController.execute();
-                }
             }
         }
 
