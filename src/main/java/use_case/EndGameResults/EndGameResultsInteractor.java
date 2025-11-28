@@ -1,7 +1,7 @@
-
 package use_case.EndGameResults;
 
 import data_access.InMemoryHangmanDataAccessObject;
+import entity.HangmanGame;
 import entity.Round;
 
 public class EndGameResultsInteractor implements EndGameResultsInputBoundary {
@@ -9,23 +9,61 @@ public class EndGameResultsInteractor implements EndGameResultsInputBoundary {
     final EndGameResultsOutputBoundary EndGameResultsPresenter;
     final InMemoryHangmanDataAccessObject hangmanGameDAO;
 
-    public EndGameResultsInteractor(EndGameResultsOutputBoundary EndGameResultsPresenter, InMemoryHangmanDataAccessObject hangmanGameDAO) {
+    public EndGameResultsInteractor(EndGameResultsOutputBoundary EndGameResultsPresenter,
+                                    InMemoryHangmanDataAccessObject hangmanGameDAO) {
         this.EndGameResultsPresenter = EndGameResultsPresenter;
         this.hangmanGameDAO = hangmanGameDAO;
     }
 
     @Override
     public void execute(EndGameResultsInputData inputData) {
-        Round currentRound = hangmanGameDAO.getCurrentRound();
+        HangmanGame game = hangmanGameDAO.getHangmanGame();
 
-        String finalStatus = currentRound.getStatus(); // WON or LOST
+        // Get the LAST round to determine overall win/loss
+        Round lastRound = game.getRounds().get(game.getRounds().size() - 1);
+        String lastRoundStatus = lastRound.getStatus();
 
-        int attemptsTaken = 6 - currentRound.getAttempt(); // need to change it so it aligns with difficulty
+        // Determine overall game status based on the last round
+        String finalStatus;
+        if (lastRoundStatus.equals(Constant.StatusConstant.WON)) {
+            finalStatus = "Victory! 🎉";
+        } else if (lastRoundStatus.equals(Constant.StatusConstant.LOST)) {
+            finalStatus = "Defeat 😢";
+        } else {
+            finalStatus = "Game Ended";
+        }
 
-        String finalWord = currentRound.getWordPuzzle().getMaskedWord();
+        // Build detailed round-by-round results
+        int totalAttemptsTaken = 0;
+        StringBuilder roundDetails = new StringBuilder();
 
-        EndGameResultsPresenter.present(finalStatus, finalWord, attemptsTaken);
+        for (int i = 0; i < game.getRounds().size(); i++) {
+            Round round = game.getRounds().get(i);
+
+            // Calculate attempts used for this round
+            int attemptsUsed = 6 - round.getAttempt();
+            totalAttemptsTaken += attemptsUsed;
+
+            // Get word
+            String word = new String(round.getWordPuzzle().getLetters());
+
+            // Get status
+            String status = round.getStatus();
+            String statusText = status.equals(Constant.StatusConstant.WON) ? "Won ✓" : "Lost ✗";
+
+            // Format: "Round 1: Apple - Won ✓"
+            roundDetails.append("Round ").append(i + 1).append(": ")
+                    .append(word).append(" - ")
+                    .append(statusText);
+
+            // Add newline if not the last round
+            if (i < game.getRounds().size() - 1) {
+                roundDetails.append("\n");
+            }
+        }
+
+        String finalWord = roundDetails.toString();
+
+        EndGameResultsPresenter.present(finalStatus, finalWord, totalAttemptsTaken);
     }
-
-
 }

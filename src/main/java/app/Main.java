@@ -8,20 +8,20 @@ public class Main {
         HangmanServer server = new HangmanServer(8080);
         server.start();
         JFrame app = new AppBuilder()
+                .addEndGameResultsViewModel()
                 .addGenerateWordView()
                 .addMakeGuessView()
-                .addEndGameResultsViewModel()
                 .addEndGameResultsView()
+
                 .addRoomJoinView()
                 .addGenerateWordUseCase()
                 .addInitializeRoundUseCase() // Please ensure addInitializeFirstRoundUseCase() is after addGenerateWordView()
                 .addMakeGuessUseCase()
-                .addHintUseCase()
+                .addEndGameResultsUseCase() // Resolved conflict by including both
+                .addHintUseCase()           // Resolved conflict by including both
                 .build();
         app.setSize(800, 600);
         app.setLocationRelativeTo(null);
         app.setVisible(true);
     }
 }
-
-
