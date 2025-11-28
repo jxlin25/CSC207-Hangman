@@ -1,6 +1,7 @@
 package view;
 
 import Constant.Constants;
+import interface_adapter.EndGameResults.EndGameResultsController;
 import interface_adapter.InitializeRound.InitializeRoundController;
 import interface_adapter.MakeGuess.MakeGuessViewModel;
 import interface_adapter.MakeGuess.MakeGuessState;
@@ -24,20 +25,14 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
     private MakeGuessController makeGuessController;
     private ViewManagerModel viewManagerModel;
     private InitializeRoundController initializeRoundController;
+    private EndGameResultsController endGameResultsController;
 
     private final HangmanImagePanel hangmanImagePanel = new HangmanImagePanel();
     private final JLabel wordPuzzleLabel = new JLabel("????");
     private final JLabel attemptsLabel = new JLabel("Attempts left: 6");
     private final JLabel roundNumberLabel = new JLabel("Round number: 1");
     private final JButton restartButton;
-
-
-
-
-    //private final JLabel hangmanImageLabel;
-    //private final JLabel messageLabel;
-    //private final JTextField guessInputField;
-    //private final JButton guessButton;
+    private final JButton nextRoundButton;  // ADD THIS LINE
 
     private JPanel alphabetButtonsPanel;
 
@@ -66,13 +61,31 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
             }
         });
 
+        // ADD THIS BLOCK:
+        this.nextRoundButton = new JButton("Next Round");
+        this.nextRoundButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.nextRoundButton.setEnabled(false);
+        this.nextRoundButton.addActionListener(e -> {
+            System.out.println("Moving to next round");
+
+            // Reset the letter buttons panel FIRST
+            this.resetLetterButtonsPanel();
+
+            // Then initialize the next round
+            this.initializeRoundController.execute();
+
+            // Disable the next round button until the round is complete again
+            this.nextRoundButton.setEnabled(false);
+        });
+
         // Add everything to the panel
         this.add(hangmanImagePanel);
         this.add(attemptsLabel);
         this.add(roundNumberLabel);
         this.add(Box.createVerticalStrut(20));
-        this.add(Box.createVerticalStrut(20));
         this.add(restartButton);
+        this.add(nextRoundButton);  // ADD THIS LINE
+        this.add(Box.createVerticalStrut(20));
         this.add(wordPuzzleLabel);
         this.add(alphabetButtonsPanel);
 
@@ -87,6 +100,10 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
 
     }
 
+    public void setEndGameResultsController(EndGameResultsController controller) {
+        this.endGameResultsController = controller;
+    }
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         MakeGuessState state = (MakeGuessState) evt.getNewValue();
@@ -98,39 +115,37 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         System.out.println("isGameOver: " + state.isGameOver());
         System.out.println("----------------------------");
 
-        // The maxAttempts can be changed by difficulty level setting
         final int maxAttempts = 6;
         final int remainingAttempts = state.getRemainingAttempts();
 
         this.roundNumberLabel.setText("Round number: " + state.getCurrentRoundNumber());
         hangmanImagePanel.setIncorrectGuesses(maxAttempts - remainingAttempts);
         this.attemptsLabel.setText("Attempts left: " + remainingAttempts);
-        // Update the displayed word
         this.wordPuzzleLabel.setText(state.getMaskedWord());
 
         // If the current round is ended
         if (state.getRoundStatus().equals(WON) || state.getRoundStatus().equals(LOST)) {
             System.out.println("Round over");
+            this.disableLetterButtons();  // ADD THIS LINE
+            this.nextRoundButton.setEnabled(true);
 
             // If the current ended round is the last round, the game also ends
             if (state.isGameOver()) {
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Game Over!",
-                        "Game Over",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
-            }
-            else {
-                // TODO: put these code into the action listener of 'Next Round' JButton
-                System.out.println("Moving to next round");
-                this.initializeRoundController.execute();
-                this.resetLetterButtonsPanel();
-
+                if (endGameResultsController != null) {
+                    endGameResultsController.execute();
+                }
             }
         }
     }
 
+    // ADD THIS METHOD:
+    private void disableLetterButtons() {
+        for (Component component : this.alphabetButtonsPanel.getComponents()) {
+            if (component instanceof JButton) {
+                component.setEnabled(false);
+            }
+        }
+    }
 
     private JPanel createNewLetterButtonsPanel() {
         JPanel lettersPanel = new JPanel(new GridLayout(2, 13, 5, 5));
@@ -140,14 +155,8 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
             JButton button = new JButton(String.valueOf(letter));
 
             button.addActionListener(e -> {
-
-                // Make a guess by the letter
                 makeGuessController.execute(Character.toLowerCase(letter));
-
-                // Disable the button so it can't be clicked again
                 button.setEnabled(false);
-
-                // Change the button color
                 button.setBackground(Color.LIGHT_GRAY);
             });
 
@@ -165,10 +174,6 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         this.repaint();
     }
 
-    /**
-     * Gets the name of this view.
-     * @return "Make Guess"
-     */
     private void returnToStartView() {
         if (viewManagerModel != null) {
             viewManagerModel.setState("Generate Word");
@@ -195,9 +200,4 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
     public void setMakeGuessController(MakeGuessController controller) {
         this.makeGuessController = controller;
     }
-
-//    public String getViewName() {
-//        return viewName;
-//    }
-
 }

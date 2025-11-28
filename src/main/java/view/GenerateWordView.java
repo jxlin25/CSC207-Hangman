@@ -1,5 +1,6 @@
 package view;
 
+import interface_adapter.EndGameResults.EndGameResultsController;
 import interface_adapter.GenerateWord.GenerateWordController;
 import interface_adapter.GenerateWord.GenerateWordViewModel;
 import interface_adapter.InitializeRound.InitializeRoundController;
@@ -68,9 +69,11 @@ public class GenerateWordView extends JPanel implements PropertyChangeListener {
         this.generateWordController = generateWordController;
     }
 
-    public void setInitializeFirstRoundController(InitializeRoundController initializeRoundController) {
+
+    public void setInitializeRoundController(InitializeRoundController initializeRoundController) {
         this.initializeRoundController = initializeRoundController;
     }
+
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

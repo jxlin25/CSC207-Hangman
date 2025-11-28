@@ -1,14 +1,19 @@
 package app;
 
 import data_access.InMemoryHangmanDataAccessObject;
-import interface_adapter.InitializeFirstRound.InitializeFirstRoundController;
-import interface_adapter.InitializeFirstRound.InitializeFirstRoundPresenter;
+import interface_adapter.EndGameResults.EndGameResultsController;
+import interface_adapter.EndGameResults.EndGameResultsPresenter;
+import interface_adapter.InitializeRound.InitializeRoundController;
+import interface_adapter.InitializeRound.InitializeRoundPresenter;
 import interface_adapter.InitializeRound.InitializeRoundController;
 import interface_adapter.InitializeRound.InitializeRoundPresenter;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.GenerateWord.GenerateWordController;
 import interface_adapter.GenerateWord.GenerateWordPresenter;
 import interface_adapter.GenerateWord.GenerateWordViewModel;
+import use_case.EndGameResults.EndGameResultsInputBoundary;
+import use_case.EndGameResults.EndGameResultsInteractor;
+import use_case.EndGameResults.EndGameResultsOutputBoundary;
 import use_case.GenerateWord.GenerateWordInputBoundary;
 import use_case.GenerateWord.GenerateWordInteractor;
 import use_case.GenerateWord.GenerateWordOutputBoundary;
@@ -66,6 +71,11 @@ public class AppBuilder {
      * View
      */
 
+    public ViewManagerModel getViewManagerModel() {
+        return this.viewManagerModel;
+    }
+
+
     public AppBuilder addGenerateWordView() {
         generateWordViewModel = new GenerateWordViewModel();
         generateWordView = new GenerateWordView(generateWordViewModel);
@@ -77,6 +87,13 @@ public class AppBuilder {
         makeGuessViewModel = new MakeGuessViewModel();
         makeGuessView = new MakeGuessView(makeGuessViewModel);
         cardPanel.add(makeGuessView, makeGuessView.getViewName());
+        return this;
+    }
+
+    public AppBuilder addEndGameResultsView() {
+        endGameResultsView = new EndGameResultsView(endGameResultsViewModel);
+        endGameResultsView.setViewManagerModel(viewManagerModel);
+        cardPanel.add(endGameResultsView, endGameResultsView.getViewName());
         return this;
     }
 
@@ -116,7 +133,7 @@ public class AppBuilder {
         final InitializeRoundOutputBoundary initializeFirstRoundPresenter = new InitializeRoundPresenter(makeGuessViewModel);
         final InitializeRoundInputBoundary initializeFirstRoundInteractor = new InitializeRoundInteractor(initializeFirstRoundPresenter, hangmanGameDAO);
         final InitializeRoundController initializeRoundController = new InitializeRoundController(initializeFirstRoundInteractor);
-        generateWordView.setInitializeFirstRoundController(initializeRoundController);
+        generateWordView.setInitializeRoundController(initializeRoundController);
         makeGuessView.setInitializeRoundController(initializeRoundController);
         return this;
     }
@@ -126,9 +143,15 @@ public class AppBuilder {
         return this;
     }
 
-    public AppBuilder addEndGameResultsView() {
-        endGameResultsView = new EndGameResultsView(endGameResultsViewModel);
-        cardPanel.add(endGameResultsView, endGameResultsView.getViewName());
+
+    public AppBuilder addEndGameResultsUseCase() {
+        final EndGameResultsOutputBoundary presenter =
+                new EndGameResultsPresenter(endGameResultsViewModel, viewManagerModel);
+        final EndGameResultsInputBoundary interactor =
+                new EndGameResultsInteractor(presenter, hangmanGameDAO);
+        final EndGameResultsController controller =
+                new EndGameResultsController(interactor);
+        makeGuessView.setEndGameResultsController(controller);
         return this;
     }
 
@@ -138,8 +161,8 @@ public class AppBuilder {
         application.add(cardPanel);
 
 // disable for demo
-//        viewManagerModel.setState(generateWordView.getViewName());
-//        viewManagerModel.firePropertyChange();
+// viewManagerModel.setState(generateWordView.getViewName());
+//  viewManagerModel.firePropertyChange();
 
         JMenuBar menuBar = new JMenuBar();
         JMenu gameMenu = new JMenu("Multiplayer"); // Changed from "Game" to be more clear
