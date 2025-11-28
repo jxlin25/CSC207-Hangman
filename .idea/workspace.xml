@@ -15,6 +15,7 @@
       <change afterPath="$PROJECT_DIR$/src/main/java/use_case/Hint/HintOutputBoundary.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/java/use_case/Hint/HintOutputData.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/data_access/DBGenerateWordDataAccessObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data_access/DBGenerateWordDataAccessObject.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/interface_adapter/MakeGuess/MakeGuessState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/interface_adapter/MakeGuess/MakeGuessState.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/interface_adapter/ViewManagerModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/interface_adapter/ViewManagerModel.java" afterDir="false" />
@@ -26,14 +27,8 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/use_case/GenerateWord/GenerateWordOutputBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/use_case/GenerateWord/GenerateWordOutputBoundary.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Constant/Constants.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Constant/StatusConstant.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/AppBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/app/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/data_access/DBGenerateWordDataAccessObject.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/data_access/InMemoryHangmanDataAccessObject.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/entity/Guess.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/entity/HangmanGame.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/entity/Player.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/entity/Round.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/entity/WordPuzzle.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/images/hangman0.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/images/hangman1.png" beforeDir="false" />
@@ -46,9 +41,6 @@
       <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/EndGameResults/EndGameResultsPresenter.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/EndGameResults/EndGameResultsState.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/EndGameResults/EndGameResultsViewModel.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/GenerateWord/GenerateWordController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/GenerateWord/GenerateWordPresenter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/GenerateWord/GenerateWordState.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/GenerateWord/GenerateWordViewModel.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/InitializeFirstRound/InitializeFirstRoundController.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/InitializeFirstRound/InitializeFirstRoundPresenter.class" beforeDir="false" />
@@ -66,13 +58,8 @@
       <change beforePath="$PROJECT_DIR$/target/classes/network/HangmanServer.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/use_case/EndGameResults/EndGameResultsInputBoundary.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/use_case/EndGameResults/EndGameResultsInputData.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/EndGameResults/EndGameResultsInteractor.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/use_case/EndGameResults/EndGameResultsOutputBoundary.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/GenerateWord/GenerateWordInputBoundary.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/GenerateWord/GenerateWordInputData.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/GenerateWord/GenerateWordInteractor.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/GenerateWord/GenerateWordOutputBoundary.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/GenerateWord/GenerateWordOutputData.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/use_case/GenerateWord/GenerateWordDataAccessInterface.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/use_case/GenerateWord/GenerateWordDataAccessInterface.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/use_case/GenerateWord/WordPuzzleDataAccessInterface.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/use_case/InitializeFirstRound/InitializeFirstRoundDataAccessInterface.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/use_case/InitializeFirstRound/InitializeFirstRoundInputBoundary.class" beforeDir="false" />
@@ -82,7 +69,6 @@
       <change beforePath="$PROJECT_DIR$/target/classes/use_case/MakeGuess/MakeGuessHangmanGameDataAccessInterface.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/use_case/MakeGuess/MakeGuessInputBoundary.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/use_case/MakeGuess/MakeGuessInputData.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/MakeGuess/MakeGuessInteractor.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/use_case/MakeGuess/MakeGuessOutputBoundary.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/use_case/MakeGuess/MakeGuessOutputData.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/use_case/Room/LobbyInteractor.class" beforeDir="false" />
@@ -93,11 +79,8 @@
       <change beforePath="$PROJECT_DIR$/target/classes/use_case/Room/RoomJoinInteractor$RoomCreateCallback.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/use_case/Room/RoomJoinInteractor$RoomJoinCallback.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/use_case/Room/RoomJoinInteractor.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/view/EndGameResultsView.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/view/GenerateWordView.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/view/HangmanImagePanel.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/view/LobbyView.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/view/MakeGuessView.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/view/RoomJoinView$Controller.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/view/RoomJoinView.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/view/RoomLobby.class" beforeDir="false" />
@@ -144,7 +127,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.Main.executor": "Debug",
+    "Application.Main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
