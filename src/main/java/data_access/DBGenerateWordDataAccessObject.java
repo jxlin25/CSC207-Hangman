@@ -34,12 +34,10 @@ public class DBGenerateWordDataAccessObject implements GenerateWordDataAccessInt
                 .url(RANDOM_WORD_API_URL + length)
                 .build();
 
-        try{
+        try {
             final Response response = client.newCall(request).execute();
             final JSONArray responseBody = new JSONArray(response.body().string());
             final String randomWord = responseBody.getString(0);
-            //TODO this part now don't need, if future also, delete saveRandomWord...
-            saveRandomWord(randomWord);
             return randomWord;
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -52,7 +50,7 @@ public class DBGenerateWordDataAccessObject implements GenerateWordDataAccessInt
                 .url(DICTIONARY_API_URL + word)
                 .build();
 
-        try{
+        try {
             Response response = client.newCall(request).execute();
             final String responseBody = response.body().string();
             if (response.code() == 200 && responseBody.startsWith("[")) {
@@ -62,15 +60,5 @@ public class DBGenerateWordDataAccessObject implements GenerateWordDataAccessInt
         } catch (IOException e) {
             return false;
         }
-    }
-
-    @Override
-    public void saveRandomWord(String randomWord) {
-        word = randomWord;
-    }
-
-    @Override
-    public String getSaveRandomWord() {
-        return word;
     }
 }
