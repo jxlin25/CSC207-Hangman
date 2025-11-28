@@ -1,6 +1,8 @@
 package view;
 
 import Constant.Constants;
+import interface_adapter.EndGameResults.EndGameResultsController;
+import interface_adapter.Hint.HintController;
 import interface_adapter.InitializeRound.InitializeRoundController;
 import interface_adapter.MakeGuess.MakeGuessViewModel;
 import interface_adapter.MakeGuess.MakeGuessState;
@@ -26,6 +28,8 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
     private MakeGuessController makeGuessController;
     private ViewManagerModel viewManagerModel;
     private InitializeRoundController initializeRoundController;
+    private EndGameResultsController endGameResultsController;
+    private HintController hintController;
 
     private final HangmanImagePanel hangmanImagePanel = new HangmanImagePanel();
     private final JLabel wordPuzzleLabel = new JLabel("????");
@@ -37,17 +41,20 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
 
     private final JButton nextRoundButton;
     private JDialog endGameDialog = new JDialog();
+    private final JButton nextRoundButton;
+    private final JButton hintButton = new JButton("Hint");
+    private final JLabel hintLabel = new JLabel("Hint: ");
 
     private JPanel alphabetButtonsPanel;
 
     public MakeGuessView(MakeGuessViewModel viewModel) {
 
         this.alphabetButtonsPanel = this.createNewLetterButtonsPanel();
-
         this.makeGuessViewModel = viewModel;
         this.makeGuessViewModel.addPropertyChangeListener(this);
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
         wordPuzzleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         restartButton = new JButton("Restart");
@@ -87,14 +94,28 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         this.popupShowResultButton.addActionListener(e -> {
             // TODO: switch to EndGameResultView
         });
+        // Hint Panel Setup
+        JPanel hintPanel = new JPanel();
+        hintPanel.setLayout(new BoxLayout(hintPanel, BoxLayout.Y_AXIS));
+        // The word 'apple' is placeholder here; the controller will handle the actual word retrieval logic.
+        hintButton.addActionListener(e -> hintController.execute("apple"));
+        hintPanel.add(hintButton);
+        hintPanel.add(hintLabel);
+
 
         this.nextRoundButton = new JButton("Next Round");
         this.nextRoundButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.nextRoundButton.setEnabled(false);
         this.nextRoundButton.addActionListener(e -> {
             System.out.println("Moving to next round");
-            this.initializeRoundController.execute();
+
+            // Reset the letter buttons panel FIRST
             this.resetLetterButtonsPanel();
+
+            // Then initialize the next round
+            this.initializeRoundController.execute();
+
+            // Disable the next round button until the round is complete again
             this.nextRoundButton.setEnabled(false);
         });
 
@@ -105,21 +126,29 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         this.add(attemptsLabel);
         this.add(roundNumberLabel);
         this.add(Box.createVerticalStrut(20));
-        this.add(Box.createVerticalStrut(20));
         this.add(restartButton);
         this.add(nextRoundButton);
+        this.add(Box.createVerticalStrut(20));
         this.add(wordPuzzleLabel);
         this.add(alphabetButtonsPanel);
-
+        this.add(hintPanel);
     }
 
     public void setInitializeRoundController(InitializeRoundController controller) {
         this.initializeRoundController = controller;
     }
 
+    public void setHintController(HintController hintController) {
+        this.hintController = hintController;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
+        // Not used, but required by the interface
+    }
 
+    public void setEndGameResultsController(EndGameResultsController controller) {
+        this.endGameResultsController = controller;
     }
 
     @Override
@@ -133,14 +162,12 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         System.out.println("isGameOver: " + state.isGameOver());
         System.out.println("----------------------------");
 
-        // The maxAttempts can be changed by difficulty level setting
         final int maxAttempts = 6;
         final int remainingAttempts = state.getRemainingAttempts();
 
         this.roundNumberLabel.setText("Round number: " + state.getCurrentRoundNumber());
         hangmanImagePanel.setIncorrectGuesses(maxAttempts - remainingAttempts);
         this.attemptsLabel.setText("Attempts left: " + remainingAttempts);
-        // Update the displayed word
         this.wordPuzzleLabel.setText(state.getMaskedWord());
 
         // If the current round is ended
@@ -176,13 +203,21 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
                 });
 
                 endGameDialog.setVisible(true);
-
+                if (endGameResultsController != null) {
+                    endGameResultsController.execute();
+                }
             }
+        }
+
+        // Update hint display
+        if (state.getHintText() != null) {
+            hintLabel.setText("Hint: " + state.getHintText());
+        } else {
+            hintLabel.setText("Hint: ");
         }
     }
 
     private void disableLetterButtons() {
-
         for (Component component : this.alphabetButtonsPanel.getComponents()) {
             if (component instanceof JButton) {
                 component.setEnabled(false);
@@ -198,14 +233,8 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
             JButton button = new JButton(String.valueOf(letter));
 
             button.addActionListener(e -> {
-
-                // Make a guess by the letter
                 makeGuessController.execute(Character.toLowerCase(letter));
-
-                // Disable the button so it can't be clicked again
                 button.setEnabled(false);
-
-                // Change the button color
                 button.setBackground(Color.LIGHT_GRAY);
             });
 
@@ -218,15 +247,28 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
     private void resetLetterButtonsPanel() {
         this.remove(this.alphabetButtonsPanel);
         this.alphabetButtonsPanel = this.createNewLetterButtonsPanel();
-        this.add(alphabetButtonsPanel);
+        // Re-add the alphabet buttons panel right before the hint panel
+        // Find the index of the hint panel to ensure correct insertion order
+        Component[] components = this.getComponents();
+        int hintPanelIndex = -1;
+        for (int i = 0; i < components.length; i++) {
+            // We use the last component which should be the hint panel based on the constructor
+            if (components[i] instanceof JPanel && components[i] != this.alphabetButtonsPanel) {
+                hintPanelIndex = i;
+            }
+        }
+
+        // Insert the new alphabet panel before the hint panel or just at the end if the index isn't found
+        if (hintPanelIndex != -1) {
+            this.add(alphabetButtonsPanel, hintPanelIndex);
+        } else {
+            this.add(alphabetButtonsPanel);
+        }
+
         this.revalidate();
         this.repaint();
     }
 
-    /**
-     * Gets the name of this view.
-     * @return "Make Guess"
-     */
     private void returnToStartView() {
         if (viewManagerModel != null) {
             viewManagerModel.setState("Generate Word");
@@ -253,9 +295,4 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
     public void setMakeGuessController(MakeGuessController controller) {
         this.makeGuessController = controller;
     }
-
-//    public String getViewName() {
-//        return viewName;
-//    }
-
 }

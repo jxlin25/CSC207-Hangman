@@ -2,6 +2,7 @@ package view;
 
 import interface_adapter.EndGameResults.EndGameResultsState;
 import interface_adapter.EndGameResults.EndGameResultsViewModel;
+import interface_adapter.ViewManagerModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,21 +11,16 @@ import java.beans.PropertyChangeListener;
 
 public class EndGameResultsView extends JPanel implements PropertyChangeListener {
 
-    // The name used by the ViewManagerModel to identify this screen
     public final String viewName;
-
     private final EndGameResultsViewModel endGameResultsViewModel;
+    private ViewManagerModel viewManagerModel;
 
-    // UI Components for displaying the results
     private final JLabel titleLabel;
     private final JLabel statusLabel;
-    private final JLabel wordLabel;
+    private final JTextArea roundDetailsArea;  // Changed from JLabel to JTextArea
     private final JLabel attemptsLabel;
+    private final JButton restartButton;
 
-    /**
-     * Constructor for the EndGameResultsView.
-     * @param viewModel The ViewModel associated with this view.
-     */
     public EndGameResultsView(EndGameResultsViewModel viewModel) {
         this.endGameResultsViewModel = viewModel;
         this.viewName = viewModel.VIEW_NAME;
@@ -33,57 +29,93 @@ public class EndGameResultsView extends JPanel implements PropertyChangeListener
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        // --- Title ---
+        // Title
         titleLabel = new JLabel("Game Over: Results");
-        titleLabel.setFont(new Font("Serif", Font.BOLD, 24));
+        titleLabel.setFont(new Font("Serif", Font.BOLD, 32));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // --- Result Labels ---
+        // Status Label
         statusLabel = new JLabel("Status: Awaiting Data...");
-        wordLabel = new JLabel("Word: Awaiting Data...");
-        attemptsLabel = new JLabel("Attempts: Awaiting Data...");
-
+        statusLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
         statusLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        wordLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Round Details (multi-line text area)
+        roundDetailsArea = new JTextArea(5, 30);
+        roundDetailsArea.setEditable(false);
+        roundDetailsArea.setFont(new Font("Monospaced", Font.PLAIN, 16));
+        roundDetailsArea.setBackground(this.getBackground());
+        roundDetailsArea.setLineWrap(false);
+        roundDetailsArea.setText("Awaiting Data...");
+
+        JScrollPane scrollPane = new JScrollPane(roundDetailsArea);
+        scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+
+        // Attempts Label
+        attemptsLabel = new JLabel("Total Attempts Used: Awaiting Data...");
+        attemptsLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
         attemptsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // --- Assemble the View ---
+        // Restart button
+        restartButton = new JButton("Play Again");
+        restartButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        restartButton.setFont(new Font("SansSerif", Font.BOLD, 16));
+        restartButton.addActionListener(e -> {
+            if (viewManagerModel != null) {
+                viewManagerModel.setState("Generate Word");
+                viewManagerModel.firePropertyChange();
+            } else {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Cannot restart: ViewManagerModel not set.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        });
+
+        // Assemble the View
+        this.add(Box.createRigidArea(new Dimension(0, 40)));
         this.add(titleLabel);
         this.add(Box.createRigidArea(new Dimension(0, 30)));
         this.add(statusLabel);
-        this.add(wordLabel);
+        this.add(Box.createRigidArea(new Dimension(0, 20)));
+        this.add(scrollPane);
+        this.add(Box.createRigidArea(new Dimension(0, 20)));
         this.add(attemptsLabel);
-        this.add(Box.createRigidArea(new Dimension(0, 10)));
+        this.add(Box.createRigidArea(new Dimension(0, 30)));
+        this.add(restartButton);
 
-        // Initialize the view with the current state data
         updateView(viewModel.getState());
     }
 
-    /**
-     * This method is called by the EndGameResultsViewModel
-     * when the results state has been updated by the Presenter.
-     *
-     */
+    public void setViewManagerModel(ViewManagerModel viewManagerModel) {
+        this.viewManagerModel = viewManagerModel;
+    }
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         EndGameResultsState state = endGameResultsViewModel.getState();
         updateView(state);
     }
 
-    /**
-     * Helper method to update all UI components based on the current state.
-     */
     private void updateView(EndGameResultsState state) {
-        // Retrieve data from the state
         String status = state.getFinalStatus();
-        String word = state.getFinalWord();
+        String roundDetails = state.getFinalWord();
         int attempts = state.getAttemptsTaken();
 
-        // Update the GUI labels
-        statusLabel.setText("Status: " + (status.isEmpty() ? "N/A" : status));
-        wordLabel.setText("The Word Was: " + (word.isEmpty() ? "N/A" : word));
-        attemptsLabel.setText("Attempts Taken: " + attempts);
+        statusLabel.setText(status.isEmpty() ? "Status: N/A" : status);
+        roundDetailsArea.setText(roundDetails.isEmpty() ? "No round data" : roundDetails);
+        attemptsLabel.setText("Total Attempts Used: " + attempts);
 
+        // Color code the status
+        if (status.contains("Victory")) {
+            statusLabel.setForeground(new Color(0, 150, 0));
+        } else if (status.contains("Defeat")) {
+            statusLabel.setForeground(new Color(200, 0, 0));
+        } else {
+            statusLabel.setForeground(Color.BLACK);
+        }
     }
 
     public String getViewName() {
