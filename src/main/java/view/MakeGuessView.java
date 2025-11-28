@@ -37,6 +37,7 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
 
 
 
+    private final JButton nextRoundButton;
 
     //private final JLabel hangmanImageLabel;
     //private final JLabel messageLabel;
@@ -76,6 +77,15 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         hintPanel.add(hintButton);
         hintPanel.add(hintLabel);
 
+        this.nextRoundButton = new JButton("Next Round");
+        this.nextRoundButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.nextRoundButton.setEnabled(false);
+        this.nextRoundButton.addActionListener(e -> {
+            System.out.println("Moving to next round");
+            this.initializeRoundController.execute();
+            this.resetLetterButtonsPanel();
+            this.nextRoundButton.setEnabled(false);
+        });
 
         // Add everything to the panel
         this.add(hangmanImagePanel);
@@ -84,6 +94,7 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         this.add(Box.createVerticalStrut(20));
         this.add(Box.createVerticalStrut(20));
         this.add(restartButton);
+        this.add(nextRoundButton);
         this.add(wordPuzzleLabel);
         this.add(alphabetButtonsPanel);
         this.add(hintPanel);
@@ -127,6 +138,8 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         // If the current round is ended
         if (state.getRoundStatus().equals(WON) || state.getRoundStatus().equals(LOST)) {
             System.out.println("Round over");
+            this.disableLetterButtons();
+            this.nextRoundButton.setEnabled(true);
 
             // If the current ended round is the last round, the game also ends
             if (state.isGameOver()) {
@@ -139,9 +152,8 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
             }
             else {
                 // TODO: put these code into the action listener of 'Next Round' JButton
-                System.out.println("Moving to next round");
-                this.initializeRoundController.execute();
-                this.resetLetterButtonsPanel();
+
+
             }
         }
         if (state.getHintText() != null) {
@@ -151,6 +163,14 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         }
     }
 
+    private void disableLetterButtons() {
+
+        for (Component component : this.alphabetButtonsPanel.getComponents()) {
+            if (component instanceof JButton) {
+                component.setEnabled(false);
+            }
+        }
+    }
 
     private JPanel createNewLetterButtonsPanel() {
         JPanel lettersPanel = new JPanel(new GridLayout(2, 13, 5, 5));
