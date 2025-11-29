@@ -65,7 +65,7 @@ public class DBHintDataAccessObject implements HintDataAccessInterface {
     @Override
     public String getGemiHint(String word) {
         final String prompt = "You are a Hangman game hint generator. " + "Please generate a hint about '" + word + "' for me, "
-                + "The hint should not contain the word, but try to be as appropriate as possible.";
+                + "The hint should not contain the word, but try to be as appropriate as possible. And Don't give me Option, just one hint.";
         JSONObject response = new JSONObject()
                 .put("contents", new JSONArray()
                         .put(new JSONObject()

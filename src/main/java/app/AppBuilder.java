@@ -151,7 +151,7 @@ public class AppBuilder {
     public AppBuilder addHintUseCase() {
         HintOutputBoundary hintPresenter = new HintPresenter(makeGuessViewModel);
 
-        HintInputBoundary hintInteractor = new HintInteractor(hintDAO, hintPresenter);
+        HintInputBoundary hintInteractor = new HintInteractor(hintDAO, hintPresenter, hangmanGameDAO);
 
         HintController hintController = new HintController(hintInteractor);
 
