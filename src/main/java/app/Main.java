@@ -17,8 +17,8 @@ public class Main {
                 .addGenerateWordUseCase()
                 .addInitializeRoundUseCase() // Please ensure addInitializeFirstRoundUseCase() is after addGenerateWordView()
                 .addMakeGuessUseCase()
-                .addEndGameResultsUseCase() // Resolved conflict by including both
-                .addHintUseCase()           // Resolved conflict by including both
+                .addEndGameResultsUseCase()
+                .addHintUseCase()
                 .build();
         app.setSize(800, 600);
         app.setLocationRelativeTo(null);

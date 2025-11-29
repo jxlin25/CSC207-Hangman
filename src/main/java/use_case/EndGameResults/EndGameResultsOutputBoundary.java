@@ -1,8 +1,8 @@
-// use_case/ResultFetch/ResultFetchOutputBoundary.java
-
 package use_case.EndGameResults;
 
+import interface_adapter.EndGameResults.EndGameResultsState.RoundResult;
+import java.util.List;
+
 public interface EndGameResultsOutputBoundary {
-    // The presenter will receive the three calculated results directly
-    void present(String finalStatus, String finalWord, int attemptsTaken);
+    void present(String finalStatus, List<RoundResult> roundResults);
 }

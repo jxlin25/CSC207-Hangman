@@ -18,7 +18,6 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
     @Override
     public void execute(MakeGuessInputData inputData) {
 
-
         final Guess guess = inputData.getGuess();
         final int currentRoundNumber = this.hangmanGameDAO.getCurrentRoundNumber();
         int currentRemainingAttempts = this.hangmanGameDAO.getCurrentRoundAttempt();
@@ -46,6 +45,7 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
 
                 if (this.hangmanGameDAO.isCurrentRoundTheLastRound()) {
                     isGameOver = true;
+                    this.hangmanGameDAO.getCurrentRound().setWon();
                 }
                 else {
                     this.hangmanGameDAO.setCurrentRoundWonAndStartNextRound();
@@ -65,6 +65,7 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
 
                 if (this.hangmanGameDAO.isCurrentRoundTheLastRound()) {
                     isGameOver = true;
+                    this.hangmanGameDAO.getCurrentRound().setLost();
                 }
                 else {
                     this.hangmanGameDAO.setCurrentRoundLostAndStartNextRound();
