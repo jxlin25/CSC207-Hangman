@@ -91,10 +91,10 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         this.popupShowResultButton = new JButton("Show Result");
         this.popupShowResultButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.popupShowResultButton.addActionListener(e -> {
-            // TODO: switch to EndGameResultView
             if (endGameResultsController != null) {
                 endGameResultsController.execute();
             }
+            this.endGameDialog.setVisible(false);
         });
         // Hint Panel Setup
         JPanel hintPanel = new JPanel();

@@ -6,14 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f1e05ea6-dbbe-4418-8f7a-5cc140a4e7aa" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/AppBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/AppBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data_access/DBHintDataAccessObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data_access/DBHintDataAccessObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/interface_adapter/Hint/HintController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/interface_adapter/Hint/HintController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/use_case/GenerateWord/GenerateWordInteractor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/use_case/GenerateWord/GenerateWordInteractor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/use_case/Hint/HintInputBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/use_case/Hint/HintInputBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/use_case/Hint/HintInputData.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/use_case/Hint/HintInteractor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/use_case/Hint/HintInteractor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/view/MakeGuessView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/MakeGuessView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
