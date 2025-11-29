@@ -1,6 +1,6 @@
 package data_access;
 
-import entity.game_session.LobbyState;
+import interface_adapter.Room.LobbyState;
 import use_case.Room.LobbyDataAccessInterface;
 
 public class InMemoryLobbyDataAccessObject implements LobbyDataAccessInterface {

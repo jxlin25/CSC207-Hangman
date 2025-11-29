@@ -8,9 +8,8 @@ import use_case.Room.RoomJoinInteractor;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class RoomJoinController implements RoomJoinView.Controller {
+public class RoomJoinController{
     private RoomJoinInputBoundary roomJoinInputBoundary;
-    @Override
     public void onJoinRoom(int roomId, String username) {
         try {
             Player player = new Player(username);

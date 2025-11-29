@@ -1,6 +1,6 @@
 package use_case.Room;
 
-import entity.game_session.LobbyState;
+import interface_adapter.Room.LobbyState;
 
 public interface LobbyDataAccessInterface {
     void saveLobbyState(int roomId, LobbyState lobbyState);

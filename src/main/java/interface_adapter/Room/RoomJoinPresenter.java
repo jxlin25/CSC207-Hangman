@@ -20,25 +20,27 @@ public class RoomJoinPresenter implements RoomJoinOutputBoundary {
         this.viewManagerModel = viewManagerModel;
     }
 
-    public void present(RoomJoinOutputData roomJoinOutputData) {}
+    public void present(RoomJoinOutputData roomJoinOutputData) {
+
+    }
 
     @Override
     public void prepareSuccess(RoomJoinOutputData outputData) {
-        // On successful room join, switch to lobby view
-        lobbyViewModel.setRoomId(outputData.getRoomId());
-        lobbyViewModel.setPlayers(outputData.getPlayers()); // If you have player list
-        lobbyViewModel.firePropertyChanged();
+        LobbyState lobbyState = lobbyViewModel.getState();
+        lobbyState.setRoomId(outputData.getRoomId());
+        lobbyState.setPlayers(outputData.getPlayers());
+        lobbyViewModel.firePropertyChange();
 
-        viewManagerModel.setActiveView(lobbyViewModel.getViewName());
-        viewManagerModel.firePropertyChanged();
+        viewManagerModel.setViewName(lobbyViewModel.getViewName());
+        viewManagerModel.firePropertyChange();
     }
 
     @Override
     public void prepareFail(String error) {
-        // Update RoomJoinViewModel with error message
-        RoomJoinState currentState = roomJoinViewModel.getState();
-        currentState.setError(error);
-        roomJoinViewModel.setState(currentState);
-        roomJoinViewModel.firePropertyChanged();
+
+        RoomJoinState state = roomJoinViewModel.getState();
+        state.setError(error);
+        roomJoinViewModel.setState(state);
+        roomJoinViewModel.firePropertyChange();
     }
 }

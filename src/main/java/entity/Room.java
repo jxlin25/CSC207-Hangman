@@ -22,4 +22,10 @@ public class Room {
     public List<Player> getUsers() {
         return users;
     }
+    public Player getRoomHost() {
+        if (!users.isEmpty()) {
+            return users.getFirst();
+        }
+        return null;
+    }
 }

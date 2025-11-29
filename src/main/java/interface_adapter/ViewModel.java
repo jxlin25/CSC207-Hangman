@@ -5,7 +5,7 @@ import java.beans.PropertyChangeSupport;
 
 
 public abstract class ViewModel<T> {
-    private final String viewName;
+    private String viewName;
     private T state;
     protected final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
@@ -32,5 +32,9 @@ public abstract class ViewModel<T> {
 
     public void addPropertyChangeListener(PropertyChangeListener l) {
         support.addPropertyChangeListener(l);
+    }
+
+    public void setViewName(String viewName) {
+        this.viewName = viewName;
     }
 }

@@ -31,6 +31,6 @@ public class RoomJoinInteractor implements RoomJoinInputBoundary {
         }
         Room currentRoom = dao.getRoom(roomId);
         RoomJoinOutputData roomJoinOutputData = new RoomJoinOutputData(roomId, input.getPlayer(), currentRoom.getUsers());
-        presenter.present(roomJoinOutputData);
+        presenter.prepareSuccess(roomJoinOutputData);
     }
 }

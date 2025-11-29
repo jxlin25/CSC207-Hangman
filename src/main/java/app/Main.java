@@ -16,6 +16,7 @@ public class Main {
                 .addGenerateWordView()
                 .addMakeGuessView()
                 .addRoomJoinView()
+                .addLobbyView()
                 .addGenerateWordUseCase()
                 .addMakeGuessUseCase()
                 .build();

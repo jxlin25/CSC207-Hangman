@@ -3,7 +3,7 @@ package network;
 import entity.Player;
 import entity.game_session.GameState;
 import interface_adapter.GameSession.GameSessionController;
-import manager.GameSessionManager;
+//import manager.GameSessionManager;
 import org.java_websocket.server.WebSocketServer;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -19,10 +19,8 @@ public class HangmanServer extends WebSocketServer {
     // roomId -> set of sockets
     private final Map<String, Set<WebSocket>> rooms = new HashMap<>();
     private final Set<String> establishedRooms = new HashSet<>();
-    private final Map<String, Set<WebSocket>> rooms; // No player info!
-    private final Map<String, GameState> gameStates;
+    //private final Map<String, GameState> gameStates;
     private final Map<String, Map<WebSocket, Player>> roomPlayers = new HashMap<>();
-    private final Map<String, GameState> gameStates = new HashMap<>();
 
 
 

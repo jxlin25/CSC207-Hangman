@@ -6,6 +6,7 @@ public class Player {
     private String name;
     //leave for multiplayer mode
     private final String id;
+    private boolean host;
     private Integer roomId;
     private int score;
     private String status;
@@ -18,7 +19,6 @@ public class Player {
         this.timeTaken = 0;
         this.status = "Waiting";
         this.id = UUID.randomUUID().toString();
-        
     }
 
     public String getName() {
@@ -62,6 +62,7 @@ public class Player {
             this.roomId = roomId;
         }
     }
+
 
     public void addToScore(int points) {
         this.score += points;

@@ -6,12 +6,12 @@ import use_case.Room.CreateRoomDataAccessInterface;
 import use_case.Room.RoomJoinInteractor;
 import entity.Room;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class InMemoryRoomJoinDataAccessObject implements CreateRoomDataAccessInterface {
     private final Map<Integer, Room> rooms = new HashMap<>();
+
+
     private final WebSocketClient client;
 
     public InMemoryRoomJoinDataAccessObject(WebSocketClient client) {
@@ -67,11 +67,9 @@ public class InMemoryRoomJoinDataAccessObject implements CreateRoomDataAccessInt
     }
 
     public Room getRoom(int roomId) {
-
-        for (int i = 0; i < rooms.size(); i++) {
-            Room currentRoom = rooms.get(i);
-            if (currentRoom.getRoomId() == roomId) {
-                return currentRoom;
+        for (int key : rooms.keySet()) {
+            if (key == roomId) {
+                return rooms.get(key);
             }
         }
         return null;

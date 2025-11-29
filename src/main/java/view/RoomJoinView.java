@@ -2,39 +2,33 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 import interface_adapter.Room.RoomJoinController;
+import interface_adapter.Room.RoomJoinState;
+import interface_adapter.Room.RoomJoinViewModel;
 import use_case.Room.RoomJoinInteractor;
 
-public class RoomJoinView extends JFrame {
+public class RoomJoinView extends JPanel {
 
     private final JTextField roomIdField = new JTextField(20);
     private final JTextField usernameField = new JTextField(20);
     private final JButton joinButton = new JButton("Join Room");
     private final JButton createButton = new JButton("Create Room");
     private final JLabel messageLabel = new JLabel();
+    private RoomJoinViewModel roomJoinViewModel;
+    private RoomJoinController controller;
 
 
-    // Updated Controller interface to include username
-    public interface Controller {
-        void onJoinRoom(int roomId, String username);
-        void onCreateRoom(String username);
-
-        void setInputBoundary(RoomJoinInteractor interactor);
-    }
-
-    private Controller controller;
-
-    public RoomJoinView() {
-        super("Join or create a Hangman Room");
+    public RoomJoinView(RoomJoinViewModel roomJoinViewModel) {
+        this.roomJoinViewModel = roomJoinViewModel;
         setupUI();
+        roomJoinViewModel.addPropertyChangeListener(evt -> {
+            RoomJoinState state = roomJoinViewModel.getState();
+            messageLabel.setText(state.getError());
+        });
     }
 
     private void setupUI() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(300, 200); // Increased height to accommodate additional row
-        setLocationRelativeTo(null);
-
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(4, 2)); // Changed to 4 rows, 2 columns
+        panel.setLayout(new GridLayout(4, 2));
 
         // Room ID row
         panel.add(new JLabel("Room ID:"));
@@ -61,7 +55,6 @@ public class RoomJoinView extends JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Please enter a username");
             }
-            this.dispose();
         });
 
         joinButton.addActionListener(e -> {
@@ -78,7 +71,6 @@ public class RoomJoinView extends JFrame {
                     } else {
                         JOptionPane.showMessageDialog(null, "Please enter a username");
                     }
-                    this.dispose();
                 } catch (NumberFormatException err) {
                     JOptionPane.showMessageDialog(null, "Please enter a valid room number");
                 }
@@ -86,28 +78,21 @@ public class RoomJoinView extends JFrame {
         });
     }
 
-    // Allows wiring the controller from outside
-    public void setController(Controller controller) {
+    public void setController(RoomJoinController controller) {
         this.controller = controller;
     }
 
-    public Controller getController() {return this.controller;}
+    public RoomJoinController getController() {return this.controller;}
 
-    // Display messages to the user
     public void showMessage(String message) {
         messageLabel.setText(message);
     }
 
-    // Optionally clear input fields
+    public RoomJoinViewModel getRoomJoinViewModel() {return roomJoinViewModel;}
+
     public void clearInput() {
         roomIdField.setText("");
         usernameField.setText("");
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            RoomJoinView view = new RoomJoinView();
-            view.setVisible(true);
-        });
-    }
 }

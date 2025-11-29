@@ -61,6 +61,7 @@ public class AppBuilder {
     private MakeGuessView makeGuessView;
     private RoomJoinView roomJoinView;
 
+
     //Controller
     private RoomJoinController roomJoinController;
 
@@ -86,28 +87,35 @@ public class AppBuilder {
         return this;
     }
 
+    private LobbyView lobbyView;
+
+    public AppBuilder addLobbyView() {
+        LobbyViewModel lobbyViewModel = new LobbyViewModel();
+        LobbyPresenter presenter = new LobbyPresenter(lobbyViewModel, viewManagerModel);
+        LobbyDataAccessInterface dataAccess = new InMemoryLobbyDataAccessObject();
+        GameSessionManager sessionManager = GameSessionManager.getInstance();
+
+        LobbyInteractor lobbyInteractor = new LobbyInteractor(presenter, dataAccess, sessionManager);
+        LobbyController controller = new LobbyController(lobbyInteractor);
+
+        lobbyView = new LobbyView(lobbyViewModel, controller);
+        cardPanel.add(lobbyView, lobbyView.getViewName());
+        return this;
+    }
+
     public AppBuilder addRoomJoinView() {
         try {
             HangmanClient hangmanClient = new HangmanClient();
             RoomJoinViewModel roomJoinViewModel = new RoomJoinViewModel();
-            ViewManagerModel viewManagerModel = new ViewManagerModel();
             LobbyViewModel lobbyViewModel = new LobbyViewModel();
             RoomJoinPresenter roomJoinPresenter = new RoomJoinPresenter(roomJoinViewModel, lobbyViewModel, viewManagerModel);
             InMemoryRoomJoinDataAccessObject inMemoryRoomDataAccess = new InMemoryRoomJoinDataAccessObject(hangmanClient);
             RoomJoinInteractor interactor = new RoomJoinInteractor(inMemoryRoomDataAccess, roomJoinPresenter);
             roomJoinController = new RoomJoinController();
-            roomJoinView = new RoomJoinView();
+            roomJoinView = new RoomJoinView(roomJoinViewModel);
             roomJoinView.setController(roomJoinController);
             roomJoinView.getController().setInputBoundary(interactor);
-//
-//            LobbyPresenter presenter = new LobbyPresenter(lobbyViewModel, viewManagerModel);
-//            LobbyDataAccessInterface dataAccess = new InMemoryLobbyDataAccessObject();
-//            GameSessionManager sessionManager = GameSessionManager.getInstance();
-//
-//            LobbyInteractor lobbyInteractor = new LobbyInteractor(presenter, dataAccess, sessionManager);
-//            LobbyController controller = new LobbyController(lobbyInteractor);
-//
-//            LobbyView lobbyView = new LobbyView(lobbyViewModel, controller);
+            cardPanel.add(roomJoinView, roomJoinViewModel.getViewName());
 
             return this;
         } catch (Exception e) {
@@ -148,18 +156,13 @@ public class AppBuilder {
 // disable for demo
 //        viewManagerModel.setState(generateWordView.getViewName());
 //        viewManagerModel.firePropertyChange();
-
+//
         JMenuBar menuBar = new JMenuBar();
-        JMenu gameMenu = new JMenu("Multiplayer"); // Changed from "Game" to be more clear
+        JMenu gameMenu = new JMenu("Multiplayer");
         JMenuItem roomMenuItem = new JMenuItem("Join/Create Room");
         roomMenuItem.addActionListener(e -> {
-            if (roomJoinView != null) {
-                roomJoinView.setVisible(true);
-                // Center the room join view
-                roomJoinView.setLocationRelativeTo(application);
-            } else {
-                System.out.println("roomJoinView is null!");
-            }
+                viewManagerModel.setState(roomJoinView.getRoomJoinViewModel().getViewName());
+                viewManagerModel.firePropertyChange();
         });
 
         gameMenu.add(roomMenuItem);

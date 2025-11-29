@@ -1,7 +1,7 @@
 package use_case.Room;
 
 import entity.game_session.GameState;
-import entity.game_session.LobbyState;
+import interface_adapter.Room.LobbyState;
 
 public interface LobbyOutputBoundary {
     void prepareGameView(GameState gameState);

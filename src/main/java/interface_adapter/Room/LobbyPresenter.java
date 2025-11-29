@@ -15,7 +15,7 @@ public class LobbyPresenter implements LobbyOutputBoundary {
     }
 
     public void prepareGameView(GameState gameState) {
-        viewManagerModel.setActiveView("MakeGuessView");
-        viewManagerModel.firePropertyChanged();
+        viewManagerModel.setViewName("MakeGuessView");
+        viewManagerModel.firePropertyChange();
     }
 }
