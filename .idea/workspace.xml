@@ -6,13 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f1e05ea6-dbbe-4418-8f7a-5cc140a4e7aa" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/app/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/interface_adapter/EndGameResults/EndGameResultsPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/interface_adapter/EndGameResults/EndGameResultsPresenter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/interface_adapter/EndGameResults/EndGameResultsState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/interface_adapter/EndGameResults/EndGameResultsState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/use_case/EndGameResults/EndGameResultsInteractor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/use_case/EndGameResults/EndGameResultsInteractor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/use_case/EndGameResults/EndGameResultsOutputBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/use_case/EndGameResults/EndGameResultsOutputBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/use_case/MakeGuess/MakeGuessInteractor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/use_case/MakeGuess/MakeGuessInteractor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/view/EndGameResultsView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/EndGameResultsView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
