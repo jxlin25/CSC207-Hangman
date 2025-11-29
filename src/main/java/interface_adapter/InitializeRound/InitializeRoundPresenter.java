@@ -27,6 +27,8 @@ public class InitializeRoundPresenter implements InitializeRoundOutputBoundary {
         state.setRemainingAttempts(outputData.getRemainingAttempts());
         state.setCurrentRoundNumber(outputData.getCurrentRoundNumber());
         state.setMaskedWord(outputData.getMaskedWord());
+        state.setHintText(null);
+        state.setResetAlphabetButtons(true);
 
 //        // If the game is over...
 //        if (outputData.isGameOver()) {
