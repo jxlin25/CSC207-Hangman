@@ -27,14 +27,7 @@ public class EndGameResultsInteractor implements EndGameResultsInputBoundary {
         String lastRoundStatus = lastRound.getStatus();
 
         // Determine overall game status based on the last round
-        String finalStatus;
-        if (lastRoundStatus.equals(Constant.StatusConstant.WON)) {
-            finalStatus = "Victory!";
-        } else if (lastRoundStatus.equals(Constant.StatusConstant.LOST)) {
-            finalStatus = "Defeat";
-        } else {
-            finalStatus = "Game Over";
-        }
+        String finalStatus = "Game Over";
 
         // Build round-by-round results
         List<RoundResult> roundResults = new ArrayList<>();
