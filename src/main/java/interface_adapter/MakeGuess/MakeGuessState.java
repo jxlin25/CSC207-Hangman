@@ -14,6 +14,7 @@ public class MakeGuessState {
     private String maskedWord = "";
     private String message = "";
     private String hintText;
+    private boolean resetAlphabetButtons;
 
     public MakeGuessState() {
 
@@ -27,6 +28,7 @@ public class MakeGuessState {
         this.remainingAttempts = remainingAttempts;
         this.currentRoundNumber = currentRoundNumber;
         this.maskedWord = maskedWord;
+
     }
 
     public String getGuessedLetter() {
@@ -96,8 +98,17 @@ public class MakeGuessState {
     public String getHintText() {
         return hintText;
     }
+
     public void setHintText(String hint) {
         this.hintText = hint;
+    }
+
+    public boolean getResetAlphabetButtons() {
+        return resetAlphabetButtons;
+    }
+
+    public void setResetAlphabetButtons(boolean resetAlphabetButtons) {
+        this.resetAlphabetButtons = resetAlphabetButtons;
     }
 }
 

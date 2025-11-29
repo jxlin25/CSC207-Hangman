@@ -25,6 +25,7 @@ public class MakeGuessPresenter implements MakeGuessOutputBoundary {
         state.setRemainingAttempts(outputData.getRemainingAttempts());
         state.setCurrentRoundNumber(outputData.getCurrentRoundNumber());
         state.setMaskedWord(outputData.getMaskedWord());
+        state.setResetAlphabetButtons(false);
 
 //        // If the game is over...
 //        if (outputData.isGameOver()) {
