@@ -99,8 +99,7 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         // Hint Panel Setup
         JPanel hintPanel = new JPanel();
         hintPanel.setLayout(new BoxLayout(hintPanel, BoxLayout.Y_AXIS));
-        // The word 'apple' is placeholder here; the controller will handle the actual word retrieval logic.
-        hintButton.addActionListener(e -> hintController.execute("apple"));
+        hintButton.addActionListener(e -> hintController.execute());
         hintPanel.add(hintButton);
         hintPanel.add(hintLabel);
 
@@ -210,9 +209,9 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
 
         // Update hint display
         if (state.getHintText() != null) {
-            hintLabel.setText("Hint: " + state.getHintText());
+            hintLabel.setText("Hint: ");       hintLabel.setText("Hint: " + state.getHintText());
         } else {
-            hintLabel.setText("Hint: ");
+
         }
     }
 

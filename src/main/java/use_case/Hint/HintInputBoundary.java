@@ -7,8 +7,7 @@ package use_case.Hint;
 public interface HintInputBoundary {
     /**
      * Execute the Hint Use Case.
-     * @param hintInputData the input data
      */
 
-    void execute(HintInputData hintInputData);
+    void execute();
 }

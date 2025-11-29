@@ -1,5 +1,7 @@
 package use_case.Hint;
 
+import use_case.MakeGuess.HangmanGameDataAccessInterface;
+
 /**
  * The Generate Word Interactor.
  */
@@ -7,22 +9,25 @@ package use_case.Hint;
 public class HintInteractor implements HintInputBoundary {
     private final HintDataAccessInterface hintDataAccessInterface;
     private final HintOutputBoundary hintOutputBoundary;
+    private final HangmanGameDataAccessInterface hangmanGameDataAccessInterface;
 
     public HintInteractor(HintDataAccessInterface hintDataAccessInterface,
-                          HintOutputBoundary hintOutputBoundary) {
+                          HintOutputBoundary hintOutputBoundary,
+                          HangmanGameDataAccessInterface hangmanGameDataAccessInterface) {
         this.hintDataAccessInterface = hintDataAccessInterface;
         this.hintOutputBoundary = hintOutputBoundary;
+        this.hangmanGameDataAccessInterface = hangmanGameDataAccessInterface;
     }
 
     @Override
-    public void execute(HintInputData hintInputData) {
+    public void execute() {
+        String word = new String(hangmanGameDataAccessInterface.getCurrentWordPuzzle().getLetters());
         String hint;
         if (hintDataAccessInterface.isApiKeyValid()) {
-            hint = hintDataAccessInterface.getGemiHint(hintInputData.getWord());
+            hint = hintDataAccessInterface.getGemiHint(word);
         }
         else {
-            hint = "You don't set the Api key, this is definition from dictionary: "
-                    + hintDataAccessInterface.getDictHint(hintInputData.getWord());
+            hint = hintDataAccessInterface.getDictHint(word);
         }
         if (hint == null || hint.trim().isEmpty()) {
             hint = "No hint available.";

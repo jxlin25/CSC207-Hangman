@@ -13,14 +13,14 @@ public class GenerateWordInteractor implements GenerateWordInputBoundary {
 
     private final GenerateWordDataAccessInterface generateWordDataAccessInterface;
     private final GenerateWordOutputBoundary generateWordOutputBoundary;
-    private final HangmanGameDataAccessInterface hangmanGameDAO;
+    private final HangmanGameDataAccessInterface hangmanGameDataAccessInterface;
 
     public GenerateWordInteractor(GenerateWordDataAccessInterface generateWordDataAccessInterface,
                                   GenerateWordOutputBoundary generateWordOutputBoundary,
-                                  HangmanGameDataAccessInterface hangmanGameDAO) {
+                                  HangmanGameDataAccessInterface hangmanGameDataAccessInterface) {
         this.generateWordDataAccessInterface = generateWordDataAccessInterface;
         this.generateWordOutputBoundary = generateWordOutputBoundary;
-        this.hangmanGameDAO = hangmanGameDAO;
+        this.hangmanGameDataAccessInterface = hangmanGameDataAccessInterface;
     }
 
     @Override
@@ -52,8 +52,7 @@ public class GenerateWordInteractor implements GenerateWordInputBoundary {
         System.out.println("The Generate Words is :" + words);
         System.out.println("----------------------------");
 
-        //TODO this part maybe can change, now, we don't use OutPutData
-        hangmanGameDAO.setHangmanGame(new HangmanGame(words));
+        hangmanGameDataAccessInterface.setHangmanGame(new HangmanGame(words));
         GenerateWordOutputData outputData = new GenerateWordOutputData(words);
         generateWordOutputBoundary.prepareSuccessView(outputData);
     }
