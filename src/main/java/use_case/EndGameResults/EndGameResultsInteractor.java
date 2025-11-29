@@ -3,6 +3,9 @@ package use_case.EndGameResults;
 import data_access.InMemoryHangmanDataAccessObject;
 import entity.HangmanGame;
 import entity.Round;
+import interface_adapter.EndGameResults.EndGameResultsState.RoundResult;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EndGameResultsInteractor implements EndGameResultsInputBoundary {
 
@@ -26,44 +29,45 @@ public class EndGameResultsInteractor implements EndGameResultsInputBoundary {
         // Determine overall game status based on the last round
         String finalStatus;
         if (lastRoundStatus.equals(Constant.StatusConstant.WON)) {
-            finalStatus = "Victory! 🎉";
+            finalStatus = "Victory!";
         } else if (lastRoundStatus.equals(Constant.StatusConstant.LOST)) {
-            finalStatus = "Defeat 😢";
+            finalStatus = "Defeat";
         } else {
-            finalStatus = "Game Ended";
+            finalStatus = "Game Over";
         }
 
-        // Build detailed round-by-round results
-        int totalAttemptsTaken = 0;
-        StringBuilder roundDetails = new StringBuilder();
+        // Build round-by-round results
+        List<RoundResult> roundResults = new ArrayList<>();
 
         for (int i = 0; i < game.getRounds().size(); i++) {
             Round round = game.getRounds().get(i);
 
-            // Calculate attempts used for this round
+            System.out.println("Round " + (i+1) + ":");
+            System.out.println("  Status: " + round.getStatus());
+            System.out.println("  Remaining Attempts: " + round.getAttempt());
+            System.out.println("  Attempts Used: " + (6 - round.getAttempt()));
+
+            // Calculate attempts used for this round (6 - remaining)
             int attemptsUsed = 6 - round.getAttempt();
-            totalAttemptsTaken += attemptsUsed;
 
             // Get word
             String word = new String(round.getWordPuzzle().getLetters());
 
             // Get status
             String status = round.getStatus();
-            String statusText = status.equals(Constant.StatusConstant.WON) ? "Won ✓" : "Lost ✗";
+            String statusText = status.equals(Constant.StatusConstant.WON) ? "Won" : "Lost";
 
-            // Format: "Round 1: Apple - Won ✓"
-            roundDetails.append("Round ").append(i + 1).append(": ")
-                    .append(word).append(" - ")
-                    .append(statusText);
+            // Create round result
+            RoundResult result = new RoundResult(
+                    i + 1,           // Round number (1-based)
+                    word,            // The word
+                    attemptsUsed,    // Attempts used in THIS round only
+                    statusText       // Won or Lost
+            );
 
-            // Add newline if not the last round
-            if (i < game.getRounds().size() - 1) {
-                roundDetails.append("\n");
-            }
+            roundResults.add(result);
         }
 
-        String finalWord = roundDetails.toString();
-
-        EndGameResultsPresenter.present(finalStatus, finalWord, totalAttemptsTaken);
+        EndGameResultsPresenter.present(finalStatus, roundResults);
     }
 }

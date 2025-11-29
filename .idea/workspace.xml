@@ -5,86 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f1e05ea6-dbbe-4418-8f7a-5cc140a4e7aa" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/data_access/DBHintDataAccessObject.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/interface_adapter/Hint/HintController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/interface_adapter/Hint/HintPresenter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/use_case/Hint/HintDataAccessInterface.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/use_case/Hint/HintInputBoundary.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/use_case/Hint/HintInputData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/use_case/Hint/HintInteractor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/use_case/Hint/HintOutputBoundary.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/use_case/Hint/HintOutputData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data_access/DBGenerateWordDataAccessObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data_access/DBGenerateWordDataAccessObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/interface_adapter/MakeGuess/MakeGuessState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/interface_adapter/MakeGuess/MakeGuessState.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/interface_adapter/ViewManagerModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/interface_adapter/ViewManagerModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/interface_adapter/ViewModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/interface_adapter/ViewModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/use_case/GenerateWord/GenerateWordDataAccessInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/use_case/GenerateWord/GenerateWordDataAccessInterface.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/use_case/GenerateWord/GenerateWordInputBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/use_case/GenerateWord/GenerateWordInputBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/use_case/GenerateWord/GenerateWordInputData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/use_case/GenerateWord/GenerateWordInputData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/use_case/GenerateWord/GenerateWordInteractor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/use_case/GenerateWord/GenerateWordInteractor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/use_case/GenerateWord/GenerateWordOutputBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/use_case/GenerateWord/GenerateWordOutputBoundary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Constant/Constants.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Constant/StatusConstant.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/entity/Guess.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/entity/Player.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/entity/WordPuzzle.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/images/hangman0.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/images/hangman1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/images/hangman2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/images/hangman3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/images/hangman4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/images/hangman5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/images/hangman6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/EndGameResults/EndGameResultsController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/EndGameResults/EndGameResultsPresenter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/EndGameResults/EndGameResultsState.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/EndGameResults/EndGameResultsViewModel.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/GenerateWord/GenerateWordViewModel.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/InitializeFirstRound/InitializeFirstRoundController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/InitializeFirstRound/InitializeFirstRoundPresenter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/MakeGuess/MakeGuessController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/MakeGuess/MakeGuessPresenter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/MakeGuess/MakeGuessState.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/MakeGuess/MakeGuessViewModel.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/Room/LobbyController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/Room/RoomJoinController$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/Room/RoomJoinController$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/Room/RoomJoinController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/ViewManagerModel.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/interface_adapter/ViewModel.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/network/HangmanClient.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/network/HangmanServer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/EndGameResults/EndGameResultsInputBoundary.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/EndGameResults/EndGameResultsInputData.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/EndGameResults/EndGameResultsOutputBoundary.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/GenerateWord/GenerateWordDataAccessInterface.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/use_case/GenerateWord/GenerateWordDataAccessInterface.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/GenerateWord/WordPuzzleDataAccessInterface.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/InitializeFirstRound/InitializeFirstRoundDataAccessInterface.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/InitializeFirstRound/InitializeFirstRoundInputBoundary.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/InitializeFirstRound/InitializeFirstRoundInteractor.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/InitializeFirstRound/InitializeFirstRoundOutputBoundary.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/InitializeFirstRound/InitializeFirstRoundOutputData.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/MakeGuess/MakeGuessHangmanGameDataAccessInterface.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/MakeGuess/MakeGuessInputBoundary.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/MakeGuess/MakeGuessInputData.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/MakeGuess/MakeGuessOutputBoundary.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/MakeGuess/MakeGuessOutputData.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/Room/LobbyInteractor.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/Room/RoomJoinInteractor$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/Room/RoomJoinInteractor$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/Room/RoomJoinInteractor$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/Room/RoomJoinInteractor$RoomCheckCallback.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/Room/RoomJoinInteractor$RoomCreateCallback.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/Room/RoomJoinInteractor$RoomJoinCallback.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/use_case/Room/RoomJoinInteractor.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/view/HangmanImagePanel.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/view/LobbyView.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/view/RoomJoinView$Controller.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/view/RoomJoinView.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/view/RoomLobby.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/view/ViewManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/interface_adapter/EndGameResults/EndGameResultsPresenter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/interface_adapter/EndGameResults/EndGameResultsPresenter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/interface_adapter/EndGameResults/EndGameResultsState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/interface_adapter/EndGameResults/EndGameResultsState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/use_case/EndGameResults/EndGameResultsInteractor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/use_case/EndGameResults/EndGameResultsInteractor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/use_case/EndGameResults/EndGameResultsOutputBoundary.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/use_case/EndGameResults/EndGameResultsOutputBoundary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/use_case/MakeGuess/MakeGuessInteractor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/use_case/MakeGuess/MakeGuessInteractor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/view/EndGameResultsView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/EndGameResultsView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,23 +53,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "Merging samuel",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "advanced.settings",
-    "to.speed.mode.migration.done": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;samuel&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="app.Main" />
@@ -199,7 +127,7 @@
         </breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/interface_adapter/EndGameResults/EndGameResultsPresenter.java</url>
-          <line>29</line>
+          <line>30</line>
           <option name="timeStamp" value="15" />
         </line-breakpoint>
       </breakpoints>
