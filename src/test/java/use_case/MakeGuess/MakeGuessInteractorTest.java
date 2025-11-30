@@ -1,9 +1,8 @@
-package useCase.MakeGuess;
+package use_case.MakeGuess;
 
 import entity.Guess;
 import entity.HangmanGame;
 import org.junit.Test;
-import use_case.MakeGuess.*;
 import data_access.InMemoryHangmanDataAccessObject;
 
 import java.util.Arrays;

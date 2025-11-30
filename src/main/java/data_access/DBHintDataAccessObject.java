@@ -53,8 +53,9 @@ public class DBHintDataAccessObject implements HintDataAccessInterface {
                 .addHeader(CONTENT_TYPE, APPLICATION_JSON)
                 .build();
 
-        try (Response response = client.newCall(request).execute()) {
-            apiValid = response.code() == 200;
+        try {
+            Response response = client.newCall(request).execute();
+            apiValid = (response.code() == 200);
             return apiValid;
         } catch (IOException e) {
             apiValid = false;
@@ -76,9 +77,11 @@ public class DBHintDataAccessObject implements HintDataAccessInterface {
         Request request = new Request.Builder()
                 .url(GEMINI_API_URL + getApiKey())
                 .post(RequestBody.create(response.toString(), MediaType.parse(APPLICATION_JSON)))
+                .addHeader(CONTENT_TYPE, APPLICATION_JSON)
                 .build();
 
-        try (Response resp = client.newCall(request).execute()) {
+        try {
+            Response resp = client.newCall(request).execute();
             if (resp.code() != 200) {
                 return "AI hint unavailable.";
             }
@@ -103,7 +106,8 @@ public class DBHintDataAccessObject implements HintDataAccessInterface {
                 .url(DICTIONARY_API_URL + word)
                 .build();
 
-        try (Response response = client.newCall(request).execute()) {
+        try {
+            Response response = client.newCall(request).execute();
             if (response.code() != 200) {
                 return "No dictionary hint available.";
             }
@@ -137,7 +141,7 @@ public class DBHintDataAccessObject implements HintDataAccessInterface {
             if ("noun".equalsIgnoreCase(meaning.optString("partOfSpeech"))) {
                 JSONArray definitions = meaning.getJSONArray("definitions");
                 if (!definitions.isEmpty()) {
-                    return "Definition: " + definitions.getJSONObject(0).getString("definition");
+                    return definitions.getJSONObject(0).getString("definition");
                 }
             }
         }

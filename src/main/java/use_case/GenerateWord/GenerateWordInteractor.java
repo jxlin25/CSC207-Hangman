@@ -26,8 +26,8 @@ public class GenerateWordInteractor implements GenerateWordInputBoundary {
     @Override
     public void execute(GenerateWordInputData inputData) {
         int n = inputData.getNumbers();
-        if (n < 0) {
-            //This situation won't occur, but to prevent any accidents
+        if (n <= 0) {
+            // This situation won't occur, but to prevent any accidents
             generateWordOutputBoundary.prepareFailureView("Number of words must be langer than 0!!");
             return;
         }
