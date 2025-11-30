@@ -57,7 +57,7 @@ public class AppBuilder {
     //DAO
     final DBGenerateWordDataAccessObject generateWordAccessObject = new DBGenerateWordDataAccessObject();
     final InMemoryHangmanDataAccessObject hangmanGameDAO = new InMemoryHangmanDataAccessObject();
-    final HintDataAccessInterface hintDAO = new DBHintDataAccessObject();
+    final DBHintDataAccessObject hintDAO = new DBHintDataAccessObject();
 
     //View Model
     private GenerateWordViewModel generateWordViewModel;
