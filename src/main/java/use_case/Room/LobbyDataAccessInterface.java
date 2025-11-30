@@ -7,4 +7,5 @@ public interface LobbyDataAccessInterface {
     LobbyState getLobbyState(int roomId);
     boolean existsLobby(int roomId);
     void removeLobby(int roomId);
+    boolean sendStartGameRequest(int roomId);
 }

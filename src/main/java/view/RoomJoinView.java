@@ -29,25 +29,15 @@ public class RoomJoinView extends JPanel {
     private void setupUI() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(4, 2));
-
-        // Room ID row
         panel.add(new JLabel("Room ID:"));
         panel.add(roomIdField);
-
-        // Username row
         panel.add(new JLabel("Username:"));
         panel.add(usernameField);
-
-        // Buttons row (spanning both columns)
         panel.add(joinButton);
         panel.add(createButton);
-
-        // Message label row (spanning both columns)
         panel.add(messageLabel);
-
         add(panel);
 
-        // Button click event triggers controller method
         createButton.addActionListener(e -> {
             String username = usernameField.getText().trim();
             if (!username.isEmpty()) {

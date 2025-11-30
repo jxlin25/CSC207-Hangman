@@ -9,21 +9,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+
 public class GameSessionManager {
-    public class GameSessionManager {
-        private static GameSessionManager instance;
-        private final Map<String, GameSessionController> sessions = new HashMap<>();
+    private static GameSessionManager instance;
+    private final Map<Integer, GameSessionController> sessions = new HashMap<>();
 
-        public void createSession(String roomId, List<Player> players) {
-//            GameState gameState = new GameState(roomId, players);
-//            GameSessionController controller = new GameSessionController(gameState);
-//            sessions.put(roomId, controller);
-//            return controller;
-        }
+    public void createSession(int roomId, List<Player> players) {
+        GameState gameState = new GameState(roomId, players);
+        GameSessionController controller = new GameSessionController(gameState);
+        sessions.put(roomId, controller);
+//        return controller;
+    }
 
-        public manager.GameSessionManager getInstance() {
-            return new manager.GameSessionManager();
+    public static GameSessionManager getInstance() {
+        if (instance == null) {
+            instance = new GameSessionManager();
         }
+        return instance;
     }
 
 }
+
+

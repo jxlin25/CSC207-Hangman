@@ -3,6 +3,7 @@ package app;
 import data_access.InMemoryHangmanDataAccessObject;
 import data_access.InMemoryLobbyDataAccessObject;
 import data_access.InMemoryRoomJoinDataAccessObject;
+import data_access.RoomRepository;
 import entity.HangmanGame;
 import interface_adapter.InitializeFirstRound.InitializeFirstRoundController;
 import interface_adapter.InitializeFirstRound.InitializeFirstRoundPresenter;
@@ -51,6 +52,13 @@ public class AppBuilder {
     //DAO
     final DBGenerateWordDataAccessObject generateWordAccessObject = new DBGenerateWordDataAccessObject();
     final InMemoryHangmanDataAccessObject hangmanGameDAO = new InMemoryHangmanDataAccessObject();
+    final RoomRepository roomRepository = new RoomRepository();
+    private final HangmanClient hangmanClient;
+
+    private final LobbyViewModel lobbyViewModel = new LobbyViewModel();
+    private final RoomJoinViewModel roomJoinViewModel = new RoomJoinViewModel();
+    private final RoomJoinPresenter roomJoinPresenter;
+
 
     //View Model
     private GenerateWordViewModel generateWordViewModel;
@@ -67,6 +75,14 @@ public class AppBuilder {
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
+        try {
+            this.roomJoinPresenter = new RoomJoinPresenter(this.roomJoinViewModel, this.lobbyViewModel, this.viewManagerModel);
+            this.hangmanClient = new HangmanClient(viewManagerModel, this.roomJoinViewModel, this.roomJoinPresenter);
+            this.hangmanClient.connectBlocking(); // Establish connection before UI is used.
+        } catch (Exception e) {
+            // This includes the InterruptedException from connectBlocking
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -90,32 +106,28 @@ public class AppBuilder {
     private LobbyView lobbyView;
 
     public AppBuilder addLobbyView() {
-        LobbyViewModel lobbyViewModel = new LobbyViewModel();
         LobbyPresenter presenter = new LobbyPresenter(lobbyViewModel, viewManagerModel);
-        LobbyDataAccessInterface dataAccess = new InMemoryLobbyDataAccessObject();
+        LobbyDataAccessInterface dataAccess = new InMemoryLobbyDataAccessObject(roomRepository, hangmanClient);
         GameSessionManager sessionManager = GameSessionManager.getInstance();
 
         LobbyInteractor lobbyInteractor = new LobbyInteractor(presenter, dataAccess, sessionManager);
         LobbyController controller = new LobbyController(lobbyInteractor);
 
-        lobbyView = new LobbyView(lobbyViewModel, controller);
-        cardPanel.add(lobbyView, lobbyView.getViewName());
+        lobbyView = new LobbyView(lobbyViewModel);
+        lobbyView.setLobbyController(controller);
+        cardPanel.add(lobbyView, lobbyView.getLobbyViewModel().getViewName());
         return this;
     }
 
     public AppBuilder addRoomJoinView() {
         try {
-            HangmanClient hangmanClient = new HangmanClient();
-            RoomJoinViewModel roomJoinViewModel = new RoomJoinViewModel();
-            LobbyViewModel lobbyViewModel = new LobbyViewModel();
-            RoomJoinPresenter roomJoinPresenter = new RoomJoinPresenter(roomJoinViewModel, lobbyViewModel, viewManagerModel);
-            InMemoryRoomJoinDataAccessObject inMemoryRoomDataAccess = new InMemoryRoomJoinDataAccessObject(hangmanClient);
+            InMemoryRoomJoinDataAccessObject inMemoryRoomDataAccess = new InMemoryRoomJoinDataAccessObject(hangmanClient, roomRepository);
             RoomJoinInteractor interactor = new RoomJoinInteractor(inMemoryRoomDataAccess, roomJoinPresenter);
             roomJoinController = new RoomJoinController();
-            roomJoinView = new RoomJoinView(roomJoinViewModel);
+            roomJoinView = new RoomJoinView(this.roomJoinViewModel);
             roomJoinView.setController(roomJoinController);
             roomJoinView.getController().setInputBoundary(interactor);
-            cardPanel.add(roomJoinView, roomJoinViewModel.getViewName());
+            cardPanel.add(roomJoinView, this.roomJoinViewModel.getViewName());
 
             return this;
         } catch (Exception e) {

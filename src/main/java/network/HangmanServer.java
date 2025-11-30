@@ -19,6 +19,7 @@ public class HangmanServer extends WebSocketServer {
     // roomId -> set of sockets
     private final Map<String, Set<WebSocket>> rooms = new HashMap<>();
     private final Set<String> establishedRooms = new HashSet<>();
+    private final Map<String, WebSocket> roomHosts = new HashMap<>(); // Track host for each room
     //private final Map<String, GameState> gameStates;
     private final Map<String, Map<WebSocket, Player>> roomPlayers = new HashMap<>();
 
@@ -37,6 +38,8 @@ public class HangmanServer extends WebSocketServer {
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
         // remove from all rooms
         rooms.values().forEach(set -> set.remove(conn));
+        // Remove from roomHosts if this connection was a host
+        roomHosts.entrySet().removeIf(entry -> entry.getValue().equals(conn));
         System.out.println("Closed: " + conn.getRemoteSocketAddress());
     }
 
@@ -44,18 +47,20 @@ public class HangmanServer extends WebSocketServer {
     public void onMessage(WebSocket conn, String message) {
         /*
             Expected JSON messages:
-            { "type": "join", "room": "1234" }
+            { "type": "join", "room": "1234", "username": "Player1" }
             { "type": "guess", "room": "1234", "letter": "A" }
+            { "type": "create", "room": "1234", "username": "HostPlayer" }
         */
 
         Map<String, String> msg = parse(message);
         String type = msg.get("type");
         String room = msg.get("room");
+        String username = msg.get("username"); // Extract username
 
         switch (type) {
             case "check_room" -> handleCheckRoom(conn, room);
-            case "create" -> handleCreateRoom(conn, room);
-            case "join" -> handleJoin(conn, room);
+            case "create" -> handleCreateRoom(conn, room, username);
+            case "join" -> handleJoin(conn, room, username);
 //            case "submit_word" -> {
 //                GameSessionController controller = GameSessionManager.getController(room);
 //                controller.handleWordSubmission(senderId, msg.get("word"));
@@ -73,7 +78,7 @@ public class HangmanServer extends WebSocketServer {
         conn.send("{\"type\":\"room_check\",\"room\":\"" + room + "\",\"exists\":" + exists + "}");
     }
 
-    private void handleCreateRoom(WebSocket conn, String room) {
+    private void handleCreateRoom(WebSocket conn, String room, String username) {
         if (establishedRooms.contains(room)) {
             conn.send("{\"type\":\"error\",\"message\":\"Room already exists\"}");
             return;
@@ -82,11 +87,13 @@ public class HangmanServer extends WebSocketServer {
         establishedRooms.add(room);
         rooms.putIfAbsent(room, new HashSet<>());
         rooms.get(room).add(conn);
-        conn.send("{\"type\":\"created\",\"room\":\"" + room + "\"}");
+        roomHosts.put(room, conn); // Store this connection as the host
+
+        conn.send("{\"type\":\"created\",\"room\":\"" + room + "\",\"isHost\":true}");
     }
 
 
-    private void handleJoin(WebSocket conn, String room) {
+    private void handleJoin(WebSocket conn, String room, String username) {
         if (rooms.get(room).size() >= 2) { // Enforce 2-player limit
             conn.send("{\"type\":\"error\",\"message\":\"Room full\"}");
             return;
@@ -97,16 +104,21 @@ public class HangmanServer extends WebSocketServer {
             return;
         }
 
-        int userCount = rooms.get(room).size();
-
-
+        // Add joining client to the room
         rooms.putIfAbsent(room, new HashSet<>());
         rooms.get(room).add(conn);
-        conn.send("{\"type\":\"joined\",\"room\":\"" + room + "\"}");
-        broadcastToRoom(room,
-                "{\"type\":\"user_joined\",\"room\":\"" + room +
-                        "\",\"userCount\":" + userCount +
-                        ",\"message\":\"User joined. Total users: " + userCount + "\"}");
+
+        // Send 'joined' response to the joining client (they are not the host)
+        conn.send("{\"type\":\"joined\",\"room\":\"" + room + "\",\"isHost\":false}");
+
+        // Notify the host (and other players if any) that a new player has joined
+        WebSocket hostConn = roomHosts.get(room);
+        if (hostConn != null && hostConn.isOpen()) {
+            hostConn.send("{\"type\":\"player_joined_notification\",\"room\":\"" + room + "\",\"username\":\"" + username + "\"}");
+        }
+        // Also notify other clients in the room (if more than 2 players eventually)
+        // For now, with 2-player limit, hostConn is the only other client.
+
     }
 
     private void broadcastToRoom(String room, String msg) {
@@ -118,11 +130,23 @@ public class HangmanServer extends WebSocketServer {
 
     private Map<String, String> parse(String json) {
         Map<String, String> result = new HashMap<>();
-        json = json.replaceAll("[{}\"]", "");
-        String[] parts = json.split(",");
-        for (String p : parts) {
-            String[] kv = p.split(":");
-            if (kv.length == 2) result.put(kv[0].trim(), kv[1].trim());
+        try {
+            // A more robust way to parse flat JSON without a dedicated library
+            json = json.trim();
+            if (json.startsWith("{") && json.endsWith("}")) {
+                json = json.substring(1, json.length() - 1); // Remove outer braces
+                String[] pairs = json.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); // Split by comma outside quotes
+                for (String pair : pairs) {
+                    String[] keyValue = pair.split(":(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); // Split by colon outside quotes
+                    if (keyValue.length == 2) {
+                        String key = keyValue[0].trim().replaceAll("\"", "");
+                        String value = keyValue[1].trim().replaceAll("\"", "");
+                        result.put(key, value);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("SERVER: Error parsing JSON: " + json + " - " + e.getMessage());
         }
         return result;
     }

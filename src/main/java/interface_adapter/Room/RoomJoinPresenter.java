@@ -31,7 +31,7 @@ public class RoomJoinPresenter implements RoomJoinOutputBoundary {
         lobbyState.setPlayers(outputData.getPlayers());
         lobbyViewModel.firePropertyChange();
 
-        viewManagerModel.setViewName(lobbyViewModel.getViewName());
+        viewManagerModel.setState(lobbyViewModel.getViewName());
         viewManagerModel.firePropertyChange();
     }
 

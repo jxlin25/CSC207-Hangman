@@ -8,7 +8,7 @@ public class Room {
     private final List<Player> users = new ArrayList<>();
 
     public Room(int roomId) {
-        this.roomId = roomId;
+        this.roomId = roomId; 
     }
 
     public int getRoomId() {

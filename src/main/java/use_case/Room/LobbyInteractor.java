@@ -19,14 +19,10 @@ public class LobbyInteractor implements LobbyInputBoundary{
 
 
     public void startGame(int roomId) {
-        LobbyState lobbyState = dataAccess.getLobbyState(roomId);
+        boolean success = dataAccess.sendStartGameRequest(roomId);
 
-        if (!canStartGame(lobbyState)) {
-            presenter.showError("Cannot start game - need 2 ready players");
-            return;
+        if (!success) {
+            presenter.showError("Failed to send start game request to server.");
         }
-        GameSessionController gameSession = sessionManager.createSession(roomId, lobbyState.getPlayers());
-
-        presenter.prepareGameView(gameSession.getGameState());
     }
 }

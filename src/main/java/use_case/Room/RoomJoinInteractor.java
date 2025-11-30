@@ -20,17 +20,12 @@ public class RoomJoinInteractor implements RoomJoinInputBoundary {
         Player player = input.getPlayer();
 
         if (roomId == -1) {
-            roomId = dao.createRoom(player);
+            player.setHost(true);
+            System.out.println("INTERACTOR: Player '" + player.getName() + "' host status set to: " + player.getHost());
+            dao.createRoom(player);
         } else {
-            if (!dao.roomExists(roomId)) {
-                presenter.prepareFail("Room does not exist");
-                return;
-            }
-
-            dao.addUser(roomId, player);
+            dao.joinRoom(roomId, player);
         }
-        Room currentRoom = dao.getRoom(roomId);
-        RoomJoinOutputData roomJoinOutputData = new RoomJoinOutputData(roomId, input.getPlayer(), currentRoom.getUsers());
-        presenter.prepareSuccess(roomJoinOutputData);
+
     }
 }

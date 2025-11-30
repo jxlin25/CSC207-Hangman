@@ -13,9 +13,17 @@ public class LobbyPresenter implements LobbyOutputBoundary {
         this.lobbyViewModel = lobbyViewModel;
         this.viewManagerModel = viewManagerModel;
     }
-
+    @Override
     public void prepareGameView(GameState gameState) {
         viewManagerModel.setViewName("MakeGuessView");
         viewManagerModel.firePropertyChange();
     }
+
+    @Override
+    public void updateLobbyView(LobbyState lobbyState) {
+
+    }
+
+    @Override
+    public void showError(String errorMessage) {}
 }

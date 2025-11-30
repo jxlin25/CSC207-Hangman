@@ -3,50 +3,65 @@ import javax.swing.*;
 import java.awt.*;
 
 import interface_adapter.Room.LobbyController;
+import interface_adapter.Room.LobbyState;
 import interface_adapter.Room.LobbyViewModel;
-import network.HangmanClient;
-//import use_case.Room.LobbyInteractor;
 
-public class LobbyView extends JFrame {
+import interface_adapter.Room.RoomJoinState;
+import network.HangmanClient;
+
+public class LobbyView extends JPanel {
     private LobbyViewModel lobbyViewModel;
     private LobbyController lobbyController;
+    private final JLabel messageLabel = new JLabel();
+    private final JLabel roomInfoLabel = new JLabel();
+    private JButton startGameButton;
 
-    public LobbyView(LobbyViewModel lobbyViewModel, LobbyController lobbyController) {
+    public LobbyView(LobbyViewModel lobbyViewModel) {
         this.lobbyViewModel = lobbyViewModel;
+        setupUI();
+        lobbyViewModel.addPropertyChangeListener(evt -> {
+            LobbyState state = lobbyViewModel.getState();
+            messageLabel.setText(String.valueOf(state.getRoomId()));
+            updateView(state);
+        });
+
+    }
+
+    public void setLobbyController(LobbyController lobbyController) {
         this.lobbyController = lobbyController;
     }
 
-    private void initializeUI() {
-//        setTitle("Room " + roomId + " - Hangman Lobby");
-        setSize(400, 300);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-//
-//        JLabel label = new JLabel("Welcome to Room " + roomId +
-//                (createRoom ? " (Host)" : " (Player)"),
-//                SwingConstants.CENTER);
-//        add(label, BorderLayout.CENTER);
-//
-//        // Only show start button if user is the room creator
-//        if (createRoom) {
-//            startGameButton = new JButton("Start Game");
-//            //startGameButton.addActionListener(e -> startGame());
-//            add(startGameButton, BorderLayout.SOUTH);
-//
-//            lobbyController.startGame(roomId);
-//        } else {
-//            // Show waiting message for players
-//            JLabel waitingLabel = new JLabel("Waiting for host to start the game...",
-//                    SwingConstants.CENTER);
-//            add(waitingLabel, BorderLayout.SOUTH);
-//        }
+    public LobbyViewModel getLobbyViewModel() {
+        return lobbyViewModel;
     }
 
-    private void setupMessageHandling() {
-//        client.setOnMessageListener(this::handleServerMessage);
+    public LobbyController getLobbyController() {
+        return lobbyController;
     }
 
-    private void handleServerMessage(String message) {
-        System.out.println("Lobby received: " + message);
+    private void setupUI() {
+        setLayout(new BorderLayout());
+
+        roomInfoLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        add(roomInfoLabel, BorderLayout.NORTH);
+
+        messageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        add(messageLabel, BorderLayout.CENTER);
+        startGameButton = new JButton("Start Game");
+        startGameButton.addActionListener(e -> {
+            if (lobbyController != null) {
+                lobbyController.startGame(lobbyViewModel.getState().getRoomId());
+            }
+        });
+        startGameButton.setVisible(false);
+        add(startGameButton, BorderLayout.SOUTH);
+    }
+    private void updateView(LobbyState state) {
+        roomInfoLabel.setText("Room ID: " + state.getRoomId());
+        messageLabel.setText("Welcome!");
+
+        if (startGameButton != null) {
+            startGameButton.setVisible(state.getPlayers().getFirst().getHost());
+        }
     }
 }

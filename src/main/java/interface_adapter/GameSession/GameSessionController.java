@@ -9,27 +9,30 @@ import use_case.game_session.GameInteractor;
 
 public class GameSessionController {
     private final GameState gameState;
-    private final GameInteractor gameInteractor;
+    private final GameInteractor gameInteractor = new GameInteractor();
 
 //    public GameSession
+    public GameSessionController(GameState gameState) {
+        this.gameState = gameState;
+    }
 
     public void handleGuess(String playerId, char letter) {
         if (!gameState.getCurrentGuesserId().equals(playerId)) {
             return;
         }
-
-        String newRevealedWord = gameInteractor.processGuess(
-                gameState.getSecretWord(),
-                gameState.getRevealedWord(),
-                letter
-        );
-
-        gameState.setRevealedWord(newRevealedWord);
-
-        if (gameInteractor.checkWinCondition(newRevealedWord)) {
-            // Handle round win
-        }
-        broadcastGameState();
+//
+//        String newRevealedWord = gameInteractor.processGuess(
+//                gameState.getSecretWord(),
+//                gameState.getRevealedWord(),
+//                letter
+//        );
+//
+//        gameState.setRevealedWord(newRevealedWord);
+//
+//        if (gameInteractor.checkWinCondition(newRevealedWord)) {
+//            // Handle round win
+//        }
+//        broadcastGameState();
     }
 
 

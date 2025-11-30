@@ -6,7 +6,7 @@ public class Player {
     private String name;
     //leave for multiplayer mode
     private final String id;
-    private boolean host;
+    private boolean host = false;
     private Integer roomId;
     private int score;
     private String status;
@@ -70,4 +70,11 @@ public class Player {
 
     public int getRoomId() {return roomId;}
     public String getId() {return id;}
+
+    public boolean getHost() {return this.host;}
+
+    public void setHost(boolean host) {
+        this.host = host;
+    }
+
 }
