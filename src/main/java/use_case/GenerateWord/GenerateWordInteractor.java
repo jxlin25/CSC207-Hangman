@@ -55,7 +55,8 @@ public class GenerateWordInteractor implements GenerateWordInputBoundary {
         System.out.println("----------------------------");
 
         //TODO this part maybe can change, now, we don't use OutPutData
-        hangmanGameDAO.setHangmanGame(new HangmanGame(words));
+        HangmanGame game = new HangmanGame(words, attempts);
+        hangmanGameDAO.setHangmanGame(game);
         GenerateWordOutputData outputData = new GenerateWordOutputData(words, attempts);
         generateWordOutputBoundary.prepareSuccessView(outputData);
     }

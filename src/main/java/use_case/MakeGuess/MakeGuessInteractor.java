@@ -10,7 +10,8 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
     private final MakeGuessOutputBoundary presenter;
     private final MakeGuessHangmanGameDataAccessInterface hangmanGameDAO;
 
-    public MakeGuessInteractor(MakeGuessOutputBoundary presenter, MakeGuessHangmanGameDataAccessInterface hangmanGameDAO) {
+    public MakeGuessInteractor(MakeGuessOutputBoundary presenter,
+                               MakeGuessHangmanGameDataAccessInterface hangmanGameDAO) {
         this.presenter = presenter;
         this.hangmanGameDAO = hangmanGameDAO;
     }
@@ -19,6 +20,34 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
     public void execute(MakeGuessInputData inputData) {
 
         final Guess guess = inputData.getGuess();
+
+        // NEW: read maxAttempts (initial attempts) from DAO, which was set by difficulty
+        int maxAttempts = this.hangmanGameDAO.getInitialAttemptsForGame();
+        if (maxAttempts <= 0) { // safe fallback, should not usually happen
+            maxAttempts = 6;
+        }
+
+        // NEW: check current attempts BEFORE changing anything
+        int currentAttempts = this.hangmanGameDAO.getCurrentRoundAttempt();
+        if (currentAttempts <= 0) {
+            // No attempts left: do not modify the game, just report that no more guesses are allowed
+            String currentWord = this.hangmanGameDAO.getCurrentWord();
+
+            final MakeGuessOutputData outputData = new MakeGuessOutputData(
+                    guess,
+                    false,
+                    Constant.StatusConstant.LOST, // or GUESSING, depending on semantics
+                    true,                         // treat as game/round over from guessing perspective
+                    0,
+                    this.hangmanGameDAO.getCurrentRoundNumber(),
+                    this.hangmanGameDAO.getMaskedWord(),
+                    currentWord,
+                    maxAttempts                  // NEW: pass through
+            );
+
+            presenter.updateView(outputData);
+            return;
+        }
 
         // add the guess to the current round
         this.hangmanGameDAO.addGuessToCurrentRound(guess);
@@ -52,11 +81,17 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
             // Deduct 1 attempt if the guess is wrong
             this.hangmanGameDAO.decreaseCurrentRoundAttempt();
         }
-        final int remainingAttempts = this.hangmanGameDAO.getCurrentRoundAttempt();
+
+        // CHANGED: clamp remainingAttempts to never go below 0
+        int remainingAttempts = this.hangmanGameDAO.getCurrentRoundAttempt();
+        if (remainingAttempts < 0) {
+            remainingAttempts = 0;
+        }
 
         // If the guess is the last guess and does not complete the puzzle,
         // mark the current round as LOST and start next round
-        if (!this.hangmanGameDAO.isCurrentWordPuzzleComplete() && this.hangmanGameDAO.getCurrentRoundAttempt() == 0) {
+        if (!this.hangmanGameDAO.isCurrentWordPuzzleComplete()
+                && remainingAttempts == 0) { // CHANGED: use remainingAttempts
             if (endedRoundWord == null) {
                 // capture word BEFORE switching to next round
                 endedRoundWord = hangmanGameDAO.getCurrentWord();
@@ -82,7 +117,8 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
                 remainingAttempts,
                 this.hangmanGameDAO.getCurrentRoundNumber(),
                 this.hangmanGameDAO.getMaskedWord(),
-                endedRoundWord
+                endedRoundWord,
+                maxAttempts               // CHANGED: now a real variable we defined above
         );
 
         presenter.updateView(outputData);

@@ -32,12 +32,6 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
     private final JLabel messageLabel = new JLabel(" ");
     private int lastRoundNumber = 1;
 
-
-    //private final JLabel hangmanImageLabel;
-    //private final JLabel messageLabel;
-    //private final JTextField guessInputField;
-    //private final JButton guessButton;
-
     private JPanel alphabetButtonsPanel;
 
     public MakeGuessView(MakeGuessViewModel viewModel) {
@@ -67,55 +61,21 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
             }
         });
 
-
-//        hangmanImageLabel = new JLabel();
-//        hangmanImageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-//        updateImage(0);
-
-
-//        messageLabel = new JLabel("Enter a letter:");
-//        messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-//        guessInputField = new JTextField(5);
-//        guessInputField.setMaximumSize(new Dimension(100, 30));
-//
-//        guessButton = new JButton(MakeGuessViewModel.GUESS_BUTTON_LABEL);
-//        guessButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-//
-//        // Button Action
-//        guessButton.addActionListener(
-//                new ActionListener() {
-//                    public void actionPerformed(ActionEvent evt) {
-//                        if (evt.getSource().equals(guessButton)) {
-//
-//                            String letter = guessInputField.getText();
-//
-//
-//                            guessInputField.setText("");
-//                        }
-//                    }
-//                }
-//        );
-
         // Add everything to the panel
         this.add(hangmanImagePanel);
         this.add(attemptsLabel);
         this.add(roundNumberLabel);
         this.add(Box.createVerticalStrut(20));
-//        this.add(hangmanImageLabel);
         this.add(Box.createVerticalStrut(20));
         this.add(messageLabel);
-//        this.add(guessInputField);
-//        this.add(guessButton);
         this.add(restartButton);
         this.add(wordPuzzleLabel);
         this.add(alphabetButtonsPanel);
-
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        // Currently unused; all actions handled via button listeners directly.
     }
 
     @Override
@@ -129,7 +89,8 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         System.out.println(state.isGameOver());
         System.out.println("----------------------------");
 
-        int maxAttempts = 6;
+        // Use maxAttempts from state (difficulty), fall back to 6 if not set
+        int maxAttempts = state.getMaxAttempts() > 0 ? state.getMaxAttempts() : 6;
 
         if (!state.isGameOver()) {
             int remainingAttempts = state.getRemainingAttempts();
@@ -174,8 +135,7 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
                     messageLabel.setText(state.getMessage());
                 }
 
-                // Reset attempts for the NEXT round
-                remainingAttempts = maxAttempts;
+                // DO NOT reset remainingAttempts here; interactor/DAO manage it
 
                 // Renew the letter buttons for the next round
                 this.remove(this.alphabetButtonsPanel);
@@ -194,6 +154,13 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
             hangmanImagePanel.setIncorrectGuesses(maxAttempts - remainingAttempts);
             this.attemptsLabel.setText("Attempts left: " + remainingAttempts);
 
+            // Enable/disable alphabet buttons based on remaining attempts
+            if (remainingAttempts <= 0) {
+                setAlphabetButtonsEnabled(false);
+            } else {
+                setAlphabetButtonsEnabled(true);
+            }
+
             // Update the displayed word
             this.wordPuzzleLabel.setText(state.getMaskedWord());
         }
@@ -207,6 +174,9 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
                 messageLabel.setText("Game Over!");
             }
 
+            // Disable alphabet buttons when game is over
+            setAlphabetButtonsEnabled(false);
+
             JOptionPane.showMessageDialog(
                     this,
                     "Game Over!",
@@ -215,7 +185,6 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
             );
         }
     }
-
 
     private JPanel createNewLetterButtonsPanel() {
         JPanel lettersPanel = new JPanel(new GridLayout(2, 13, 5, 5));
@@ -247,9 +216,14 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         messageLabel.setText(" ");
         lastRoundNumber = 1;
         wordPuzzleLabel.setText("????");
-        attemptsLabel.setText("Attempts left: 6");
+
+        // Use a neutral placeholder; new game/difficulty will set proper values
+        attemptsLabel.setText("Attempts left: 0");
         roundNumberLabel.setText("Round number: 1");
         hangmanImagePanel.setIncorrectGuesses(0);
+
+        // Disable alphabet buttons until a new game actually starts
+        setAlphabetButtonsEnabled(false);
 
         if (viewManagerModel != null) {
             viewManagerModel.setState("Generate Word");
@@ -264,6 +238,16 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         }
     }
 
+    private void setAlphabetButtonsEnabled(boolean enabled) {
+        if (alphabetButtonsPanel == null) return;
+
+        for (Component comp : alphabetButtonsPanel.getComponents()) {
+            if (comp instanceof JButton) {
+                comp.setEnabled(enabled);
+            }
+        }
+    }
+
     public String getViewName() {
         return viewName;
     }
@@ -275,9 +259,4 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
     public void setMakeGuessController(MakeGuessController controller) {
         this.makeGuessController = controller;
     }
-
-//    public String getViewName() {
-//        return viewName;
-//    }
-
 }

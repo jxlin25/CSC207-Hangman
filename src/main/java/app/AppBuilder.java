@@ -17,6 +17,7 @@ import use_case.InitializeFirstRound.InitializeFirstRoundOutputBoundary;
 import use_case.MakeGuess.*;
 import view.GenerateWordView;
 import view.ViewManager;
+import view.ChooseDifficultyView;
 import javax.swing.*;
 import java.awt.*;
 
@@ -50,6 +51,7 @@ public class AppBuilder {
     private GenerateWordView generateWordView;
     private MakeGuessView makeGuessView;
     private RoomJoinView roomJoinView;
+    private ChooseDifficultyView chooseDifficultyView;
 
     //Controller
     private RoomJoinController roomJoinController;
@@ -75,6 +77,13 @@ public class AppBuilder {
         cardPanel.add(makeGuessView, makeGuessView.getViewName());
         return this;
     }
+
+    public AppBuilder addDifficultySelectionView() {
+        // Ensure generateWordView is already created before this is called
+        chooseDifficultyView = new ChooseDifficultyView(viewManagerModel, generateWordView);
+        cardPanel.add(chooseDifficultyView, chooseDifficultyView.getViewName());
+        return this;
+        }
 
     public AppBuilder addRoomJoinView() {
         RoomJoinInteractor interactor = new RoomJoinInteractor();
@@ -145,9 +154,14 @@ public class AppBuilder {
         menuBar.add(gameMenu);
         application.setJMenuBar(menuBar);
 
-        viewManagerModel.setState(generateWordView.getViewName());
+        // CHANGED: start on difficulty selection instead of generate word
+        if (chooseDifficultyView != null) {
+            viewManagerModel.setState(chooseDifficultyView.getViewName());
+        } else {
+            // fallback to generateWordView if difficultySelectionView not configured
+            viewManagerModel.setState(generateWordView.getViewName());
+        }
         viewManagerModel.firePropertyChange();
-        // Add the main content
         return application;
     }
 }

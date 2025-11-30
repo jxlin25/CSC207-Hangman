@@ -132,5 +132,12 @@ public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameData
     public int getFirstRoundAttempt() {
         return this.getFirstRound().getAttempt();
     }
+
+    @Override
+    public int getInitialAttemptsForGame() {
+        // Example logic: if  Round entity keeps the starting attempts of round 1,
+        // return that. Adjust to actual model.
+        return this.getHangmanGame().getMaxAttempts();
+    }
 }
 

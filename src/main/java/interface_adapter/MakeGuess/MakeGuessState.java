@@ -16,6 +16,9 @@ public class MakeGuessState {
     // New word for the round that just ended
     private String correctWord = "";
 
+    // max attempts defined by difficulty
+    private int maxAttempts = 6;
+
     public MakeGuessState() {
     }
 
@@ -91,6 +94,15 @@ public class MakeGuessState {
 
     public void setMaskedWord(String maskedWord) {
         this.maskedWord = maskedWord;
+    }
+
+    // NEW
+    public int getMaxAttempts() {
+        return maxAttempts;
+    }
+
+    public void setMaxAttempts(int maxAttempts) {
+        this.maxAttempts = maxAttempts;
     }
 
     // new

@@ -13,6 +13,7 @@ public class Main {
         JFrame app = new AppBuilder()
                 .addGenerateWordView()
                 .addMakeGuessView()
+                .addDifficultySelectionView()
                 .addRoomJoinView()
                 .addGenerateWordUseCase()
                 .addInitializeFirstRoundUseCase() // Please ensure addInitializeFirstRoundUseCase() is after addGenerateWordView()
