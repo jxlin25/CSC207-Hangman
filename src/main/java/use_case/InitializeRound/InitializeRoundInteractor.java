@@ -5,9 +5,9 @@ import use_case.MakeGuess.HangmanGameDataAccessInterface;
 public class InitializeRoundInteractor implements InitializeRoundInputBoundary {
 
     private InitializeRoundOutputBoundary presenter;
-    private HangmanGameDataAccessInterface hangmanGameDAO;
+    private InitializeRoundDataAccessInterface hangmanGameDAO;
 
-    public InitializeRoundInteractor(InitializeRoundOutputBoundary presenter, HangmanGameDataAccessInterface hangmanGameDAO) {
+    public InitializeRoundInteractor(InitializeRoundOutputBoundary presenter, InitializeRoundDataAccessInterface hangmanGameDAO) {
         this.presenter = presenter;
         this.hangmanGameDAO = hangmanGameDAO;
     }
@@ -19,7 +19,8 @@ public class InitializeRoundInteractor implements InitializeRoundInputBoundary {
                 new InitializeRoundOutputData(
                         this.hangmanGameDAO.getCurrentRoundAttempt(),
                         this.hangmanGameDAO.getCurrentRoundNumber(),
-                        this.hangmanGameDAO.getCurrentMaskedWord()
+                        this.hangmanGameDAO.getCurrentMaskedWord(),
+                        this.hangmanGameDAO.getTotalRoundNumber()
                 );
 
         this.presenter.initializeView(outputData);
