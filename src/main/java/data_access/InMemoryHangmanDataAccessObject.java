@@ -121,6 +121,10 @@ public class InMemoryHangmanDataAccessObject implements
         }
     }
 
+    public int getMaxAttempts() {
+        return this.getHangmanGame().getMaxAttempts();
+    }
+
 //    @Override
 //    public int getInitialAttemptsForGame() {
 //        // Example logic: if  Round entity keeps the starting attempts of round 1,

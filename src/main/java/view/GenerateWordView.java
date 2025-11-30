@@ -1,5 +1,7 @@
 package view;
 
+import Constant.AttemptsConstant;
+import interface_adapter.ChooseDifficulty.ChooseDifficultyController;
 import interface_adapter.EndGameResults.EndGameResultsController;
 import interface_adapter.GenerateWord.GenerateWordController;
 import interface_adapter.GenerateWord.GenerateWordViewModel;
@@ -24,6 +26,7 @@ public class GenerateWordView extends JPanel implements PropertyChangeListener {
 
     private GenerateWordController generateWordController;
     private InitializeRoundController initializeRoundController;
+    private ChooseDifficultyController chooseDifficultyController;
     private ViewManagerModel viewManagerModel; // optional, only if you still use view switching
 
     private final JButton startGameButton;
@@ -50,7 +53,7 @@ public class GenerateWordView extends JPanel implements PropertyChangeListener {
         // - Easy (8 attempts)
         // - Default (6 attempts)
         // - Hard (4 attempts)
-        difficultySelector = new JComboBox<>(new String[]{"Easy (8 attempts)", "Default (6 attempts)", "Hard (4 attempts)"});
+        difficultySelector = new JComboBox<>(new String[]{"Easy (8 attempts)", "Normal (6 attempts)", "Hard (4 attempts)"});
         difficultySelector.setAlignmentX(Component.CENTER_ALIGNMENT);
         difficultySelector.setSelectedIndex(1);
         // "Default (6 attempts)"
@@ -68,13 +71,16 @@ public class GenerateWordView extends JPanel implements PropertyChangeListener {
             }
 
             if (selection.startsWith("Easy")) {
-                selectedAttempts = 8;
-            } else if (selection.startsWith("Default")) {
-                selectedAttempts = 6;
+                selectedAttempts = AttemptsConstant.EASY_ATTEMPTS;
+
+            } else if (selection.startsWith("Normal")) {
+                selectedAttempts = AttemptsConstant.NORMAL_ATTEMPTS;
+
             } else if (selection.startsWith("Hard")) {
-                selectedAttempts = 4;
+                selectedAttempts = AttemptsConstant.HARD_ATTEMPTS;
+
             } else {
-                selectedAttempts = 6;
+                selectedAttempts = AttemptsConstant.NORMAL_ATTEMPTS;
             }
         });
 
@@ -94,10 +100,13 @@ public class GenerateWordView extends JPanel implements PropertyChangeListener {
             if (evt.getSource().equals(startGameButton)) {
                 int numberOfWords = (Integer) numberSelector.getSelectedItem();
 
-                // NOTE:
+
                 // - Still uses generateWordController and initializeRoundController as before
                 generateWordController.execute(numberOfWords);
                 // Generate the HangmanGame entity for the game
+
+                chooseDifficultyController.execute(this.selectedAttempts);
+
                 initializeRoundController.execute();
                 // Update the data of the first word to the view
             }
@@ -136,6 +145,10 @@ public class GenerateWordView extends JPanel implements PropertyChangeListener {
 
     public void setInitializeRoundController(InitializeRoundController initializeRoundController) {
         this.initializeRoundController = initializeRoundController;
+    }
+
+    public void setChooseDifficultyController(ChooseDifficultyController chooseDifficultyController) {
+        this.chooseDifficultyController = chooseDifficultyController;
     }
 
     /**

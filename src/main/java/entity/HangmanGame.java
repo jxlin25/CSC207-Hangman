@@ -23,9 +23,8 @@ public class HangmanGame {
         // Creating rounds of the game
         for (String word : words) {
             WordPuzzle wordPuzzle = new WordPuzzle(word.toCharArray());
-            this.rounds.add(new Round(wordPuzzle,maxAttempts));
-            final WordPuzzle wordPuzzle = new WordPuzzle(word.toCharArray());
             this.rounds.add(new Round(wordPuzzle));
+
         }
         this.currentRoundIndex = 0;
     }
@@ -42,7 +41,7 @@ public class HangmanGame {
     }
 
     public ArrayList<Round> getRounds() {
-        return (ArrayList<Round>) rounds.clone();
+        return this.rounds;
     }
 
     public int getCurrentRoundIndex() {

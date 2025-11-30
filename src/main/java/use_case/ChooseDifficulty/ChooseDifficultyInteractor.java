@@ -1,38 +1,46 @@
 package use_case.ChooseDifficulty;
 
 import Constant.AttemptsConstant;
+import use_case.MakeGuess.HangmanGameDataAccessInterface;
 
 public class ChooseDifficultyInteractor implements ChooseDifficultyInputBoundary {
 
     private final ChooseDifficultyOutputBoundary presenter;
+    private final ChooseDifficultyDataAccessInterface chooseDifficultyDataAccessObject;
 
-    public ChooseDifficultyInteractor(ChooseDifficultyOutputBoundary presenter) {
-        this.presenter = presenter;
+
+    public ChooseDifficultyInteractor(ChooseDifficultyOutputBoundary chooseDifficultyPresenter, ChooseDifficultyDataAccessInterface chooseDifficultyDataAccessObject) {
+        this.presenter = chooseDifficultyPresenter;
+        this.chooseDifficultyDataAccessObject = chooseDifficultyDataAccessObject;
     }
 
     @Override
     public void execute(ChooseDifficultyInputData inputData) {
-        String difficulty = inputData.getDifficulty();
-        int maxAttempts;
 
-        switch (difficulty.toUpperCase()) {
-            case "EASY":
-                maxAttempts = AttemptsConstant.EASY_ATTEMPTS;
-                difficulty = "EASY";
-                break;
-            case "HARD":
-                maxAttempts = AttemptsConstant.HARD_ATTEMPTS;
-                difficulty = "HARD";
-                break;
-            case "NORMAL":
-            default:
-                maxAttempts = AttemptsConstant.NORMAL_ATTEMPTS;
-                difficulty = "NORMAL";
-                break;
-        }
+        final int maxAttempts = inputData.getMaxAttempts();
+
+        chooseDifficultyDataAccessObject.setMaxAttempt(maxAttempts);
+
+//        int maxAttempts;
+//
+//        switch (difficulty.toUpperCase()) {
+//            case "EASY":
+//                maxAttempts = AttemptsConstant.EASY_ATTEMPTS;
+//                difficulty = "EASY";
+//                break;
+//            case "HARD":
+//                maxAttempts = AttemptsConstant.HARD_ATTEMPTS;
+//                difficulty = "HARD";
+//                break;
+//            case "NORMAL":
+//            default:
+//                maxAttempts = AttemptsConstant.NORMAL_ATTEMPTS;
+//                difficulty = "NORMAL";
+//                break;
+//        }
 
         final ChooseDifficultyOutputData outputData =
-                new ChooseDifficultyOutputData(difficulty, maxAttempts);
+                new ChooseDifficultyOutputData(maxAttempts);
 
         presenter.present(outputData);
     }

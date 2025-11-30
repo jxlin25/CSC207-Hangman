@@ -38,10 +38,10 @@ public class EndGameResultsInteractor implements EndGameResultsInputBoundary {
             System.out.println("Round " + (i+1) + ":");
             System.out.println("  Status: " + round.getStatus());
             System.out.println("  Remaining Attempts: " + round.getAttempt());
-            System.out.println("  Attempts Used: " + (6 - round.getAttempt()));
+            System.out.println("  Attempts Used: " + (hangmanGameDAO.getMaxAttempts() - round.getAttempt()));
 
             // Calculate attempts used for this round (6 - remaining)
-            int attemptsUsed = 6 - round.getAttempt();
+            int attemptsUsed = hangmanGameDAO.getMaxAttempts() - round.getAttempt();
 
             // Get word
             String word = new String(round.getWordPuzzle().getLetters());

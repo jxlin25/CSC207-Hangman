@@ -2,14 +2,14 @@ package use_case.ChooseDifficulty;
 
 public class ChooseDifficultyInputData {
 
-    private final String difficulty; // e.g., "EASY", "NORMAL", "HARD"
+    private final int maxAttempts;
 
-    public ChooseDifficultyInputData(String difficulty) {
-        this.difficulty = difficulty;
+    public ChooseDifficultyInputData(int maxAttempts) {
+        this.maxAttempts = maxAttempts;
     }
 
-    public String getDifficulty() {
-        return difficulty;
+    public int getMaxAttempts() {
+        return maxAttempts;
     }
 }
 
