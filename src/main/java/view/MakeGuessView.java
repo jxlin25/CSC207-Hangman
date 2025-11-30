@@ -28,6 +28,11 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
     private final JLabel roundNumberLabel = new JLabel("Round number: 1");
     private final JButton restartButton;
 
+    //private final JLabel hangmanImageLabel;
+    //private final JLabel messageLabel;
+    //private final JTextField guessInputField;
+    //private final JButton guessButton;
+
     // new
     private final JLabel messageLabel = new JLabel(" ");
     private int lastRoundNumber = 1;
@@ -60,7 +65,34 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
                 returnToStartView();
             }
         });
+//        hangmanImageLabel = new JLabel();
+//        hangmanImageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+//        updateImage(0);
 
+
+//        messageLabel = new JLabel("Enter a letter:");
+//        messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+//        guessInputField = new JTextField(5);
+//        guessInputField.setMaximumSize(new Dimension(100, 30));
+//
+//        guessButton = new JButton(MakeGuessViewModel.GUESS_BUTTON_LABEL);
+//        guessButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+//
+//        // Button Action
+//        guessButton.addActionListener(
+//                new ActionListener() {
+//                    public void actionPerformed(ActionEvent evt) {
+//                        if (evt.getSource().equals(guessButton)) {
+//
+//                            String letter = guessInputField.getText();
+//
+//
+//                            guessInputField.setText("");
+//                        }
+//                    }
+//                }
+//        );
         // Add everything to the panel
         this.add(hangmanImagePanel);
         this.add(attemptsLabel);
