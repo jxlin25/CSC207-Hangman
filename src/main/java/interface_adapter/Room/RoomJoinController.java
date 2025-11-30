@@ -2,8 +2,6 @@ package interface_adapter.Room;
 import view.RoomJoinView;
 import use_case.Room.RoomJoinInteractor;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 public class RoomJoinController implements RoomJoinView.Controller {
     private RoomJoinInteractor interactor;
     private String username;

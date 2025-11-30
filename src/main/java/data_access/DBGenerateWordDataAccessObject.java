@@ -5,11 +5,11 @@ import java.util.Random;
 
 import org.json.JSONArray;
 
-import Constant.Constants;
+import constant.Constants;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import use_case.GenerateWord.GenerateWordDataAccessInterface;
+import use_case.generate_word.GenerateWordDataAccessInterface;
 
 public class DBGenerateWordDataAccessObject implements GenerateWordDataAccessInterface {
 

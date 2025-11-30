@@ -1,8 +1,8 @@
 package view;
 
-import interface_adapter.EndGameResults.EndGameResultsState;
-import interface_adapter.EndGameResults.EndGameResultsState.RoundResult;
-import interface_adapter.EndGameResults.EndGameResultsViewModel;
+import interface_adapter.endgame_results.EndGameResultsState;
+import interface_adapter.endgame_results.EndGameResultsState.RoundResult;
+import interface_adapter.endgame_results.EndGameResultsViewModel;
 import interface_adapter.ViewManagerModel;
 
 import javax.swing.*;

@@ -1,6 +1,6 @@
 package entity;
 
-import Constant.StatusConstant;
+import constant.StatusConstant;
 
 import java.util.ArrayList;
 
@@ -17,7 +17,7 @@ public class Round {
 
     public Round(WordPuzzle wordPuzzle) {
         this.wordPuzzle = wordPuzzle;
-        this.status = Constant.StatusConstant.WAITING;
+        this.status = constant.StatusConstant.WAITING;
         this.guesses = new ArrayList<Guess>();
         this.attempt = 6; //can be modified once all the difficulty levels are implemented
     }
@@ -34,7 +34,7 @@ public class Round {
      * Sets the status of the current round to WON.
      */
     public void setWon() {
-        this.setStatus(Constant.StatusConstant.WON);
+        this.setStatus(constant.StatusConstant.WON);
     }
 
     /**
@@ -49,7 +49,7 @@ public class Round {
      * marking this round as started.
      */
     public void startRound() {
-        this.setStatus(Constant.StatusConstant.GUESSING);
+        this.setStatus(constant.StatusConstant.GUESSING);
     }
 
     /**

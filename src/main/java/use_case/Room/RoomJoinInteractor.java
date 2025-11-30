@@ -1,5 +1,4 @@
 package use_case.Room;
-import network.HangmanServer;
 import network.HangmanClient;
 import org.java_websocket.handshake.ServerHandshake;
 import view.LobbyView;
