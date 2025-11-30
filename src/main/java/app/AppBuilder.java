@@ -28,7 +28,6 @@ import use_case.Hint.HintInteractor;
 import use_case.GenerateWord.GenerateWordInputBoundary;
 import use_case.GenerateWord.GenerateWordInteractor;
 import use_case.GenerateWord.GenerateWordOutputBoundary;
-import use_case.Hint.HintDataAccessInterface;
 import use_case.Hint.HintInputBoundary;
 import use_case.Hint.HintOutputBoundary;
 import use_case.InitializeRound.InitializeRoundInputBoundary;
@@ -37,7 +36,6 @@ import use_case.InitializeRound.InitializeRoundOutputBoundary;
 import use_case.MakeGuess.*;
 import view.GenerateWordView;
 import view.ViewManager;
-import view.ChooseDifficultyView;
 
 import view.*;
 
@@ -78,7 +76,6 @@ public class AppBuilder {
     private GenerateWordView generateWordView;
     private MakeGuessView makeGuessView;
     private RoomJoinView roomJoinView;
-    private ChooseDifficultyView chooseDifficultyView;
     private EndGameResultsView endGameResultsView;
 
     //Controller
