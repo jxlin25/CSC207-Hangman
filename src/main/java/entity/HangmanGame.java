@@ -13,6 +13,7 @@ public class HangmanGame {
     private int currentRoundIndex;
     private final int maxAttempts;
 
+
     /**
      * Creates a new game.
      * @param words A list of words, where each round contains a word

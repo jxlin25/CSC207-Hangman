@@ -22,6 +22,7 @@ public class Round {
         this.attempt = attempts; //can be modified once all the difficulty levels are implemented
     }
 
+
     public String getStatus() {
         return status;
     }

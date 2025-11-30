@@ -37,9 +37,6 @@ public class ChooseDifficultyPresenter implements ChooseDifficultyOutputBoundary
 
         // Optionally also put difficulty/attempts into GenerateWordState
         GenerateWordState gwState = generateWordViewModel.getState();
-        // If you have dedicated fields, set them here.
-        // gwState.setDifficulty(outputData.getDifficulty());
-        // gwState.setAttempts(outputData.getMaxAttempts());
         generateWordViewModel.setState(gwState);
         generateWordViewModel.firePropertyChange();
 

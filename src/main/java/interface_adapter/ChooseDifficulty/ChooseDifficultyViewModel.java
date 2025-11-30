@@ -30,3 +30,4 @@ public class ChooseDifficultyViewModel {
         support.addPropertyChangeListener(listener);
     }
 }
+
