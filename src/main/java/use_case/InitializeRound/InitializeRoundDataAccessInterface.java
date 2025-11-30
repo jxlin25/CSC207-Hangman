@@ -3,36 +3,33 @@ package use_case.InitializeRound;
 import entity.Round;
 import entity.WordPuzzle;
 
+/**
+ * The data access interface for the InitializeRound use case.
+ */
 public interface InitializeRoundDataAccessInterface {
 
     /**
-     * Gets the first Round object in the rounds of HangmanGame.
-     * @return the first Round object in the rounds of HangmanGame
+     * Gets number of total rounds of the game.
+     * @return number of total rounds of the game
      */
-    Round getFirstRound();
+    int getTotalRoundNumber();
 
     /**
-     * Gets the masked word puzzle from the first Round object.
-     * @return the masked string of word
+     * Gets the remaining attempts of the current Round.
+     * @return the remaining attempts of the current Round
      */
-    String getFirstMaskedWord();
+    int getCurrentRoundAttempt();
 
     /**
-     * Returns the round number of the first round in the HangmanGame.
-     * @return the round number of the first round in the HangmanGame
+     * Gets the round number of the current Round.
+     * @return the round number of the current Round
      */
-    int getFirstRoundNumber();
+    int getCurrentRoundNumber();
 
     /**
-     * Gets the remaining attempts of the first Round.
-     * @return the remaining attempts of the first Round
+     * Gets the string of the masked word of the current WordPuzzle.
+     * @return the string of the masked word of the current WordPuzzle
      */
-    int getFirstRoundAttempt();
-
-    /**
-     * Gets the WordPuzzle object of the first Round.
-     * @return the WordPuzzle object of the first Round
-     */
-    WordPuzzle getFirstWordPuzzle();
+    String getCurrentMaskedWord();
 
 }

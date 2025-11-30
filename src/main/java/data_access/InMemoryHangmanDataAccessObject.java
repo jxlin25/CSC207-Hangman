@@ -5,10 +5,13 @@ import entity.HangmanGame;
 import entity.Round;
 import entity.WordPuzzle;
 import use_case.ChooseDifficulty.ChooseDifficultyDataAccessInterface;
+import use_case.InitializeRound.InitializeRoundDataAccessInterface;
 import use_case.MakeGuess.HangmanGameDataAccessInterface;
 
 public class InMemoryHangmanDataAccessObject implements
-        HangmanGameDataAccessInterface, ChooseDifficultyDataAccessInterface {
+        HangmanGameDataAccessInterface,
+        InitializeRoundDataAccessInterface,
+        ChooseDifficultyDataAccessInterface {
 
     private HangmanGame currentHangmanGame;
 
@@ -51,6 +54,11 @@ public class InMemoryHangmanDataAccessObject implements
     @Override
     public boolean setCurrentRoundLostAndStartNextRound() {
         return this.getHangmanGame().startNextRound(false);
+    }
+
+    @Override
+    public int getTotalRoundNumber() {
+        return this.getHangmanGame().getTotalRounds();
     }
 
     @Override
