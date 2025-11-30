@@ -27,7 +27,6 @@ public class GameState {
     private String revealedWord;
     private Set<Character> guessedLetters;
     private int incorrectGuessesCount;
-
     private String roundWinnerId;
 
     public GameState(int roomId, List<Player> players) {
@@ -52,6 +51,14 @@ public class GameState {
         this.roundWinnerId = null;
     }
 
+    public void initializeForGuessing(String secretWord) {
+        this.secretWord = secretWord.toUpperCase();
+        this.revealedWord = "_".repeat(secretWord.length());
+        this.guessedLetters = new HashSet<>();
+        this.incorrectGuessesCount = 0;
+        this.currentPhase = GamePhase.GUESSING;
+    }
+
     public GamePhase getCurrentPhase() {
         return currentPhase;
     }
@@ -69,6 +76,10 @@ public class GameState {
     }
 
     public void setSecretWord(String secretWord) {this.secretWord = secretWord;}
+
+    public void setGuessedLetters(Set<Character> guessedLetters) {
+        this.guessedLetters = guessedLetters;
+    }
 
     public int getRoomId() {
         return roomId;
@@ -106,8 +117,20 @@ public class GameState {
         return guessedLetters;
     }
 
+    public Map<String, Integer> getScores() {
+        return scores;
+    }
+
     public int getIncorrectGuessesCount() {
         return incorrectGuessesCount;
+    }
+
+    public boolean isWordValid(String word) {
+        return word != null && word.matches("[a-zA-Z]+") && word.length() >= 3;
+    }
+
+    public void setIncorrectGuessesCount(int count) {
+        this.incorrectGuessesCount = count;
     }
 
     public String getRoundWinnerId() {
@@ -115,5 +138,20 @@ public class GameState {
     }
     public int getMaxRounds() {
         return maxRounds;
+    }
+
+    public void setRevealedWord(String revealedWord) {
+        this.revealedWord = revealedWord;
+    }
+
+    public void setCurrentRound(int currentRound) {
+        this.currentRound = currentRound;
+    }
+    public void setCurrentWordSetterId(String currentWordSetterId) {
+        this.currentWordSetterId = currentWordSetterId;
+    }
+
+    public void setRoundWinnerId(String roundWinnerId) {
+        this.roundWinnerId = roundWinnerId;
     }
 }

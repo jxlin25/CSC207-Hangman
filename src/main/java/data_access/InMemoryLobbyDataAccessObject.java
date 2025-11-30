@@ -45,7 +45,7 @@ public class InMemoryLobbyDataAccessObject implements LobbyDataAccessInterface {
     @Override
     public boolean sendStartGameRequest(int roomId) {
         try {
-            String message = String.format("{\"type\":\"START_GAME\", \"roomId\":%d}", roomId);
+            String message = String.format("{\"type\":\"start_game\", \"room\":\"%d\"}", roomId);
             client.send(message);
             return true;
         } catch (Exception e) {

@@ -2,28 +2,29 @@ package network;
 
 import entity.Player;
 import entity.game_session.GameState;
-import interface_adapter.GameSession.GameSessionController;
-//import manager.GameSessionManager;
+import entity.game_session.GamePhase;
+import use_case.game_session.GameInteractor; // Import GameInteractor
 import org.java_websocket.server.WebSocketServer;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import java.net.InetSocketAddress;
 import java.util.*;
-import entity.game_session.GamePhase;
-
-
-
 
 public class HangmanServer extends WebSocketServer {
 
-    // roomId -> set of sockets
+    // Room management
     private final Map<String, Set<WebSocket>> rooms = new HashMap<>();
     private final Set<String> establishedRooms = new HashSet<>();
-    private final Map<String, WebSocket> roomHosts = new HashMap<>(); // Track host for each room
-    //private final Map<String, GameState> gameStates;
+    private final Map<String, WebSocket> roomHosts = new HashMap<>();
     private final Map<String, Map<WebSocket, Player>> roomPlayers = new HashMap<>();
 
-
+    // Game state management
+    private final Map<String, GameState> gameStates = new HashMap<>();
+    // Updated to map WebSocket to username directly for playerId
+    private final Map<WebSocket, String> connectionToPlayerId = new HashMap<>();
+    
+    // Game Interactor
+    private final GameInteractor gameInteractor = new GameInteractor(); // Initialize GameInteractor
 
     public HangmanServer(int port) {
         super(new InetSocketAddress(port));
@@ -36,40 +37,31 @@ public class HangmanServer extends WebSocketServer {
 
     @Override
     public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-        // remove from all rooms
+        // Remove from all rooms
         rooms.values().forEach(set -> set.remove(conn));
         // Remove from roomHosts if this connection was a host
         roomHosts.entrySet().removeIf(entry -> entry.getValue().equals(conn));
+        // Remove player mapping
+        connectionToPlayerId.remove(conn); // Use conn directly as key
         System.out.println("Closed: " + conn.getRemoteSocketAddress());
     }
 
     @Override
     public void onMessage(WebSocket conn, String message) {
-        /*
-            Expected JSON messages:
-            { "type": "join", "room": "1234", "username": "Player1" }
-            { "type": "guess", "room": "1234", "letter": "A" }
-            { "type": "create", "room": "1234", "username": "HostPlayer" }
-        */
-
         Map<String, String> msg = parse(message);
         String type = msg.get("type");
         String room = msg.get("room");
-        String username = msg.get("username"); // Extract username
+        String username = msg.get("username"); // Assuming username is always sent in messages
 
         switch (type) {
             case "check_room" -> handleCheckRoom(conn, room);
             case "create" -> handleCreateRoom(conn, room, username);
             case "join" -> handleJoin(conn, room, username);
-//            case "submit_word" -> {
-//                GameSessionController controller = GameSessionManager.getController(room);
-//                controller.handleWordSubmission(senderId, msg.get("word"));
-//            }
-//            case "make_guess" -> {
-//                GameSessionController controller = GameSessionManager.getController(room);
-//                controller.handleGuess(senderId, msg.get("letter"));
-//            }
-            case "state" -> broadcastToRoom(room, message); // for spectators
+            // New cases for multiplayer game actions
+            case "submit_word" -> handleSubmitWord(conn, room, msg.get("word"));
+            case "make_guess" -> handleMakeGuess(conn, room, msg.get("letter").charAt(0)); // Get char directly
+            case "start_game" -> handleStartGame(conn, room);
+            case "state" -> broadcastToRoom(room, message); // Existing functionality
         }
     }
 
@@ -87,38 +79,216 @@ public class HangmanServer extends WebSocketServer {
         establishedRooms.add(room);
         rooms.putIfAbsent(room, new HashSet<>());
         rooms.get(room).add(conn);
-        roomHosts.put(room, conn); // Store this connection as the host
+        roomHosts.put(room, conn);
+        System.out.println("SERVER DEBUG: Host set for room " + room + ": " + conn.toString()); // DEBUG
+
+        // Initialize player mapping
+        initializePlayerInRoom(conn, room, username);
 
         conn.send("{\"type\":\"created\",\"room\":\"" + room + "\",\"isHost\":true}");
     }
 
-
     private void handleJoin(WebSocket conn, String room, String username) {
-        if (rooms.get(room).size() >= 2) { // Enforce 2-player limit
-            conn.send("{\"type\":\"error\",\"message\":\"Room full\"}");
-            return;
-        }
-
         if (!establishedRooms.contains(room)) {
             conn.send("{\"type\":\"error\",\"message\":\"Room does not exist\"}");
             return;
         }
+        
+        Set<WebSocket> roomMembers = rooms.get(room);
+        if (roomMembers != null && roomMembers.size() >= 2) {
+            conn.send("{\"type\":\"error\",\"message\":\"Room full\"}");
+            return;
+        }
 
-        // Add joining client to the room
         rooms.putIfAbsent(room, new HashSet<>());
         rooms.get(room).add(conn);
 
-        // Send 'joined' response to the joining client (they are not the host)
+        // Initialize player mapping
+        initializePlayerInRoom(conn, room, username);
+
         conn.send("{\"type\":\"joined\",\"room\":\"" + room + "\",\"isHost\":false}");
 
-        // Notify the host (and other players if any) that a new player has joined
         WebSocket hostConn = roomHosts.get(room);
         if (hostConn != null && hostConn.isOpen()) {
             hostConn.send("{\"type\":\"player_joined_notification\",\"room\":\"" + room + "\",\"username\":\"" + username + "\"}");
         }
-        // Also notify other clients in the room (if more than 2 players eventually)
-        // For now, with 2-player limit, hostConn is the only other client.
+    }
 
+    // New game message handlers
+    private void handleStartGame(WebSocket conn, String room) {
+        System.out.println("SERVER DEBUG: handleStartGame called by: " + conn.toString() + " for room: " + room); // DEBUG
+        System.out.println("SERVER DEBUG: Checking if " + conn.toString() + " is host of " + room); // DEBUG
+        if (!isRoomHost(conn, room)) {
+            conn.send("{\"type\":\"error\",\"message\":\"Only host can start game\"}");
+            return;
+        }
+
+        Map<WebSocket, Player> playersInRoom = roomPlayers.get(room);
+        if (playersInRoom == null || playersInRoom.size() != 2) {
+            conn.send("{\"type\":\"error\",\"message\":\"Need exactly 2 players to start game\"}");
+            return;
+        }
+
+        GameState gameState = initializeNewGameState(room);
+        gameStates.put(room, gameState);
+        
+        // Broadcast initial game state
+        broadcastGameState(room, gameState);
+    }
+
+    private void handleSubmitWord(WebSocket conn, String room, String word) {
+        GameState currentState = gameStates.get(room);
+        if (currentState == null) {
+            conn.send("{\"type\":\"error\",\"message\":\"Game not started\"}");
+            return;
+        }
+
+        String playerId = getPlayerId(conn); // Get playerId (username)
+        if (playerId == null) {
+            conn.send("{\"type\":\"error\",\"message\":\"Player not registered\"}");
+            return;
+        }
+
+        try {
+            // Use GameInteractor to process word submission
+            GameState updatedState = gameInteractor.processWordSubmission(currentState, playerId, word);
+            gameStates.put(room, updatedState); // Update the game state in the map
+            broadcastGameState(room, updatedState);
+        } catch (Exception e) {
+            conn.send("{\"type\":\"error\",\"message\":\"" + e.getMessage() + "\"}");
+        }
+    }
+
+    private void handleMakeGuess(WebSocket conn, String room, char letter) {
+        GameState currentState = gameStates.get(room);
+        if (currentState == null) {
+            conn.send("{\"type\":\"error\",\"message\":\"Game not started\"}");
+            return;
+        }
+
+        String playerId = getPlayerId(conn); // Get playerId (username)
+        if (playerId == null) {
+            conn.send("{\"type\":\"error\",\"message\":\"Player not registered\"}");
+            return;
+        }
+
+        try {
+            // Use GameInteractor to process guess
+            GameState updatedState = gameInteractor.processGuess(currentState, playerId, letter);
+            gameStates.put(room, updatedState); // Update the game state in the map
+            broadcastGameState(room, updatedState);
+        } catch (Exception e) {
+            conn.send("{\"type\":\"error\",\"message\":\"" + e.getMessage() + "\"}");
+        }
+    }
+
+    // Helper methods
+    private void initializePlayerInRoom(WebSocket conn, String room, String username) {
+        // Use username as the playerId
+        connectionToPlayerId.put(conn, username); // Map WebSocket to username
+
+        roomPlayers.putIfAbsent(room, new HashMap<>());
+        Player player = new Player(username); // Create Player with username
+        roomPlayers.get(room).put(conn, player);
+    }
+
+    private String getPlayerId(WebSocket conn) {
+        return connectionToPlayerId.get(conn);
+    }
+
+    private boolean isRoomHost(WebSocket conn, String room) {
+        WebSocket host = roomHosts.get(room);
+        System.out.println("SERVER DEBUG: isRoomHost check: conn=" + conn.toString() + ", hostInMap=" + (host != null ? host.toString() : "null")); // DEBUG
+        return host != null && host.equals(conn);
+    }
+
+    private GameState initializeNewGameState(String room) {
+        Map<WebSocket, Player> playersMap = roomPlayers.get(room);
+        List<Player> playerList = new ArrayList<>(playersMap.values());
+
+        // Ensure playerList has at least two players for word setter/guesser assignment
+        if (playerList.size() < 2) {
+            throw new IllegalStateException("Not enough players to initialize game state.");
+        }
+
+        // Convert room string to integer ID (you might want to handle this differently)
+        int roomId;
+        try {
+            roomId = Integer.parseInt(room);
+        } catch (NumberFormatException e) {
+            roomId = room.hashCode(); // Fallback to hash code if not a valid int
+        }
+
+        // Create initial GameState
+        GameState gameState = new GameState(roomId, playerList);
+        
+        // Assign word setter and guesser (e.g., host is word setter, other player is guesser)
+        // This assumes playerList[0] is host, playerList[1] is other player
+        gameState.setCurrentWordSetterId(playerList.get(0).getId());
+        gameState.setCurrentGuesserId(playerList.get(1).getId());
+        gameState.setCurrentPhase(GamePhase.WORD_SELECTION); // Initial phase
+        
+        return gameState;
+    }
+
+    private void broadcastGameState(String room, GameState gameState) {
+        String gameStateJson = gameStateToJson(gameState);
+        // Using "game_state_update" as type as per common practice
+        broadcastToRoom(room, "{\"type\":\"game_state_update\",\"gameState\":" + gameStateJson + "}");
+    }
+
+    private String gameStateToJson(GameState gameState) {
+        StringBuilder json = new StringBuilder();
+        json.append("{");
+        json.append("\"roomId\":").append(gameState.getRoomId()).append(",");
+        json.append("\"currentPhase\":\"").append(gameState.getCurrentPhase()).append("\",");
+        json.append("\"currentRound\":").append(gameState.getCurrentRound()).append(",");
+        json.append("\"maxRounds\":").append(gameState.getMaxRounds()).append(",");
+        json.append("\"currentWordSetterId\":\"").append(gameState.getCurrentWordSetterId()).append("\",");
+        json.append("\"currentGuesserId\":\"").append(gameState.getCurrentGuesserId()).append("\",");
+        json.append("\"secretWord\":").append(gameState.getSecretWord() != null ? "\"" + gameState.getSecretWord() + "\"" : "null").append(","); // Include secret word for now
+        json.append("\"revealedWord\":\"").append(gameState.getRevealedWord()).append("\",");
+        json.append("\"guessedLetters\":").append(setToJsonArray(gameState.getGuessedLetters())).append(",");
+        json.append("\"incorrectGuessesCount\":").append(gameState.getIncorrectGuessesCount()).append(",");
+        json.append("\"maxIncorrectGuesses\":").append(gameState.getMaxIncorrectGuesses()).append(",");
+        json.append("\"roundWinnerId\":").append(gameState.getRoundWinnerId() != null ? "\"" + gameState.getRoundWinnerId() + "\"" : "null").append(",");
+        json.append("\"scores\":{"); // Start scores object
+        boolean firstScore = true;
+        for (Map.Entry<String, Integer> entry : gameState.getScores().entrySet()) {
+            if (!firstScore) json.append(",");
+            json.append("\"").append(entry.getKey()).append("\":").append(entry.getValue());
+            firstScore = false;
+        }
+        json.append("},"); // End scores object
+
+        // Add players information
+        json.append("\"players\":").append(playersToJsonArray(gameState.getPlayers()));
+        json.append("}");
+        return json.toString();
+    }
+
+    private String setToJsonArray(Set<Character> set) {
+        StringBuilder sb = new StringBuilder("[");
+        boolean first = true;
+        for (Character c : set) {
+            if (!first) sb.append(",");
+            sb.append("\"").append(c).append("\"");
+            first = false;
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    private String playersToJsonArray(List<Player> players) {
+        StringBuilder sb = new StringBuilder("[");
+        boolean first = true;
+        for (Player player : players) {
+            if (!first) sb.append(",");
+            sb.append("{\"id\":\"").append(player.getId()).append("\",\"name\":\"").append(player.getName()).append("\"}"); // Changed "username" to "name" to match Player entity
+            first = false;
+        }
+        sb.append("]");
+        return sb.toString();
     }
 
     private void broadcastToRoom(String room, String msg) {
@@ -131,13 +301,12 @@ public class HangmanServer extends WebSocketServer {
     private Map<String, String> parse(String json) {
         Map<String, String> result = new HashMap<>();
         try {
-            // A more robust way to parse flat JSON without a dedicated library
             json = json.trim();
             if (json.startsWith("{") && json.endsWith("}")) {
-                json = json.substring(1, json.length() - 1); // Remove outer braces
-                String[] pairs = json.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); // Split by comma outside quotes
+                json = json.substring(1, json.length() - 1);
+                String[] pairs = json.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
                 for (String pair : pairs) {
-                    String[] keyValue = pair.split(":(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); // Split by colon outside quotes
+                    String[] keyValue = pair.split(":(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
                     if (keyValue.length == 2) {
                         String key = keyValue[0].trim().replaceAll("\"", "");
                         String value = keyValue[1].trim().replaceAll("\"", "");
@@ -169,4 +338,3 @@ public class HangmanServer extends WebSocketServer {
         new HangmanServer(8080).start();
     }
 }
-

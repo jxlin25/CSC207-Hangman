@@ -5,13 +5,14 @@ public class Player {
 
     private String name;
     //leave for multiplayer mode
-    private final String id;
+    private String id; // Removed final
     private boolean host = false;
     private Integer roomId;
     private int score;
     private String status;
     private long timeTaken;
     private int attempt;
+    private PlayerRole currentRole;
 
     public Player(String name) {
         this.name = name;
@@ -20,7 +21,9 @@ public class Player {
         this.status = "Waiting";
         this.id = UUID.randomUUID().toString();
     }
-
+    public enum PlayerRole {
+        WORD_SETTER, GUESSER, SPECTATOR
+    }
     public String getName() {
         return name;
     }
@@ -70,6 +73,10 @@ public class Player {
 
     public int getRoomId() {return roomId;}
     public String getId() {return id;}
+
+    public void setId(String id) { // Added setter for id
+        this.id = id;
+    }
 
     public boolean getHost() {return this.host;}
 
