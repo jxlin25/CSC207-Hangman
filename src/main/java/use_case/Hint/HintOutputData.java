@@ -6,12 +6,22 @@ package use_case.Hint;
 
 public class HintOutputData {
     private String hint;
+    private int remainHint;
 
-    public HintOutputData(String hint) {
+    public HintOutputData(String hint, int remainHint) {
         this.hint = hint;
+        this.remainHint = remainHint;
     }
 
     public String getHint() {
         return hint;
+    }
+
+    public void setHint(String hint) {
+        this.hint = hint;
+    }
+
+    public int getRemainHint() {
+        return remainHint;
     }
 }

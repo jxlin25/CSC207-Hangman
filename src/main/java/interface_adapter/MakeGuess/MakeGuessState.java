@@ -17,6 +17,7 @@ public class MakeGuessState {
     private boolean resetAlphabetButtons;
     private int maxAttempts = 6;
     private int totalRound = 1;
+    private int hintAttempts;
 
     public MakeGuessState() {
 
@@ -117,7 +118,12 @@ public class MakeGuessState {
     public void setTotalRound(int totalRound) {
         this.totalRound = totalRound;
     }
+
+    public int getHintAttempts() {
+        return hintAttempts;
+    }
+
+    public void setHintAttempts(int hintAttempts) {
+        this.hintAttempts = hintAttempts;
+    }
 }
-
-
-

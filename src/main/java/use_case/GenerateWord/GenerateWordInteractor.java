@@ -1,10 +1,9 @@
 package use_case.GenerateWord;
 
-import entity.HangmanGame;
-
-import use_case.MakeGuess.HangmanGameDataAccessInterface;
-
 import java.util.ArrayList;
+
+import entity.HangmanGame;
+import use_case.MakeGuess.HangmanGameDataAccessInterface;
 
 /**
  * The Generate Word Interactor.

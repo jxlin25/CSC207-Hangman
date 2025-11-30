@@ -42,6 +42,7 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
     private final JButton nextRoundButton;
     private JDialog endGameDialog = new JDialog();
     private final JButton hintButton = new JButton("Hint");
+    private final JLabel hintAttemptsLabel = new JLabel("Hint attempts left: 0");
     //private final JLabel hintLabel = new JLabel("Hint: ");
     private final JTextArea hintTextArea = new JTextArea();
 
@@ -145,6 +146,7 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         // Add everything to the panel
         //this.add(hintPanel);
         this.add(hintButton);
+        this.add(hintAttemptsLabel);
         this.add(hintTextArea);
         this.add(hangmanImagePanel);
         this.add(attemptsLabel);
@@ -244,6 +246,7 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
 
                 endGameDialog.setVisible(true);
             }
+
         }
 
         // Update hint display
@@ -253,6 +256,16 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         }
         else {
             hintTextArea.setText("Hint: ");
+        }
+        // hint attempts.
+
+        hintAttemptsLabel.setText("Hint attempts left: " + state.getHintAttempts());
+
+        if (state.getHintAttempts() == 0) {
+            hintButton.setEnabled(false);
+        }
+        else {
+            hintButton.setEnabled(true);
         }
     }
 

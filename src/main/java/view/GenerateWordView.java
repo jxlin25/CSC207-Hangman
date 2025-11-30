@@ -98,14 +98,25 @@ public class GenerateWordView extends JPanel implements PropertyChangeListener {
 
         startGameButton.addActionListener(evt -> {
             if (evt.getSource().equals(startGameButton)) {
-                int numberOfWords = (Integer) numberSelector.getSelectedItem();
+                final int numberOfWords = (Integer) numberSelector.getSelectedItem();
 
+                final int numberOfHintAttempts;
+
+                if (this.selectedAttempts == 8) {
+                    numberOfHintAttempts = 12;
+                }
+                else if (this.selectedAttempts == 6) {
+                    numberOfHintAttempts = (numberOfWords + 1) / 2;
+                }
+                else {
+                    numberOfHintAttempts = (numberOfWords + 2) / 2;
+                }
 
                 // - Still uses generateWordController and initializeRoundController as before
                 generateWordController.execute(numberOfWords);
                 // Generate the HangmanGame entity for the game
 
-                chooseDifficultyController.execute(this.selectedAttempts);
+                chooseDifficultyController.execute(this.selectedAttempts, numberOfHintAttempts);
 
                 initializeRoundController.execute();
                 // Update the data of the first word to the view

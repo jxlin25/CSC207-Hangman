@@ -28,6 +28,7 @@ public class ChooseDifficultyPresenter implements ChooseDifficultyOutputBoundary
         final MakeGuessState state = makeGuessViewModel.getState();
 
         state.setMaxAttempts(outputData.getMaxAttempts());
+        state.setHintAttempts(outputData.getHintAttempts());
 
         makeGuessViewModel.setState(state);
 //        // Update difficulty VM
