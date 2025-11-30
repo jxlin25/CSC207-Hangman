@@ -13,25 +13,25 @@ public class GenerateWordInteractor implements GenerateWordInputBoundary {
 
     private final GenerateWordDataAccessInterface generateWordDataAccessInterface;
     private final GenerateWordOutputBoundary generateWordOutputBoundary;
-    private final HangmanGameDataAccessInterface hangmanGameDAO;
+    private final HangmanGameDataAccessInterface hangmanGameDataAccessInterface;
 
     public GenerateWordInteractor(GenerateWordDataAccessInterface generateWordDataAccessInterface,
                                   GenerateWordOutputBoundary generateWordOutputBoundary,
-                                  HangmanGameDataAccessInterface hangmanGameDAO) {
+                                  HangmanGameDataAccessInterface hangmanGameDataAccessInterface) {
         this.generateWordDataAccessInterface = generateWordDataAccessInterface;
         this.generateWordOutputBoundary = generateWordOutputBoundary;
-        this.hangmanGameDAO = hangmanGameDAO;
+        this.hangmanGameDataAccessInterface = hangmanGameDataAccessInterface;
     }
 
     @Override
     public void execute(GenerateWordInputData inputData) {
         int n = inputData.getNumbers();
-        if (n < 0) {
-            //This situation won't occur, but to prevent any accidents
+        if (n <= 0) {
+            // This situation won't occur, but to prevent any accidents
             generateWordOutputBoundary.prepareFailureView("Number of words must be langer than 0!!");
             return;
         }
-        ArrayList<String> words = new ArrayList<>();
+        final ArrayList<String> words = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             int tries = 0;
             String word = null;
@@ -52,9 +52,8 @@ public class GenerateWordInteractor implements GenerateWordInputBoundary {
         System.out.println("The Generate Words is :" + words);
         System.out.println("----------------------------");
 
-        //TODO this part maybe can change, now, we don't use OutPutData
-        hangmanGameDAO.setHangmanGame(new HangmanGame(words));
-        GenerateWordOutputData outputData = new GenerateWordOutputData(words);
+        hangmanGameDataAccessInterface.setHangmanGame(new HangmanGame(words));
+        final GenerateWordOutputData outputData = new GenerateWordOutputData(words);
         generateWordOutputBoundary.prepareSuccessView(outputData);
     }
 }

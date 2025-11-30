@@ -1,7 +1,7 @@
 package interface_adapter.Hint;
 
-import interface_adapter.MakeGuess.MakeGuessViewModel;
 import interface_adapter.MakeGuess.MakeGuessState;
+import interface_adapter.MakeGuess.MakeGuessViewModel;
 import use_case.Hint.HintOutputBoundary;
 import use_case.Hint.HintOutputData;
 

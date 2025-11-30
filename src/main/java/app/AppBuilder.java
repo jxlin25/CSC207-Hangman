@@ -57,7 +57,7 @@ public class AppBuilder {
     //DAO
     final DBGenerateWordDataAccessObject generateWordAccessObject = new DBGenerateWordDataAccessObject();
     final InMemoryHangmanDataAccessObject hangmanGameDAO = new InMemoryHangmanDataAccessObject();
-    final HintDataAccessInterface hintDAO = new DBHintDataAccessObject();
+    final DBHintDataAccessObject hintDAO = new DBHintDataAccessObject();
 
     //View Model
     private GenerateWordViewModel generateWordViewModel;
@@ -151,7 +151,7 @@ public class AppBuilder {
     public AppBuilder addHintUseCase() {
         HintOutputBoundary hintPresenter = new HintPresenter(makeGuessViewModel);
 
-        HintInputBoundary hintInteractor = new HintInteractor(hintDAO, hintPresenter);
+        HintInputBoundary hintInteractor = new HintInteractor(hintDAO, hintPresenter, hangmanGameDAO);
 
         HintController hintController = new HintController(hintInteractor);
 
