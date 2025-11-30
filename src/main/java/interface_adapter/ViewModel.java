@@ -13,7 +13,7 @@ import java.beans.PropertyChangeSupport;
 public abstract class ViewModel<T> {
     private final String viewName;
     private T state;
-    protected final PropertyChangeSupport support = new PropertyChangeSupport(this);
+    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     public ViewModel(String viewName) {
         this.viewName = viewName;
@@ -22,9 +22,14 @@ public abstract class ViewModel<T> {
     public void setState(T state) {
         this.state = state;
     }
-    public T getState() { return state; }
 
-    public String getViewName() {return viewName;}
+    public T getState() {
+        return state;
+    }
+
+    public String getViewName() {
+        return viewName;
+    }
 
     /**
      * Fires a property changed event for the state of this ViewModel.
@@ -33,7 +38,6 @@ public abstract class ViewModel<T> {
     public void firePropertyChange() {
         support.firePropertyChange("state", null, state);
     }
-
 
     /**
      * Fires a property changed event for the state of this ViewModel, which
@@ -44,8 +48,6 @@ public abstract class ViewModel<T> {
      * it can use the property name to distinguish which property has changed.
      * @param propertyName the label for the property that was changed
      */
-
-    //TODO：I'm not sure if we need this. Actually, I think we can delete it
 
     public void firePropertyChange(String propertyName) {
         this.support.firePropertyChange(propertyName, null, this.state);

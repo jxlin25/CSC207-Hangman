@@ -1,9 +1,8 @@
 package interface_adapter.GenerateWord;
 
 import interface_adapter.MakeGuess.MakeGuessState;
-import interface_adapter.ViewManagerModel;
 import interface_adapter.MakeGuess.MakeGuessViewModel;
-
+import interface_adapter.ViewManagerModel;
 import use_case.GenerateWord.GenerateWordOutputBoundary;
 import use_case.GenerateWord.GenerateWordOutputData;
 

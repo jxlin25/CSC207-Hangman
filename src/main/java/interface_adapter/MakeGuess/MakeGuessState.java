@@ -13,13 +13,11 @@ public class MakeGuessState {
     private int currentRoundNumber = 1;
     private String maskedWord = "";
     private String message = "";
-    // New word for the round that just ended
-    private String correctWord = "";
-
-    // max attempts defined by difficulty
-    private int maxAttempts = 6;
+    private String hintText;
+    private boolean resetAlphabetButtons;
 
     public MakeGuessState() {
+
     }
 
     public MakeGuessState(String guessedLetter, boolean isGuessCorrect, boolean isGameOver, String roundStatus, int remainingAttempts, int currentRoundNumber,  String maskedWord) {
@@ -30,6 +28,7 @@ public class MakeGuessState {
         this.remainingAttempts = remainingAttempts;
         this.currentRoundNumber = currentRoundNumber;
         this.maskedWord = maskedWord;
+
     }
 
     public String getGuessedLetter() {
@@ -96,18 +95,21 @@ public class MakeGuessState {
         this.maskedWord = maskedWord;
     }
 
-    // NEW
-    public int getMaxAttempts() {
-        return maxAttempts;
+    public String getHintText() {
+        return hintText;
     }
 
-    public void setMaxAttempts(int maxAttempts) {
-        this.maxAttempts = maxAttempts;
+    public void setHintText(String hint) {
+        this.hintText = hint;
     }
 
-    // new
-    public String getCorrectWord() {return correctWord;}
-    public void setCorrectWord(String correctWord) {this.correctWord = correctWord;}
+    public boolean getResetAlphabetButtons() {
+        return resetAlphabetButtons;
+    }
+
+    public void setResetAlphabetButtons(boolean resetAlphabetButtons) {
+        this.resetAlphabetButtons = resetAlphabetButtons;
+    }
 }
 
 

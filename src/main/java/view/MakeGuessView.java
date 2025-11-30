@@ -1,5 +1,8 @@
 package view;
 
+import interface_adapter.EndGameResults.EndGameResultsController;
+import interface_adapter.Hint.HintController;
+import interface_adapter.InitializeRound.InitializeRoundController;
 import interface_adapter.MakeGuess.MakeGuessViewModel;
 import interface_adapter.MakeGuess.MakeGuessState;
 import interface_adapter.MakeGuess.MakeGuessController;
@@ -9,6 +12,8 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.awt.Component;
@@ -17,21 +22,27 @@ import static Constant.StatusConstant.*;
 
 public class MakeGuessView extends JPanel implements ActionListener, PropertyChangeListener {
 
-    public final String viewName = "Make Guess";
+    private final String viewName = "Make Guess";
     private final MakeGuessViewModel makeGuessViewModel;
     private MakeGuessController makeGuessController;
     private ViewManagerModel viewManagerModel;
+    private InitializeRoundController initializeRoundController;
+    private EndGameResultsController endGameResultsController;
+    private HintController hintController;
 
     private final HangmanImagePanel hangmanImagePanel = new HangmanImagePanel();
     private final JLabel wordPuzzleLabel = new JLabel("????");
     private final JLabel attemptsLabel = new JLabel("Attempts left: 6");
     private final JLabel roundNumberLabel = new JLabel("Round number: 1");
     private final JButton restartButton;
+    private final JButton popupRestartButton;
+    private final JButton popupShowResultButton;
 
-    //private final JLabel hangmanImageLabel;
-    //private final JLabel messageLabel;
-    //private final JTextField guessInputField;
-    //private final JButton guessButton;
+    private final JButton nextRoundButton;
+    private JDialog endGameDialog = new JDialog();
+    private final JButton hintButton = new JButton("Hint");
+    //private final JLabel hintLabel = new JLabel("Hint: ");
+    private final JTextArea hintTextArea = new JTextArea();
 
     // new
     private final JLabel messageLabel = new JLabel(" ");
@@ -41,12 +52,12 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
 
     public MakeGuessView(MakeGuessViewModel viewModel) {
 
-        this.alphabetButtonsPanel = this.createNewLetterButtonsPanel();
-
+        this.alphabetButtonsPanel = this.createNewAlphabetButtonsPanel();
         this.makeGuessViewModel = viewModel;
         this.makeGuessViewModel.addPropertyChangeListener(this);
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
         wordPuzzleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // new
@@ -57,43 +68,83 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         restartButton.addActionListener(e -> {
             int option = JOptionPane.showConfirmDialog(
                     this,
-                    "Are you want to restart the game?",
+                    "Do you want to restart the game?",
                     "Confirm Restart",
                     JOptionPane.YES_NO_OPTION
             );
             if (option == JOptionPane.YES_OPTION) {
+                this.endGameDialog.setVisible(false);
                 returnToStartView();
             }
         });
-//        hangmanImageLabel = new JLabel();
-//        hangmanImageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-//        updateImage(0);
 
+        this.popupRestartButton = new JButton("Restart");
+        this.popupRestartButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.popupRestartButton.addActionListener(e -> {
+            int option = JOptionPane.showConfirmDialog(
+                    this,
+                    "Do you want to restart the game?",
+                    "Confirm Restart",
+                    JOptionPane.YES_NO_OPTION
+            );
+            if (option == JOptionPane.YES_OPTION) {
+                this.endGameDialog.setVisible(false);
+                returnToStartView();
+            }
+        });
 
-//        messageLabel = new JLabel("Enter a letter:");
-//        messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.popupShowResultButton = new JButton("Show Result");
+        this.popupShowResultButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.popupShowResultButton.addActionListener(e -> {
+            if (endGameResultsController != null) {
+                endGameResultsController.execute();
+            }
+            this.endGameDialog.setVisible(false);
 
-//        guessInputField = new JTextField(5);
-//        guessInputField.setMaximumSize(new Dimension(100, 30));
+        });
+        // Hint Panel Setup
+//        JPanel hintPanel = new JPanel();
+//        hintLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 //
-//        guessButton = new JButton(MakeGuessViewModel.GUESS_BUTTON_LABEL);
-//        guessButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+//        hintPanel.setLayout(new BoxLayout(hintPanel, BoxLayout.Y_AXIS));
+//        // The word 'apple' is placeholder here; the controller will handle the actual word retrieval logic.
 //
-//        // Button Action
-//        guessButton.addActionListener(
-//                new ActionListener() {
-//                    public void actionPerformed(ActionEvent evt) {
-//                        if (evt.getSource().equals(guessButton)) {
-//
-//                            String letter = guessInputField.getText();
-//
-//
-//                            guessInputField.setText("");
-//                        }
-//                    }
-//                }
-//        );
+//        hintPanel.add(hintButton);
+//        hintPanel.add(hintLabel);
+        hintButton.addActionListener(event ->
+                hintController.execute());
+
+        hintTextArea.setEditable(false);
+        hintTextArea.setLineWrap(true);
+        hintTextArea.setWrapStyleWord(true);
+        hintTextArea.setOpaque(false);
+        hintTextArea.setFocusable(false);
+        hintTextArea.setAlignmentX(Component.CENTER_ALIGNMENT);
+        hintTextArea.setPreferredSize(new Dimension(400, 200));
+        hintTextArea.setMaximumSize(new Dimension(400,200));
+
+        this.nextRoundButton = new JButton("Next Round");
+        this.nextRoundButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.nextRoundButton.setEnabled(false);
+        this.nextRoundButton.addActionListener(e -> {
+            System.out.println("Moving to next round");
+
+            // Reset the letter buttons panel FIRST
+            this.resetAlphabetButtonsPanel();
+
+            // Then initialize the next round
+            this.initializeRoundController.execute();
+
+            // Disable the next round button until the round is complete again
+            this.nextRoundButton.setEnabled(false);
+        });
+
+        this.endGameDialog.setVisible(false);
+
         // Add everything to the panel
+        //this.add(hintPanel);
+        this.add(hintButton);
+        this.add(hintTextArea);
         this.add(hangmanImagePanel);
         this.add(attemptsLabel);
         this.add(roundNumberLabel);
@@ -101,166 +152,144 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         this.add(Box.createVerticalStrut(20));
         this.add(messageLabel);
         this.add(restartButton);
+        this.add(nextRoundButton);
+        this.add(Box.createVerticalStrut(20));
         this.add(wordPuzzleLabel);
         this.add(alphabetButtonsPanel);
+
+    }
+
+    public void setInitializeRoundController(InitializeRoundController controller) {
+        this.initializeRoundController = controller;
+    }
+
+    public void setHintController(HintController hintController) {
+        this.hintController = hintController;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // Currently unused; all actions handled via button listeners directly.
+        // Not used, but required by the interface
+    }
+
+    public void setEndGameResultsController(EndGameResultsController controller) {
+        this.endGameResultsController = controller;
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        MakeGuessState state = (MakeGuessState) evt.getNewValue();
+        final MakeGuessState state = (MakeGuessState) evt.getNewValue();
 
-        System.out.println(state.getGuessedLetter());
-        System.out.println(state.getRoundStatus());
-        System.out.println(state.getRemainingAttempts());
-        System.out.println(state.isGuessCorrect());
-        System.out.println(state.isGameOver());
+        System.out.println("Guessed letter: " + state.getGuessedLetter());
+        System.out.println("Status: " + state.getRoundStatus());
+        System.out.println("Remaining attempts: " + state.getRemainingAttempts());
+        System.out.println("isGuessCorrect: " + state.isGuessCorrect());
+        System.out.println("isGameOver: " + state.isGameOver());
         System.out.println("----------------------------");
 
-        // Use maxAttempts from state (difficulty), fall back to 6 if not set
-        int maxAttempts = state.getMaxAttempts() > 0 ? state.getMaxAttempts() : 6;
+        final int maxAttempts = 6;
+        final int remainingAttempts = state.getRemainingAttempts();
 
-        if (!state.isGameOver()) {
-            int remainingAttempts = state.getRemainingAttempts();
+        this.roundNumberLabel.setText("Round number: " + state.getCurrentRoundNumber());
+        hangmanImagePanel.setIncorrectGuesses(maxAttempts - remainingAttempts);
+        this.attemptsLabel.setText("Attempts left: " + remainingAttempts);
+        this.wordPuzzleLabel.setText(state.getMaskedWord());
 
-            // Detect if we just started a new round or a new game
-            int currentRound = state.getCurrentRoundNumber();
+        if (state.getResetAlphabetButtons()) {
+            this.resetAlphabetButtonsPanel();
+        }
 
-            // New game: round goes back to 1, so reset lastRoundNumber and clear message
-            if (currentRound == 1 && lastRoundNumber != 1) {
-                lastRoundNumber = 1;
-                messageLabel.setText(" ");
+        // If the current round is ended
+        if (state.getRoundStatus().equals(WON) || state.getRoundStatus().equals(LOST)) {
+            System.out.println("Round over");
+            this.disableAlphabetButtons();
+            this.nextRoundButton.setEnabled(true);
+
+            // If the current ended round is the last round, the game also ends
+            if (state.isGameOver()) {
+//                JOptionPane.showMessageDialog(
+//                        this,
+//                        "Game Over!",
+//                        "Game Over",
+//                        JOptionPane.INFORMATION_MESSAGE
+//                );
+                final JOptionPane endGamePane = new JOptionPane(
+                        "Game Over! Do you want to restart?",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.DEFAULT_OPTION,
+                        null,
+                        new Object[]{this.popupRestartButton, this.popupShowResultButton}
+                );
+
+                this.endGameDialog = endGamePane.createDialog(this, "Game Over!");
+
+                // Close the program when the endGameDialog is closed
+                endGameDialog.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+
+                endGameDialog.setVisible(true);
             }
-            // New round within the same game: round number increases
-            else if (currentRound != lastRoundNumber) {
-                messageLabel.setText(" ");
-                lastRoundNumber = currentRound;
-            }
+        }
 
-            // Round just ended (win or loss)
-            if (state.getRoundStatus().equals(WON) || state.getRoundStatus().equals(LOST)) {
-                System.out.println("triggered");
-
-                // Show round end dialog WITH the word
-                if (state.getRoundStatus().equals(WON)) {
-                    JOptionPane.showMessageDialog(
-                            this,
-                            "You won this round! The word was: " + state.getCorrectWord(),
-                            "Round Result",
-                            JOptionPane.INFORMATION_MESSAGE
-                    );
-                } else {
-                    JOptionPane.showMessageDialog(
-                            this,
-                            "You lost this round. The correct word was: " + state.getCorrectWord(),
-                            "Round Result",
-                            JOptionPane.INFORMATION_MESSAGE
-                    );
-                }
-
-                // Show the presenter's message (which can still include the word)
-                if (state.getMessage() != null && !state.getMessage().isEmpty()) {
-                    messageLabel.setText(state.getMessage());
-                }
-
-                // DO NOT reset remainingAttempts here; interactor/DAO manage it
-
-                // Renew the letter buttons for the next round
-                this.remove(this.alphabetButtonsPanel);
-                this.alphabetButtonsPanel = this.createNewLetterButtonsPanel();
-                this.add(alphabetButtonsPanel);
-                this.revalidate();
-                this.repaint();
-            } else {
-                // Still guessing in current round (normal letter click)
-                if (state.getMessage() != null && !state.getMessage().isEmpty()) {
-                    messageLabel.setText(state.getMessage());
-                }
-            }
-
-            this.roundNumberLabel.setText("Round number: " + currentRound);
-            hangmanImagePanel.setIncorrectGuesses(maxAttempts - remainingAttempts);
-            this.attemptsLabel.setText("Attempts left: " + remainingAttempts);
-
-            // Enable/disable alphabet buttons based on remaining attempts
-            if (remainingAttempts <= 0) {
-                setAlphabetButtonsEnabled(false);
-            } else {
-                setAlphabetButtonsEnabled(true);
-            }
-
-            // Update the displayed word
-            this.wordPuzzleLabel.setText(state.getMaskedWord());
+        // Update hint display
+        if (state.getHintText() != null) {
+            System.out.println("Hint updated");
+            hintTextArea.setText("Hint: " + state.getHintText());
         }
         else {
-            // GAME OVER (no more rounds)
-            if (state.getMessage() != null && !state.getMessage().isEmpty()) {
-                messageLabel.setText(state.getMessage());
-            } else if (state.getCorrectWord() != null && !state.getCorrectWord().isEmpty()) {
-                messageLabel.setText("Game Over. The correct word was: " + state.getCorrectWord());
-            } else {
-                messageLabel.setText("Game Over!");
-            }
-
-            // Disable alphabet buttons when game is over
-            setAlphabetButtonsEnabled(false);
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Game Over!",
-                    "Game Over",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
+            hintTextArea.setText("Hint: ");
         }
     }
 
-    private JPanel createNewLetterButtonsPanel() {
-        JPanel lettersPanel = new JPanel(new GridLayout(2, 13, 5, 5));
+    private void disableAlphabetButtons() {
+        for (Component component : this.alphabetButtonsPanel.getComponents()) {
+            if (component instanceof JButton) {
+                component.setEnabled(false);
+            }
+        }
+    }
 
+    private JPanel createNewAlphabetButtonsPanel() {
+        final JPanel alphabetButtonsPanel = new JPanel(new GridLayout(2, 13, 5, 5));
+        fillAlphabetButtonsPanel(alphabetButtonsPanel);
+        return alphabetButtonsPanel;
+    }
+
+    private void fillAlphabetButtonsPanel(JPanel lettersPanel) {
         for (int i = 0; i < 26; i++) {
             final char letter = (char) ('A' + i);
             JButton button = new JButton(String.valueOf(letter));
 
             button.addActionListener(e -> {
-
-                // Make a guess by the letter
                 makeGuessController.execute(Character.toLowerCase(letter));
-
-                // Disable the button so it can't be clicked again
                 button.setEnabled(false);
-
-                // Change the button color
                 button.setBackground(Color.LIGHT_GRAY);
             });
 
             lettersPanel.add(button);
         }
+    }
 
-        return lettersPanel;
+    private void resetAlphabetButtonsPanel() {
+        // Removes all the old buttons
+        alphabetButtonsPanel.removeAll();
+        // Fills the panel with new buttons
+        fillAlphabetButtonsPanel(alphabetButtonsPanel);
+        alphabetButtonsPanel.revalidate();
+        alphabetButtonsPanel.repaint();
     }
 
     private void returnToStartView() {
-        // Clear UI state for a fresh game
-        messageLabel.setText(" ");
-        lastRoundNumber = 1;
-        wordPuzzleLabel.setText("????");
-
-        // Use a neutral placeholder; new game/difficulty will set proper values
-        attemptsLabel.setText("Attempts left: 0");
-        roundNumberLabel.setText("Round number: 1");
-        hangmanImagePanel.setIncorrectGuesses(0);
-
-        // Disable alphabet buttons until a new game actually starts
-        setAlphabetButtonsEnabled(false);
-
+        this.resetAlphabetButtonsPanel();
         if (viewManagerModel != null) {
             viewManagerModel.setState("Generate Word");
             viewManagerModel.firePropertyChange();
-        } else {
+        }
+        else {
             JOptionPane.showMessageDialog(
                     this,
                     "Navigation error: viewManagerModel not set.",

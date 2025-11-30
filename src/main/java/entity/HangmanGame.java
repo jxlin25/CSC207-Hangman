@@ -21,10 +21,12 @@ public class HangmanGame {
         this.rounds = new ArrayList<>();
         this.maxAttempts = maxAttempts;
 
-        //creating rounds of the game
+        // Creating rounds of the game
         for (String word : words) {
             WordPuzzle wordPuzzle = new WordPuzzle(word.toCharArray());
             this.rounds.add(new Round(wordPuzzle,maxAttempts));
+            final WordPuzzle wordPuzzle = new WordPuzzle(word.toCharArray());
+            this.rounds.add(new Round(wordPuzzle));
         }
         this.currentRoundIndex = 0;
     }
@@ -35,6 +37,13 @@ public class HangmanGame {
     public int getMaxAttempts() {
         return maxAttempts;
     }
+    public ArrayList<Round> getRounds() {
+        return (ArrayList<Round>) rounds.clone();
+    }
+
+    public int getCurrentRoundIndex() {
+        return currentRoundIndex;
+    }
 
     /**
      * Gets the currently active round.
@@ -44,14 +53,12 @@ public class HangmanGame {
         return rounds.get(currentRoundIndex);
     }
 
-    public Round getRound(int index){
-        if(index >= 0 && index < this.rounds.size()){
-            return this.rounds.get(index);
+    public Round getRound(int index) {
+        Round result = null;
+        if (index >= 0 && index < this.rounds.size()) {
+            result = this.rounds.get(index);
         }
-        else{
-            return null;
-        }
-
+        return result;
     }
 
     /**
@@ -60,10 +67,10 @@ public class HangmanGame {
      */
     public boolean startNextRound(boolean won) {
         if (won){
-            this.getCurrentRound().setWON();
+            this.getCurrentRound().setWon();
         }
         else{
-            this.getCurrentRound().setLOST();
+            this.getCurrentRound().setLost();
         }
         if (currentRoundIndex >= rounds.size() - 1) {
             return false; // cannot move to next round
@@ -83,7 +90,7 @@ public class HangmanGame {
 
         // Check if all the round has the status of either WON or LOST
         // If not, immediately return false
-        for  (Round round : rounds) {
+        for (Round round : rounds) {
             if (!(round.getStatus() == Constant.StatusConstant.WON || round.getStatus() == Constant.StatusConstant.LOST)) {
                 return false;
             }

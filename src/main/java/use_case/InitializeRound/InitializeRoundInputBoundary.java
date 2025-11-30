@@ -1,6 +1,6 @@
-package use_case.InitializeFirstRound;
+package use_case.InitializeRound;
 
-public interface InitializeFirstRoundInputBoundary {
+public interface InitializeRoundInputBoundary {
 
     /**
      * Executes the Initialize First Round use case.

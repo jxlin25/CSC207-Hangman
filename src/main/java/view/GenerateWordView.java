@@ -1,8 +1,9 @@
 package view;
 
+import interface_adapter.EndGameResults.EndGameResultsController;
 import interface_adapter.GenerateWord.GenerateWordController;
 import interface_adapter.GenerateWord.GenerateWordViewModel;
-import interface_adapter.InitializeFirstRound.InitializeFirstRoundController;
+import interface_adapter.InitializeRound.InitializeRoundController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +15,7 @@ public class GenerateWordView extends JPanel implements PropertyChangeListener {
 
     private GenerateWordController generateWordController;
     private final GenerateWordViewModel generateWordViewModel;
-    private InitializeFirstRoundController initializeFirstRoundController;
+    private InitializeRoundController initializeRoundController;
 
     private final JButton startGameButton;
     private final JComboBox<Integer> numberSelector;
@@ -45,12 +46,12 @@ public class GenerateWordView extends JPanel implements PropertyChangeListener {
         startGameButton.addActionListener(evt -> {
             if (evt.getSource().equals(startGameButton)) {
                 int numberOfWords = (Integer) numberSelector.getSelectedItem();
-
-                // Use the attempts value that was previously set
-                generateWordController.execute(numberOfWords, selectedAttempts);
-                initializeFirstRoundController.execute();
+                generateWordController.execute(numberOfWords);// Generate the HangmanGame entity for the game
+                initializeRoundController.execute();// Update the data of the first word to the view
             }
         });
+
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JPanel numberPanel = new JPanel();
         numberPanel.add(numberLabel);
@@ -72,8 +73,9 @@ public class GenerateWordView extends JPanel implements PropertyChangeListener {
         this.generateWordController = generateWordController;
     }
 
-    public void setInitializeFirstRoundController(InitializeFirstRoundController initializeFirstRoundController) {
-        this.initializeFirstRoundController = initializeFirstRoundController;
+
+    public void setInitializeRoundController(InitializeRoundController initializeRoundController) {
+        this.initializeRoundController = initializeRoundController;
     }
 
     /**
