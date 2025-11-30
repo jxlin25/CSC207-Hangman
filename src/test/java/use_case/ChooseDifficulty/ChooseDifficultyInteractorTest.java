@@ -1,6 +1,5 @@
 package use_case.ChooseDifficulty;
 
-import Constant.AttemptsConstant;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -9,6 +8,38 @@ import static org.junit.Assert.*;
  * Tests for ChooseDifficultyInteractor to achieve 100% coverage.
  */
 public class ChooseDifficultyInteractorTest {
+
+    /**
+     * Simple in-memory test double for the data access interface.
+     * It stores the last values written by the interactor.
+     */
+    private static class TestDataAccess implements ChooseDifficultyDataAccessInterface {
+        private int storedMaxAttempts;
+        private int storedHintAttempts;
+
+        @Override
+        public void setMaxAttempt(int maxAttempts) {
+            this.storedMaxAttempts = maxAttempts;
+        }
+
+        @Override
+        public void setHintAttempts(int hintAttempts) {
+            this.storedHintAttempts = hintAttempts;
+        }
+
+        @Override
+        public int getHintAttempts() {
+            return storedHintAttempts;
+        }
+
+        int getStoredMaxAttempts() {
+            return storedMaxAttempts;
+        }
+
+        int getStoredHintAttempts() {
+            return storedHintAttempts;
+        }
+    }
 
     /**
      * Simple test double for the output boundary that stores the last output.
@@ -21,95 +52,69 @@ public class ChooseDifficultyInteractorTest {
             this.lastOutput = outputData;
         }
 
-        public ChooseDifficultyOutputData getLastOutput() {
+        ChooseDifficultyOutputData getLastOutput() {
             return lastOutput;
         }
     }
 
-    /**
-     * Simple test implementation of the input data.
-     * If you already have a real ChooseDifficultyInputData class,
-     * you can replace this with that class in the tests.
-     */
-    private static class TestInputData implements ChooseDifficultyInputData {
-        private final String difficulty;
-
-        TestInputData(String difficulty) {
-            this.difficulty = difficulty;
-        }
-
-        @Override
-        public String getDifficulty() {
-            return difficulty;
-        }
-    }
-
     @Test
-    public void execute_easyDifficulty_setsEasyAttemptsAndUppercaseLabel() {
+    public void execute_storesValuesInDao_andPresentsOutput_basicCase() {
         // Arrange
         TestPresenter presenter = new TestPresenter();
-        ChooseDifficultyInteractor interactor = new ChooseDifficultyInteractor(presenter);
-        ChooseDifficultyInputData input = new TestInputData("easy"); // lower-case to test toUpperCase()
+        TestDataAccess dataAccess = new TestDataAccess();
+        ChooseDifficultyInteractor interactor =
+                new ChooseDifficultyInteractor(presenter, dataAccess);
+
+        int maxAttempts = 10;
+        int hintAttempts = 3;
+        ChooseDifficultyInputData inputData =
+                new ChooseDifficultyInputData(maxAttempts, hintAttempts);
 
         // Act
-        interactor.execute(input);
+        interactor.execute(inputData);
 
-        // Assert
+        // Assert DAO interaction
+        assertEquals("DAO should store maxAttempts",
+                maxAttempts, dataAccess.getStoredMaxAttempts());
+        assertEquals("DAO should store hintAttempts",
+                hintAttempts, dataAccess.getStoredHintAttempts());
+        assertEquals("DAO.getHintAttempts should return stored hintAttempts",
+                hintAttempts, dataAccess.getHintAttempts());
+
+        // Assert presenter interaction
         ChooseDifficultyOutputData output = presenter.getLastOutput();
-        assertNotNull(output);  // no message arg, avoids overload confusion
-        assertEquals("EASY", output.getDifficulty());
-        assertEquals(AttemptsConstant.EASY_ATTEMPTS, output.getMaxAttempts());
+        assertNotNull("Presenter should receive an output", output);
+        assertEquals("Output maxAttempts should match input",
+                maxAttempts, output.getMaxAttempts());
+        assertEquals("Output hintAttempts should match input",
+                hintAttempts, output.getHintAttempts());
     }
 
     @Test
-    public void execute_hardDifficulty_setsHardAttemptsAndUppercaseLabel() {
+    public void execute_withDifferentValues_stillPassesThemThrough() {
         // Arrange
         TestPresenter presenter = new TestPresenter();
-        ChooseDifficultyInteractor interactor = new ChooseDifficultyInteractor(presenter);
-        ChooseDifficultyInputData input = new TestInputData("HaRd"); // mixed case
+        TestDataAccess dataAccess = new TestDataAccess();
+        ChooseDifficultyInteractor interactor =
+                new ChooseDifficultyInteractor(presenter, dataAccess);
+
+        int maxAttempts = 4;
+        int hintAttempts = 1;
+        ChooseDifficultyInputData inputData =
+                new ChooseDifficultyInputData(maxAttempts, hintAttempts);
 
         // Act
-        interactor.execute(input);
+        interactor.execute(inputData);
 
-        // Assert
-        ChooseDifficultyOutputData output = presenter.getLastOutput();
-        assertNotNull(output);
-        assertEquals("HARD", output.getDifficulty());
-        assertEquals(AttemptsConstant.HARD_ATTEMPTS, output.getMaxAttempts());
-    }
+        // Assert DAO interaction
+        assertEquals(maxAttempts, dataAccess.getStoredMaxAttempts());
+        assertEquals(hintAttempts, dataAccess.getStoredHintAttempts());
+        assertEquals(hintAttempts, dataAccess.getHintAttempts());
 
-    @Test
-    public void execute_normalDifficulty_setsNormalAttemptsAndUppercaseLabel() {
-        // Arrange
-        TestPresenter presenter = new TestPresenter();
-        ChooseDifficultyInteractor interactor = new ChooseDifficultyInteractor(presenter);
-        ChooseDifficultyInputData input = new TestInputData("NORMAL"); // already uppercase
-
-        // Act
-        interactor.execute(input);
-
-        // Assert
+        // Assert presenter interaction
         ChooseDifficultyOutputData output = presenter.getLastOutput();
         assertNotNull(output);
-        assertEquals("NORMAL", output.getDifficulty());
-        assertEquals(AttemptsConstant.NORMAL_ATTEMPTS, output.getMaxAttempts());
-    }
-
-    @Test
-    public void execute_unknownDifficulty_defaultsToNormal() {
-        // Arrange
-        TestPresenter presenter = new TestPresenter();
-        ChooseDifficultyInteractor interactor = new ChooseDifficultyInteractor(presenter);
-        ChooseDifficultyInputData input = new TestInputData("invalid-value");
-
-        // Act
-        interactor.execute(input);
-
-        // Assert
-        ChooseDifficultyOutputData output = presenter.getLastOutput();
-        assertNotNull(output);
-        // For unknown difficulties, the code falls through to the default case and sets "NORMAL"
-        assertEquals("NORMAL", output.getDifficulty());
-        assertEquals(AttemptsConstant.NORMAL_ATTEMPTS, output.getMaxAttempts());
+        assertEquals(maxAttempts, output.getMaxAttempts());
+        assertEquals(hintAttempts, output.getHintAttempts());
     }
 }
