@@ -15,19 +15,10 @@ public class MakeGuessState {
     private String message = "";
     private String hintText;
     private boolean resetAlphabetButtons;
+    private int maxAttempts = 6;
+    private int totalRound = 1;
 
     public MakeGuessState() {
-
-    }
-
-    public MakeGuessState(String guessedLetter, boolean isGuessCorrect, boolean isGameOver, String roundStatus, int remainingAttempts, int currentRoundNumber,  String maskedWord) {
-        this.guessedLetter = guessedLetter;
-        this.isGuessCorrect = isGuessCorrect;
-        this.isGameOver = isGameOver;
-        this.roundStatus = roundStatus;
-        this.remainingAttempts = remainingAttempts;
-        this.currentRoundNumber = currentRoundNumber;
-        this.maskedWord = maskedWord;
 
     }
 
@@ -109,6 +100,22 @@ public class MakeGuessState {
 
     public void setResetAlphabetButtons(boolean resetAlphabetButtons) {
         this.resetAlphabetButtons = resetAlphabetButtons;
+    }
+
+    public int getMaxAttempts() {
+        return maxAttempts;
+    }
+
+    public void setMaxAttempts(int maxAttempts) {
+        this.maxAttempts = maxAttempts;
+    }
+
+    public int getTotalRound() {
+        return totalRound;
+    }
+
+    public void setTotalRound(int totalRound) {
+        this.totalRound = totalRound;
     }
 }
 

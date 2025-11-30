@@ -15,13 +15,12 @@ public class Round {
     private ArrayList<Guess> guesses;
     private int attempt;
 
-    public Round(WordPuzzle wordPuzzle, int attempts) {
+    public Round(WordPuzzle wordPuzzle) {
         this.wordPuzzle = wordPuzzle;
         this.status = Constant.StatusConstant.WAITING;
         this.guesses = new ArrayList<Guess>();
-        this.attempt = attempts; //can be modified once all the difficulty levels are implemented
+        this.attempt = 6; //can be modified once all the difficulty levels are implemented
     }
-
 
     public String getStatus() {
         return status;
@@ -31,18 +30,32 @@ public class Round {
         this.status = status;
     }
 
+    /**
+     * Sets the status of the current round to WON.
+     */
     public void setWon() {
         this.setStatus(Constant.StatusConstant.WON);
     }
 
+    /**
+     * Sets the status of the current round to LOST.
+     */
     public void setLost() {
         this.setStatus(StatusConstant.LOST);
     }
 
+    /**
+     * Sets the status of the current round to GUESSING,
+     * marking this round as started.
+     */
     public void startRound() {
         this.setStatus(Constant.StatusConstant.GUESSING);
     }
 
+    /**
+     * Add a guess to this round.
+     * @param guess the guess object that is going to be added
+     */
     public void addGuess(Guess guess) {
         this.guesses.add(guess);
     }
@@ -55,7 +68,7 @@ public class Round {
         this.attempt = attempt;
     }
 
-    public boolean isPuzzleComplete(){
+    public boolean isPuzzleComplete() {
         return wordPuzzle.isPuzzleComplete();
     }
 
@@ -69,6 +82,7 @@ public class Round {
      * @return boolean of whether the guess is correct
      */
     public boolean isGuessCorrect(Guess guess) {
+
         return this.wordPuzzle.isLetterHidden(guess.getLetter());
     }
 }

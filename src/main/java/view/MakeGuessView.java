@@ -187,7 +187,7 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         System.out.println("isGameOver: " + state.isGameOver());
         System.out.println("----------------------------");
 
-        final int maxAttempts = 6;
+        final int maxAttempts = state.getMaxAttempts();
         final int remainingAttempts = state.getRemainingAttempts();
 
         this.roundNumberLabel.setText("Round number: " + state.getCurrentRoundNumber());

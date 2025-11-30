@@ -3,8 +3,7 @@ package entity;
 public class Player {
 
     private String name;
-    //leave for multiplayer mode
-    //private String uid;
+
     private int score;
     private String status;
     private long timeTaken;

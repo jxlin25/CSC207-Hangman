@@ -31,7 +31,7 @@ public class ChooseDifficultyInteractor implements ChooseDifficultyInputBoundary
                 break;
         }
 
-        ChooseDifficultyOutputData outputData =
+        final ChooseDifficultyOutputData outputData =
                 new ChooseDifficultyOutputData(difficulty, maxAttempts);
 
         presenter.present(outputData);
