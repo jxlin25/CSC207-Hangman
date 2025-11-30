@@ -4,9 +4,9 @@ import entity.Guess;
 import entity.HangmanGame;
 import entity.Round;
 import entity.WordPuzzle;
-import use_case.ChooseDifficulty.ChooseDifficultyDataAccessInterface;
-import use_case.InitializeRound.InitializeRoundDataAccessInterface;
-import use_case.MakeGuess.HangmanGameDataAccessInterface;
+import use_case.choose_difficulty.ChooseDifficultyDataAccessInterface;
+import use_case.initialize_round.InitializeRoundDataAccessInterface;
+import use_case.make_guess.HangmanGameDataAccessInterface;
 
 public class InMemoryHangmanDataAccessObject implements
         HangmanGameDataAccessInterface,
@@ -113,7 +113,6 @@ public class InMemoryHangmanDataAccessObject implements
         return this.getHangmanGame().getCurrentRoundNumber();
     }
 
-    // full word string for the *current* round
     @Override
     public String getCurrentWord() {
         char[] letters = this.getCurrentWordPuzzleLetters();

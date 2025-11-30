@@ -4,36 +4,36 @@ import data_access.InMemoryHangmanDataAccessObject;
 import data_access.DBHintDataAccessObject;
 import data_access.DBGenerateWordDataAccessObject;
 
-import interface_adapter.ChooseDifficulty.ChooseDifficultyController;
-import interface_adapter.ChooseDifficulty.ChooseDifficultyPresenter;
-import interface_adapter.EndGameResults.EndGameResultsController;
-import interface_adapter.EndGameResults.EndGameResultsPresenter;
-import interface_adapter.InitializeRound.InitializeRoundController;
-import interface_adapter.InitializeRound.InitializeRoundPresenter;
+import interface_adapter.choose_difficulty.ChooseDifficultyController;
+import interface_adapter.choose_difficulty.ChooseDifficultyPresenter;
+import interface_adapter.endgame_results.EndGameResultsController;
+import interface_adapter.endgame_results.EndGameResultsPresenter;
+import interface_adapter.initialize_round.InitializeRoundController;
+import interface_adapter.initialize_round.InitializeRoundPresenter;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.GenerateWord.GenerateWordController;
-import interface_adapter.GenerateWord.GenerateWordPresenter;
-import interface_adapter.GenerateWord.GenerateWordViewModel;
-import interface_adapter.Hint.HintPresenter;
-import interface_adapter.Hint.HintController;
+import interface_adapter.generate_word.GenerateWordController;
+import interface_adapter.generate_word.GenerateWordPresenter;
+import interface_adapter.generate_word.GenerateWordViewModel;
+import interface_adapter.generate_hint.HintPresenter;
+import interface_adapter.generate_hint.HintController;
 
-import use_case.ChooseDifficulty.ChooseDifficultyInputBoundary;
-import use_case.ChooseDifficulty.ChooseDifficultyInteractor;
-import use_case.ChooseDifficulty.ChooseDifficultyOutputBoundary;
-import use_case.EndGameResults.EndGameResultsInputBoundary;
-import use_case.EndGameResults.EndGameResultsInteractor;
-import use_case.EndGameResults.EndGameResultsOutputBoundary;
-import use_case.Hint.HintInteractor;
+import use_case.choose_difficulty.ChooseDifficultyInputBoundary;
+import use_case.choose_difficulty.ChooseDifficultyInteractor;
+import use_case.choose_difficulty.ChooseDifficultyOutputBoundary;
+import use_case.endgame_results.EndGameResultsInputBoundary;
+import use_case.endgame_results.EndGameResultsInteractor;
+import use_case.endgame_results.EndGameResultsOutputBoundary;
+import use_case.generate_hint.HintInteractor;
 
-import use_case.GenerateWord.GenerateWordInputBoundary;
-import use_case.GenerateWord.GenerateWordInteractor;
-import use_case.GenerateWord.GenerateWordOutputBoundary;
-import use_case.Hint.HintInputBoundary;
-import use_case.Hint.HintOutputBoundary;
-import use_case.InitializeRound.InitializeRoundInputBoundary;
-import use_case.InitializeRound.InitializeRoundInteractor;
-import use_case.InitializeRound.InitializeRoundOutputBoundary;
-import use_case.MakeGuess.*;
+import use_case.generate_word.GenerateWordInputBoundary;
+import use_case.generate_word.GenerateWordInteractor;
+import use_case.generate_word.GenerateWordOutputBoundary;
+import use_case.generate_hint.HintInputBoundary;
+import use_case.generate_hint.HintOutputBoundary;
+import use_case.initialize_round.InitializeRoundInputBoundary;
+import use_case.initialize_round.InitializeRoundInteractor;
+import use_case.initialize_round.InitializeRoundOutputBoundary;
+import use_case.make_guess.*;
 import view.GenerateWordView;
 import view.ViewManager;
 
@@ -48,11 +48,11 @@ import use_case.Room.RoomJoinInteractor;
 
 
 import view.MakeGuessView;
-import interface_adapter.MakeGuess.MakeGuessViewModel;
-import interface_adapter.MakeGuess.MakeGuessController;
-import interface_adapter.MakeGuess.MakeGuessPresenter;
+import interface_adapter.make_guess.MakeGuessViewModel;
+import interface_adapter.make_guess.MakeGuessController;
+import interface_adapter.make_guess.MakeGuessPresenter;
 
-import interface_adapter.EndGameResults.EndGameResultsViewModel;
+import interface_adapter.endgame_results.EndGameResultsViewModel;
 
 public class AppBuilder {
 

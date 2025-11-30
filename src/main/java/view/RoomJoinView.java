@@ -1,7 +1,7 @@
 package view;
 import javax.swing.*;
 import java.awt.*;
-import interface_adapter.Room.RoomJoinController;
+
 import use_case.Room.RoomJoinInteractor;
 
 public class RoomJoinView extends JFrame {

@@ -1,11 +1,10 @@
 package view;
 
-import Constant.AttemptsConstant;
-import interface_adapter.ChooseDifficulty.ChooseDifficultyController;
-import interface_adapter.EndGameResults.EndGameResultsController;
-import interface_adapter.GenerateWord.GenerateWordController;
-import interface_adapter.GenerateWord.GenerateWordViewModel;
-import interface_adapter.InitializeRound.InitializeRoundController;
+import constant.AttemptsConstant;
+import interface_adapter.choose_difficulty.ChooseDifficultyController;
+import interface_adapter.generate_word.GenerateWordController;
+import interface_adapter.generate_word.GenerateWordViewModel;
+import interface_adapter.initialize_round.InitializeRoundController;
 import interface_adapter.ViewManagerModel;
 
 import javax.swing.*;

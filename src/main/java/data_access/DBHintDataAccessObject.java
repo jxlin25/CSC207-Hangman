@@ -7,8 +7,8 @@ import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import Constant.Constants;
-import use_case.Hint.HintDataAccessInterface;
+import constant.Constants;
+import use_case.generate_hint.HintDataAccessInterface;
 
 public class DBHintDataAccessObject implements HintDataAccessInterface {
 
