@@ -1,9 +1,11 @@
 package interface_adapter.EndGameResults;
 
-import interface_adapter.ViewManagerModel;
-import use_case.EndGameResults.EndGameResultsOutputBoundary;
-import interface_adapter.EndGameResults.EndGameResultsState.RoundResult;
+// 1. Standard Java imports
 import java.util.List;
+
+import interface_adapter.EndGameResults.EndGameResultsState.RoundResult;
+import interface_adapter.ViewManagerModel;
+import use_case.endgameresults.EndGameResultsOutputBoundary;
 
 public class EndGameResultsPresenter implements EndGameResultsOutputBoundary {
 
@@ -19,7 +21,7 @@ public class EndGameResultsPresenter implements EndGameResultsOutputBoundary {
     public void present(String finalStatus, List<RoundResult> roundResults) {
 
         // Update the ViewModel State
-        EndGameResultsState state = endGameResultsViewModel.getState();
+        final EndGameResultsState state = endGameResultsViewModel.getState();
         state.setFinalStatus(finalStatus);
         state.setRoundResults(roundResults);
 

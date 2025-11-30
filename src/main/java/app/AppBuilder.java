@@ -15,15 +15,14 @@ import interface_adapter.GenerateWord.GenerateWordViewModel;
 import interface_adapter.Hint.HintPresenter;
 import interface_adapter.Hint.HintController;
 
-import use_case.EndGameResults.EndGameResultsInputBoundary;
-import use_case.EndGameResults.EndGameResultsInteractor;
-import use_case.EndGameResults.EndGameResultsOutputBoundary;
+import use_case.endgameresults.EndGameResultsInputBoundary;
+import use_case.endgameresults.EndGameResultsInteractor;
+import use_case.endgameresults.EndGameResultsOutputBoundary;
 import use_case.Hint.HintInteractor;
 
 import use_case.GenerateWord.GenerateWordInputBoundary;
 import use_case.GenerateWord.GenerateWordInteractor;
 import use_case.GenerateWord.GenerateWordOutputBoundary;
-import use_case.Hint.HintDataAccessInterface;
 import use_case.Hint.HintInputBoundary;
 import use_case.Hint.HintOutputBoundary;
 import use_case.InitializeRound.InitializeRoundInputBoundary;

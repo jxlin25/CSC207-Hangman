@@ -5,13 +5,14 @@
     <scanScope>JavaOnly</scanScope>
     <option name="thirdPartyClasspath" />
     <option name="activeLocationIds">
-      <option value="8e6aac86-7cd6-4edd-9751-405a4d0c78a5" />
+      <option value="c40a58d9-3fbb-41ae-a6f8-e43a246246f9" />
     </option>
     <option name="locations">
       <list>
         <ConfigurationLocation id="bundled-sun-checks" type="BUNDLED" scope="All" description="Sun Checks">(bundled)</ConfigurationLocation>
         <ConfigurationLocation id="bundled-google-checks" type="BUNDLED" scope="All" description="Google Checks">(bundled)</ConfigurationLocation>
         <ConfigurationLocation id="8e6aac86-7cd6-4edd-9751-405a4d0c78a5" type="LOCAL_FILE" scope="All" description="Checkstyle">$PROJECT_DIR$/mystyle.xml</ConfigurationLocation>
+        <ConfigurationLocation id="c40a58d9-3fbb-41ae-a6f8-e43a246246f9" type="LOCAL_FILE" scope="All" description="hangman game">$PROJECT_DIR$/mystyle.xml</ConfigurationLocation>
       </list>
     </option>
   </component>

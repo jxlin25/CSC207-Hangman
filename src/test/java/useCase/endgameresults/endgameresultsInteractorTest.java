@@ -1,4 +1,4 @@
-package use_case.EndGameResults;
+package use_case.endgameresults;
 
 import data_access.InMemoryHangmanDataAccessObject;
 import entity.HangmanGame;
@@ -9,13 +9,12 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static Constant.StatusConstant.*;
 import static org.junit.Assert.*;
 
 /**
  * Unit tests for EndGameResultsInteractor.
  */
-public class EndGameResultsInteractorTest {
+public class endgameresultsInteractorTest {
 
     /**
      * A dummy presenter that captures the output data.
@@ -131,7 +130,7 @@ public class EndGameResultsInteractorTest {
         DummyEndGameResultsPresenter presenter = new DummyEndGameResultsPresenter();
         EndGameResultsInteractor interactor = new EndGameResultsInteractor(presenter, dao);
 
-        EndGameResultsInputData inputData = new EndGameResultsInputData();
+        EndGameResultsInputData inputData = new use_case.endgameresults.EndGameResultsInputData();
 
         // Act
         interactor.execute(inputData);

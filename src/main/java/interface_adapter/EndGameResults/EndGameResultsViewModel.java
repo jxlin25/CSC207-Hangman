@@ -1,12 +1,13 @@
 package interface_adapter.EndGameResults;
 
-import interface_adapter.ViewModel;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+import interface_adapter.ViewModel;
+
 public class EndGameResultsViewModel extends ViewModel<EndGameResultsState> {
 
-    public final String VIEW_NAME = "ResultsView";
+    private final String viewName = "ResultsView";
     private EndGameResultsState state = new EndGameResultsState();
     private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
