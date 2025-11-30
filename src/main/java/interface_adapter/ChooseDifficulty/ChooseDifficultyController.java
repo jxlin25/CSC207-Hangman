@@ -11,9 +11,10 @@ public class ChooseDifficultyController {
         this.interactor = interactor;
     }
 
-    public void execute(String difficulty) {
-        ChooseDifficultyInputData inputData = new ChooseDifficultyInputData(difficulty);
+    public void execute(int maxAttempts) {
+        ChooseDifficultyInputData inputData = new ChooseDifficultyInputData(maxAttempts);
         interactor.execute(inputData);
     }
 }
+
 

@@ -1,5 +1,6 @@
 package view;
 
+import Constant.Constants;
 import interface_adapter.EndGameResults.EndGameResultsController;
 import interface_adapter.Hint.HintController;
 import interface_adapter.InitializeRound.InitializeRoundController;
@@ -182,18 +183,28 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
 
         System.out.println("Guessed letter: " + state.getGuessedLetter());
         System.out.println("Status: " + state.getRoundStatus());
+        System.out.println("Max attempts: " + state.getMaxAttempts());
         System.out.println("Remaining attempts: " + state.getRemainingAttempts());
         System.out.println("isGuessCorrect: " + state.isGuessCorrect());
         System.out.println("isGameOver: " + state.isGameOver());
         System.out.println("----------------------------");
 
-        final int maxAttempts = 6;
+        final int maxAttempts = state.getMaxAttempts();
         final int remainingAttempts = state.getRemainingAttempts();
 
         this.roundNumberLabel.setText("Round number: " + state.getCurrentRoundNumber());
-        hangmanImagePanel.setIncorrectGuesses(maxAttempts - remainingAttempts);
         this.attemptsLabel.setText("Attempts left: " + remainingAttempts);
         this.wordPuzzleLabel.setText(state.getMaskedWord());
+
+        // If the remaining attempts is more than the max index of
+        // the hangman figure (6), display hangman0.png
+        if (remainingAttempts > Constants.HANGMAN_FIGURE_MAX_INDEX ) {
+            this.hangmanImagePanel.setImageIndex(0);
+        }
+        else {
+            this.hangmanImagePanel.setImageIndex(
+                    Constants.HANGMAN_FIGURE_MAX_INDEX - remainingAttempts);
+        }
 
         if (state.getResetAlphabetButtons()) {
             this.resetAlphabetButtonsPanel();
@@ -243,6 +254,10 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         else {
             hintTextArea.setText("Hint: ");
         }
+    }
+
+    private void updateHangmanImagePanel(int index) {
+        this.hangmanImagePanel.setImageIndex(index);
     }
 
     private void disableAlphabetButtons() {

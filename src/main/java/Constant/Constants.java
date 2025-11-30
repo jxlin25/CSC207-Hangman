@@ -14,4 +14,6 @@ public class Constants {
     public static final String API_KEY_ENV_NAME = "GEMINI_API_KEY";
     public static final int SUCCEED_CODE = 200;
     public static final String DEF_STRING = "Definition: ";
+
+    public static final int HANGMAN_FIGURE_MAX_INDEX = 6;
 }

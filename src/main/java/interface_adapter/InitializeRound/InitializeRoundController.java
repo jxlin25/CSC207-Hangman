@@ -15,6 +15,5 @@ public class InitializeRoundController {
      */
     public void execute() {
         this.initializeRoundInputBoundary.execute();
-
     }
 }

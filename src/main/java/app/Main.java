@@ -11,7 +11,7 @@ public class Main {
                 .addEndGameResultsViewModel()
                 .addGenerateWordView()
                 .addMakeGuessView()
-                .addDifficultySelectionView()
+//                .addDifficultySelectionView()
                 .addEndGameResultsView()
 
                 .addRoomJoinView()
@@ -20,6 +20,7 @@ public class Main {
                 .addMakeGuessUseCase()
                 .addEndGameResultsUseCase()
                 .addHintUseCase()
+                .addChooseDifficultyUseCase()
                 .build();
         app.setSize(800, 600);
         app.setLocationRelativeTo(null);
