@@ -14,8 +14,9 @@ public class HintPresenter implements HintOutputBoundary {
 
     @Override
     public void prepareSuccessView(HintOutputData hintOutputData) {
-        MakeGuessState state = makeGuessViewModel.getState();
+        final MakeGuessState state = makeGuessViewModel.getState();
         state.setHintText(hintOutputData.getHint());
+        state.setHintAttempts(hintOutputData.getRemainHint());
 
         makeGuessViewModel.setState(state);
         makeGuessViewModel.firePropertyChanged();

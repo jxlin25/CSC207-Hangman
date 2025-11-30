@@ -147,6 +147,7 @@ public class DBHintDataAccessObject implements HintDataAccessInterface {
     @Nullable
     private static String getPreferredHint(JSONArray meanings, String word, String partOfSpeech) {
         String result = null;
+        String lowerWord = word.toLowerCase();
         for (int i = 0; i < meanings.length(); i++) {
             final JSONObject meaning = meanings.getJSONObject(i);
 
@@ -156,8 +157,14 @@ public class DBHintDataAccessObject implements HintDataAccessInterface {
 
             final JSONArray definitions = meaning.getJSONArray("definitions");
 
-            if (definitions.length() > 0) {
-                result = definitions.getJSONObject(0).getString("definition");
+            for (int j = 0; j < definitions.length(); j++) {
+                final String def = definitions.getJSONObject(j).getString("definition");
+                final String defLower = def.toLowerCase();
+
+                if (defLower.contains(lowerWord)) {
+                    continue;
+                }
+                result = def;
             }
         }
         return result;

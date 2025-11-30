@@ -121,6 +121,16 @@ public class InMemoryHangmanDataAccessObject implements
         }
     }
 
+    @Override
+    public void setHintAttempts(int hintAttempts) {
+        this.getHangmanGame().setHintAttempts(hintAttempts);
+    }
+
+    @Override
+    public int getHintAttempts() {
+        return this.getHangmanGame().getHintAttempts();
+    }
+
     public int getMaxAttempts() {
         return this.getHangmanGame().getMaxAttempts();
     }

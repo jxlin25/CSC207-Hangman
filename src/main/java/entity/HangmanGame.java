@@ -12,6 +12,7 @@ public class HangmanGame {
     private ArrayList<Round> rounds;
     private int currentRoundIndex;
     private int maxAttempts;
+    private int hintAttempts;
 
     /**
      * Creates a new game.
@@ -38,6 +39,21 @@ public class HangmanGame {
 
     public void setMaxAttempts(int maxAttempts) {
         this.maxAttempts = maxAttempts;
+    }
+
+    public int getHintAttempts() {
+        return hintAttempts;
+    }
+
+    public void setHintAttempts(int hintAttempts) {
+        this.hintAttempts = hintAttempts;
+    }
+
+    /**
+     * decreasing the hint attempts.
+     */
+    public void decreasingHint() {
+        this.hintAttempts = hintAttempts - 1;
     }
 
     public ArrayList<Round> getRounds() {
@@ -125,5 +141,4 @@ public class HangmanGame {
 
         return wins;
     }
-
 }

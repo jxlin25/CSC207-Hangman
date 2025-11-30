@@ -1,5 +1,6 @@
 package use_case.Hint;
 
+import entity.HangmanGame;
 import use_case.MakeGuess.HangmanGameDataAccessInterface;
 
 /**
@@ -22,6 +23,8 @@ public class HintInteractor implements HintInputBoundary {
     @Override
     public void execute() {
         final String word = new String(hangmanGameDataAccessInterface.getCurrentWordPuzzle().getLetters());
+        hangmanGameDataAccessInterface.getHangmanGame().decreasingHint();
+        final int remainHint = hangmanGameDataAccessInterface.getHangmanGame().getHintAttempts();
         String hint = "";
         if (hintDataAccessInterface.isApiKeyValid()) {
             hint = hintDataAccessInterface.getGemiHint(word);
@@ -36,7 +39,7 @@ public class HintInteractor implements HintInputBoundary {
         if (hint == null || hint.trim().isEmpty()) {
             hint = "No hint available.";
         }
-        final HintOutputData hintOutputData = new HintOutputData(hint);
+        final HintOutputData hintOutputData = new HintOutputData(hint, remainHint);
         System.out.println("----------------------------");
         System.out.println("The Hint is :" + hint);
         System.out.println("----------------------------");

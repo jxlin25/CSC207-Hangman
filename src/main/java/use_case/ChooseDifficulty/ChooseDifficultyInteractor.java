@@ -18,8 +18,10 @@ public class ChooseDifficultyInteractor implements ChooseDifficultyInputBoundary
     public void execute(ChooseDifficultyInputData inputData) {
 
         final int maxAttempts = inputData.getMaxAttempts();
+        final int hintAttempts = inputData.getHintAttempts();
 
         chooseDifficultyDataAccessObject.setMaxAttempt(maxAttempts);
+        chooseDifficultyDataAccessObject.setHintAttempts(hintAttempts);
 
 //        int maxAttempts;
 //
@@ -40,7 +42,7 @@ public class ChooseDifficultyInteractor implements ChooseDifficultyInputBoundary
 //        }
 
         final ChooseDifficultyOutputData outputData =
-                new ChooseDifficultyOutputData(maxAttempts);
+                new ChooseDifficultyOutputData(maxAttempts, hintAttempts);
 
         presenter.present(outputData);
     }
