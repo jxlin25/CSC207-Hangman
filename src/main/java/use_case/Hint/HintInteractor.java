@@ -21,13 +21,13 @@ public class HintInteractor implements HintInputBoundary {
 
     @Override
     public void execute() {
-        String word = new String(hangmanGameDataAccessInterface.getCurrentWordPuzzle().getLetters());
+        final String word = new String(hangmanGameDataAccessInterface.getCurrentWordPuzzle().getLetters());
         String hint = "";
         if (hintDataAccessInterface.isApiKeyValid()) {
             hint = hintDataAccessInterface.getGemiHint(word);
         }
         else {
-            String dictHint = hintDataAccessInterface.getDictHint(word);
+            final String dictHint = hintDataAccessInterface.getDictHint(word);
             if (!(dictHint == null || dictHint.trim().isEmpty())) {
                 hint = "You haven't set an API Key or the Key is invalid. Here is a hint from the dictionary: "
                         + hintDataAccessInterface.getDictHint(word);
