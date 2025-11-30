@@ -84,7 +84,8 @@ public class InMemoryHangmanDataAccessObject implements
     @Override
     public char[] getCurrentWordPuzzleLetters() {
         // WordPuzzle exposes the underlying letters via getLetters()
-        return this.getCurrentWordPuzzle().getLetters();
+        return this.getCurrentWordPuzzle().getLetters();}
+
     public boolean isCurrentRoundTheLastRound() {
         return this.getHangmanGame().getCurrentRoundIndex() == this.getHangmanGame().getRounds().size() - 1;
     }
@@ -147,31 +148,6 @@ public class InMemoryHangmanDataAccessObject implements
         // Example logic: if  Round entity keeps the starting attempts of round 1,
         // return that. Adjust to actual model.
         return this.getHangmanGame().getMaxAttempts();
-    }
-//    // InitializeFirstRoundDataAccessInterface
-//    @Override
-//    public Round getFirstRound() {
-//        return this.currentHangmanGame.getRound(0);
-//    }
-//
-//    @Override
-//    public String getFirstMaskedWord() {
-//        return this.getFirstWordPuzzle().getMaskedWord();
-//    }
-//
-//    @Override
-//    public WordPuzzle getFirstWordPuzzle() {
-//        return this.getFirstRound().getWordPuzzle();
-//    }
-//
-//    @Override
-//    public int getFirstRoundNumber() {
-//        return 1;
-//    }
-//
-//    @Override
-//    public int getFirstRoundAttempt() {
-//        return this.getFirstRound().getAttempt();
-//    }
+
 }
 
