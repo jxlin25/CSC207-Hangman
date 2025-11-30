@@ -30,16 +30,21 @@ import use_case.InitializeRound.InitializeRoundInputBoundary;
 import use_case.InitializeRound.InitializeRoundInteractor;
 import use_case.InitializeRound.InitializeRoundOutputBoundary;
 import use_case.MakeGuess.*;
+import view.GenerateWordView;
+import view.ViewManager;
+import view.ChooseDifficultyView;
 
 import view.*;
 
 import javax.swing.*;
 import java.awt.*;
 
+import view.RoomJoinView;
 import interface_adapter.Room.RoomJoinController;
 import use_case.Room.RoomJoinInteractor;
 
 
+import view.MakeGuessView;
 import interface_adapter.MakeGuess.MakeGuessViewModel;
 import interface_adapter.MakeGuess.MakeGuessController;
 import interface_adapter.MakeGuess.MakeGuessPresenter;
@@ -68,6 +73,7 @@ public class AppBuilder {
     private GenerateWordView generateWordView;
     private MakeGuessView makeGuessView;
     private RoomJoinView roomJoinView;
+    private ChooseDifficultyView chooseDifficultyView;
     private EndGameResultsView endGameResultsView;
 
     //Controller
@@ -99,6 +105,13 @@ public class AppBuilder {
         cardPanel.add(makeGuessView, makeGuessView.getViewName());
         return this;
     }
+
+    public AppBuilder addDifficultySelectionView() {
+        // Ensure generateWordView is already created before this is called
+        chooseDifficultyView = new ChooseDifficultyView(viewManagerModel, generateWordView);
+        cardPanel.add(chooseDifficultyView, chooseDifficultyView.getViewName());
+        return this;
+        }
 
     public AppBuilder addEndGameResultsView() {
         endGameResultsView = new EndGameResultsView(endGameResultsViewModel);
@@ -204,7 +217,13 @@ public class AppBuilder {
         menuBar.add(gameMenu);
         application.setJMenuBar(menuBar);
 
-        viewManagerModel.setState(generateWordView.getViewName());
+        // CHANGED: start on difficulty selection instead of generate word
+        if (chooseDifficultyView != null) {
+            viewManagerModel.setState(chooseDifficultyView.getViewName());
+        } else {
+            // fallback to generateWordView if difficultySelectionView not configured
+            viewManagerModel.setState(generateWordView.getViewName());
+        }
         viewManagerModel.firePropertyChange();
         // Add the main content
         return application;

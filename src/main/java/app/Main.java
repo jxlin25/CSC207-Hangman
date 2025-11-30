@@ -11,6 +11,7 @@ public class Main {
                 .addEndGameResultsViewModel()
                 .addGenerateWordView()
                 .addMakeGuessView()
+                .addDifficultySelectionView()
                 .addEndGameResultsView()
 
                 .addRoomJoinView()
@@ -25,3 +26,5 @@ public class Main {
         app.setVisible(true);
     }
 }
+
+

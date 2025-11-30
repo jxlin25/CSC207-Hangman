@@ -11,22 +11,33 @@ public class HangmanGame {
 
     private ArrayList<Round> rounds;
     private int currentRoundIndex;
+    private final int maxAttempts;
+
 
     /**
      * Creates a new game.
      * @param words A list of words, where each round contains a word
      */
-    public HangmanGame(List<String> words) {
+    public HangmanGame(List<String> words, int maxAttempts) {
         this.rounds = new ArrayList<>();
+        this.maxAttempts = maxAttempts;
 
         // Creating rounds of the game
         for (String word : words) {
+            WordPuzzle wordPuzzle = new WordPuzzle(word.toCharArray());
+            this.rounds.add(new Round(wordPuzzle,maxAttempts));
             final WordPuzzle wordPuzzle = new WordPuzzle(word.toCharArray());
             this.rounds.add(new Round(wordPuzzle));
         }
         this.currentRoundIndex = 0;
     }
 
+    /**
+     * Gets the maximum attempts per round for this game (difficulty).
+     */
+    public int getMaxAttempts() {
+        return maxAttempts;
+    }
     public ArrayList<Round> getRounds() {
         return (ArrayList<Round>) rounds.clone();
     }

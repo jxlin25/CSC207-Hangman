@@ -26,16 +26,18 @@ public class GenerateWordPresenter implements GenerateWordOutputBoundary {
 
     @Override
     public void prepareSuccessView(GenerateWordOutputData outputData) {
+        // Update GenerateWord state
         final GenerateWordState state = generateWordViewModel.getState();
         state.setWords(outputData.getWords());
         state.setError(null);
         generateWordViewModel.setState(state);
         generateWordViewModel.firePropertyChange();
-
+        // Update MakeGuess state with attempts from difficulty
         final MakeGuessState makeGuessState = makeGuessViewModel.getState();
+        makeGuessState.setRemainingAttempts(outputData.getAttempts());
         makeGuessViewModel.setState(makeGuessState);
         makeGuessViewModel.firePropertyChange();
-
+        // Switch view to MakeGuess
         viewManagerModel.setState(makeGuessViewModel.getViewName());
         viewManagerModel.firePropertyChange();
     }

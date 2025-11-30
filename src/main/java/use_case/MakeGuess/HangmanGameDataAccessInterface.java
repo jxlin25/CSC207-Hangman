@@ -112,4 +112,12 @@ public interface HangmanGameDataAccessInterface {
      */
     boolean[] getCurrentWordPuzzleRevealedLettersBooleans();
 
+    /**
+     * Gets the full word of the current WordPuzzle.
+     * @return the full word of the current WordPuzzle as a String
+     */
+    String getCurrentWord();
+
+    // NEW: this returns the initial attempts value for this game/difficulty
+    int getInitialAttemptsForGame();
 }

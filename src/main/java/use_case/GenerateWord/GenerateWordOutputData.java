@@ -9,12 +9,18 @@ import java.util.ArrayList;
 public class GenerateWordOutputData {
 
     private final ArrayList<String> words;
+    private final int attempts;
 
-    public GenerateWordOutputData(ArrayList<String> words) {
+    public GenerateWordOutputData(ArrayList<String> words, int attempts) {
         this.words = words;
+        this.attempts = attempts;
     }
 
     public ArrayList<String> getWords() {
         return words;
+    }
+
+    public int getAttempts() {
+        return attempts;
     }
 }

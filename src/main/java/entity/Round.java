@@ -15,12 +15,13 @@ public class Round {
     private ArrayList<Guess> guesses;
     private int attempt;
 
-    public Round(WordPuzzle wordPuzzle) {
+    public Round(WordPuzzle wordPuzzle, int attempts) {
         this.wordPuzzle = wordPuzzle;
         this.status = Constant.StatusConstant.WAITING;
         this.guesses = new ArrayList<Guess>();
-        this.attempt = 6; //can be modified once all the difficulty levels are implemented
+        this.attempt = attempts; //can be modified once all the difficulty levels are implemented
     }
+
 
     public String getStatus() {
         return status;

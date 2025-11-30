@@ -3,6 +3,8 @@ package interface_adapter.MakeGuess;
 import use_case.MakeGuess.MakeGuessOutputBoundary;
 import use_case.MakeGuess.MakeGuessOutputData;
 
+import static Constant.StatusConstant.*;
+
 /** The Presenter for the MakeGuess use case.
  */
 public class MakeGuessPresenter implements MakeGuessOutputBoundary {
@@ -27,7 +29,7 @@ public class MakeGuessPresenter implements MakeGuessOutputBoundary {
         state.setMaskedWord(outputData.getMaskedWord());
         state.setResetAlphabetButtons(false);
 
-//        // If the game is over...
+        //        // If the game is over...
 //        if (outputData.isGameOver()) {
 //            state.setMessage("Game Over!");
 //        }
@@ -60,6 +62,40 @@ public class MakeGuessPresenter implements MakeGuessOutputBoundary {
 //                }
 //            }
 //        }
+
+        // existing (new) field
+        state.setCorrectWord(outputData.getCorrectWord());
+
+        // NEW: store maxAttempts from outputData into state
+        state.setMaxAttempts(outputData.getMaxAttempts());
+
+        // Build a user-friendly message
+        String message = "";
+        if (outputData.isGameOver()) {
+            if (WON.equals(outputData.getRoundStatus())) {
+                message = "You won the game! Final word: " + outputData.getCorrectWord();
+            } else if (LOST.equals(outputData.getRoundStatus())) {
+                message = "Game over. The correct word was: " + outputData.getCorrectWord();
+            } else {
+                message = "Game over!";
+            }
+        } else {
+            if (GUESSING.equals(outputData.getRoundStatus())) {
+                if (outputData.isGuessCorrect()) {
+                    message = "Correct guess! " + outputData.getRemainingAttempts() + " attempts left.";
+                } else {
+                    message = "Wrong guess. " + outputData.getRemainingAttempts() + " attempts left.";
+                }
+            } else if (WON.equals(outputData.getRoundStatus())) {
+                message = "You won this round! The word was: " + outputData.getCorrectWord();
+            } else if (LOST.equals(outputData.getRoundStatus())) {
+                message = "You lost this round. The correct word was: " + outputData.getCorrectWord();
+            }
+        }
+
+        // NEW: actually store message to state (UI can display it)
+        state.setMessage(message);
+
         makeGuessViewModel.setState(state);
         makeGuessViewModel.firePropertyChanged();
     }

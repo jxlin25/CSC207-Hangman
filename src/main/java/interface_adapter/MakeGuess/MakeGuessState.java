@@ -9,7 +9,7 @@ public class MakeGuessState {
     private boolean isGuessCorrect;
     private String roundStatus = Constant.StatusConstant.GUESSING;
     private boolean isGameOver;
-    private int remainingAttempts = 6;
+    private int remainingAttempts; // no default; presenter sets it
     private int currentRoundNumber = 1;
     private String maskedWord = "";
     private String message = "";

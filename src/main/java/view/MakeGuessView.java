@@ -44,6 +44,10 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
     //private final JLabel hintLabel = new JLabel("Hint: ");
     private final JTextArea hintTextArea = new JTextArea();
 
+    // new
+    private final JLabel messageLabel = new JLabel(" ");
+    private int lastRoundNumber = 1;
+
     private JPanel alphabetButtonsPanel;
 
     public MakeGuessView(MakeGuessViewModel viewModel) {
@@ -55,6 +59,9 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         wordPuzzleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // new
+        messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         restartButton = new JButton("Restart");
         restartButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -142,6 +149,8 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
         this.add(attemptsLabel);
         this.add(roundNumberLabel);
         this.add(Box.createVerticalStrut(20));
+        this.add(Box.createVerticalStrut(20));
+        this.add(messageLabel);
         this.add(restartButton);
         this.add(nextRoundButton);
         this.add(Box.createVerticalStrut(20));
@@ -287,6 +296,16 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
                     "Error",
                     JOptionPane.ERROR_MESSAGE
             );
+        }
+    }
+
+    private void setAlphabetButtonsEnabled(boolean enabled) {
+        if (alphabetButtonsPanel == null) return;
+
+        for (Component comp : alphabetButtonsPanel.getComponents()) {
+            if (comp instanceof JButton) {
+                comp.setEnabled(enabled);
+            }
         }
     }
 

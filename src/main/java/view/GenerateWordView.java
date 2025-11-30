@@ -20,6 +20,9 @@ public class GenerateWordView extends JPanel implements PropertyChangeListener {
     private final JButton startGameButton;
     private final JComboBox<Integer> numberSelector;
 
+    // Attempts are now provided from outside (e.g., difficulty selection)
+    private int selectedAttempts = 6; // default if no difficulty is chosen
+
     public GenerateWordView(GenerateWordViewModel viewModel) {
         this.generateWordViewModel = viewModel;
         this.generateWordViewModel.addPropertyChangeListener(this);
@@ -39,6 +42,7 @@ public class GenerateWordView extends JPanel implements PropertyChangeListener {
         startGameButton = new JButton("START");
         startGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        // Now just uses selectedAttempts (provided by difficulty selection)
         startGameButton.addActionListener(evt -> {
             if (evt.getSource().equals(startGameButton)) {
                 int numberOfWords = (Integer) numberSelector.getSelectedItem();
@@ -74,6 +78,12 @@ public class GenerateWordView extends JPanel implements PropertyChangeListener {
         this.initializeRoundController = initializeRoundController;
     }
 
+    /**
+     * Called from elsewhere (e.g., after difficulty selection) to configure attempts.
+     */
+    public void setSelectedAttempts(int selectedAttempts) {
+        this.selectedAttempts = selectedAttempts;
+    }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

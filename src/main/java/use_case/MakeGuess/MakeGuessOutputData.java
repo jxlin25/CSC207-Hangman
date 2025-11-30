@@ -14,6 +14,9 @@ public class MakeGuessOutputData {
     private final int currentRoundNumber;
     private final String maskedWord;
 
+    private final String correctWord; // full word of the round that just ended
+    private final int maxAttempts;
+
     public MakeGuessOutputData(
             Guess guess,
             boolean isGuessCorrect,
@@ -21,7 +24,9 @@ public class MakeGuessOutputData {
             boolean isGameOver,
             int remainingAttempts,
             int currentRoundNumber,
-            String maskedWord) {
+            String maskedWord,
+            String correctWord,
+            int maxAttempts) {
         this.guess = guess;
         this.isGuessCorrect = isGuessCorrect;
         this.roundStatus = roundStatus;
@@ -29,6 +34,8 @@ public class MakeGuessOutputData {
         this.remainingAttempts = remainingAttempts;
         this.currentRoundNumber = currentRoundNumber;
         this.maskedWord = maskedWord;
+        this.correctWord = correctWord;
+        this.maxAttempts = maxAttempts;
     }
 
     public Guess getGuess() {
@@ -58,4 +65,7 @@ public class MakeGuessOutputData {
     public String getMaskedWord() {
         return this.maskedWord;
     }
+
+    public String getCorrectWord() {return this.correctWord;}
+    public int getMaxAttempts() { return maxAttempts; }
 }
