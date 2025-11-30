@@ -17,10 +17,11 @@ public class GenerateWordController {
 
     /**
      * Executes the Generate Word Use Case.
+     * @param generateNumber the number of the word we want to generate.
      */
 
     public void execute(int generateNumber) {
-        GenerateWordInputData inputData = new GenerateWordInputData(generateNumber);
+        final GenerateWordInputData inputData = new GenerateWordInputData(generateNumber);
         generateWordInputBoundary.execute(inputData);
     }
 }

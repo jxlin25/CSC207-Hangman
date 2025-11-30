@@ -1,33 +1,27 @@
 package data_access;
 
+import java.io.IOException;
+
 import okhttp3.*;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import Constant.Constants;
 import use_case.Hint.HintDataAccessInterface;
 
-import java.io.IOException;
-
 public class DBHintDataAccessObject implements HintDataAccessInterface {
-    private static final String GEMINI_API_URL =
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=";
-    private static final String DICTIONARY_API_URL =
-            "https://api.dictionaryapi.dev/api/v2/entries/en/";
-
-    private static final String CONTENT_TYPE = "Content-Type";
-    private static final String APPLICATION_JSON = "application/json";
-    private static final String API_KEY_ENV_NAME = "GEMINI_API_KEY";
 
     private final OkHttpClient client;
 
-    Boolean apiValid;
+    private Boolean apiValid;
 
     public DBHintDataAccessObject() {
         this.client = new OkHttpClient().newBuilder().build();
     }
 
     private String getApiKey() {
-        return System.getenv(API_KEY_ENV_NAME);
+        return System.getenv(Constants.API_KEY_ENV_NAME);
     }
 
     @Override
@@ -39,7 +33,7 @@ public class DBHintDataAccessObject implements HintDataAccessInterface {
             apiValid = false;
             return apiValid;
         }
-        JSONObject resp = new JSONObject()
+        final JSONObject resp = new JSONObject()
                 .put("contents", new JSONArray()
                         .put(new JSONObject()
                                 .put("parts", new JSONArray()
@@ -47,17 +41,18 @@ public class DBHintDataAccessObject implements HintDataAccessInterface {
                                 )
                         ));
 
-        Request request = new Request.Builder()
-                .url(GEMINI_API_URL + getApiKey())
-                .post(RequestBody.create(resp.toString(), MediaType.parse(APPLICATION_JSON)))
-                .addHeader(CONTENT_TYPE, APPLICATION_JSON)
+        final Request request = new Request.Builder()
+                .url(Constants.GEMINI_API_URL + getApiKey())
+                .post(RequestBody.create(resp.toString(), MediaType.parse(Constants.APPLICATION_JSON)))
+                .addHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_JSON)
                 .build();
 
         try {
-            Response response = client.newCall(request).execute();
-            apiValid = (response.code() == 200);
+            final Response response = client.newCall(request).execute();
+            apiValid = response.code() == Constants.SUCCEED_CODE;
             return apiValid;
-        } catch (IOException e) {
+        }
+        catch (IOException ioException) {
             apiValid = false;
             return apiValid;
         }
@@ -65,86 +60,106 @@ public class DBHintDataAccessObject implements HintDataAccessInterface {
 
     @Override
     public String getGemiHint(String word) {
-        final String prompt = "You are a Hangman game hint generator. " + "Please generate a hint about '" + word + "' for me, "
-                + "The hint should not contain the word, but try to be as appropriate as possible. And Don't give me Option, just one hint.";
-        JSONObject response = new JSONObject()
+        String result = "AI hint unavailable.";
+        final String prompt = "You are a Hangman game hint generator. " + "Please generate a hint about '"
+                + word + "' for me, "
+                + "The hint should not contain the word, but try to be as appropriate as possible. "
+                + "And Don't give me Option, just one hint.";
+        final JSONObject response = new JSONObject()
                 .put("contents", new JSONArray()
                         .put(new JSONObject()
                                 .put("parts", new JSONArray()
                                         .put(new JSONObject().put("text", prompt))
                                 )
                         ));
-        Request request = new Request.Builder()
-                .url(GEMINI_API_URL + getApiKey())
-                .post(RequestBody.create(response.toString(), MediaType.parse(APPLICATION_JSON)))
-                .addHeader(CONTENT_TYPE, APPLICATION_JSON)
+        final Request request = new Request.Builder()
+                .url(Constants.GEMINI_API_URL + getApiKey())
+                .post(RequestBody.create(response.toString(), MediaType.parse(Constants.APPLICATION_JSON)))
+                .addHeader(Constants.CONTENT_TYPE, Constants.APPLICATION_JSON)
                 .build();
 
         try {
-            Response resp = client.newCall(request).execute();
-            if (resp.code() != 200) {
-                return "AI hint unavailable.";
+            final Response resp = client.newCall(request).execute();
+            if (resp.code() == Constants.SUCCEED_CODE) {
+                final JSONObject body = new JSONObject(resp.body().string());
+                final String actualHint = body
+                        .getJSONArray("candidates")
+                        .getJSONObject(0)
+                        .getJSONObject("content")
+                        .getJSONArray("parts")
+                        .getJSONObject(0)
+                        .getString("text").trim();
+                if (actualHint != null && !actualHint.isEmpty()) {
+                    result = actualHint;
+                }
             }
-
-            JSONObject body = new JSONObject(resp.body().string());
-            return body
-                    .getJSONArray("candidates")
-                    .getJSONObject(0)
-                    .getJSONObject("content")
-                    .getJSONArray("parts")
-                    .getJSONObject(0)
-                    .getString("text").trim();
-
-        } catch (IOException e) {
-            return "We can't get Ai hint.";
         }
+        catch (IOException ioException) {
+            result = "We can't get Ai hint.";
+        }
+        return result;
     }
 
     @Override
     public String getDictHint(String word) {
-        Request request = new Request.Builder()
-                .url(DICTIONARY_API_URL + word)
+        final Request request = new Request.Builder()
+                .url(Constants.DICTIONARY_API_URL + word)
                 .build();
 
         try {
-            Response response = client.newCall(request).execute();
-            if (response.code() != 200) {
+            final Response response = client.newCall(request).execute();
+            if (response.code() != Constants.SUCCEED_CODE) {
                 return "No dictionary hint available.";
             }
 
-            JSONArray body = new JSONArray(response.body().string());
-            JSONObject firstEntry = body.getJSONObject(0);
+            final JSONArray body = new JSONArray(response.body().string());
+            final JSONObject firstEntry = body.getJSONObject(0);
 
-            JSONArray meanings = firstEntry.getJSONArray("meanings");
+            final JSONArray meanings = firstEntry.getJSONArray("meanings");
 
-            // a word may have many part of speech, I hope first return the def of noun
-            String definitions1 = getNounDef(meanings);
-            if (definitions1 != null) {
-                return definitions1;
+            // Give priority to verb definitions
+            final String verbHint = getPreferredHint(meanings, word, "verb");
+            if (verbHint != null) {
+                return Constants.DEF_STRING + verbHint;
             }
 
-            // if don't have noun, return the first def
-            JSONObject firstMeaning = meanings.getJSONObject(0);
-            JSONArray definitions = firstMeaning.getJSONArray("definitions");
-            return "Definition: " + definitions.getJSONObject(0).getString("definition");
+            // Select noun definitions
+            final String nounHint = getPreferredHint(meanings, word, "noun");
+            if (nounHint != null) {
+                return Constants.DEF_STRING + nounHint;
+            }
 
-        } catch (Exception e) {
+            // if don't have noun and vert.
+            final String hint = getPreferredHint(meanings, word, "any");
+            if (hint != null) {
+                return Constants.DEF_STRING + hint;
+            }
+
+            return "No hint available.";
+
+        }
+        catch (IOException exception) {
             return "We can't get Dictionary hint.";
         }
     }
 
     // just try
     @Nullable
-    private static String getNounDef(JSONArray meanings) {
+    private static String getPreferredHint(JSONArray meanings, String word, String partOfSpeech) {
+        String result = null;
         for (int i = 0; i < meanings.length(); i++) {
-            JSONObject meaning = meanings.getJSONObject(i);
-            if ("noun".equalsIgnoreCase(meaning.optString("partOfSpeech"))) {
-                JSONArray definitions = meaning.getJSONArray("definitions");
-                if (!definitions.isEmpty()) {
-                    return definitions.getJSONObject(0).getString("definition");
-                }
+            final JSONObject meaning = meanings.getJSONObject(i);
+
+            if (!"any".equals(partOfSpeech) && !partOfSpeech.equalsIgnoreCase(meaning.optString("partOfSpeech"))) {
+                continue;
+            }
+
+            final JSONArray definitions = meaning.getJSONArray("definitions");
+
+            if (definitions.length() > 0) {
+                result = definitions.getJSONObject(0).getString("definition");
             }
         }
-        return null;
+        return result;
     }
 }
