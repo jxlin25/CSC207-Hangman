@@ -1,44 +1,44 @@
 package entity;
 
 public class GameStats {
-    private int wins;
-    private int losses;
+    private int roundsWon;
+    private int roundsLost;
 
     public GameStats() {
-        this.wins = 0;
-        this.losses = 0;
+        this.roundsWon = 0;
+        this.roundsLost = 0;
     }
 
-    public int getWins() {
-        return wins;
+    public int getRoundsWon() {
+        return roundsWon;
     }
 
-    public int getLosses() {
-        return losses;
+    public int getRoundsLost() {
+        return roundsLost;
     }
 
-    public void incrementWins() {
-        wins++;
+    public void incrementRoundsWon() {
+        roundsWon++;
     }
 
-    public void incrementLosses() {
-        losses++;
+    public void incrementRoundsLost() {
+        roundsLost++;
     }
 
-    public int getTotalGames() {
-        return wins + losses;
+    public int getTotalRounds() {
+        return roundsWon + roundsLost;
     }
 
-    public double getWinRate() {
-        return getTotalGames() > 0 ? (wins * 100.0) / getTotalGames() : 0.0;
+    public double getRoundWinRate() {
+        return getTotalRounds() > 0 ? (roundsWon * 100.0) / getTotalRounds() : 0.0;
     }
 
     // For persistence, we might want to set the wins and losses as well
-    public void setWins(int wins) {
-        this.wins = wins;
+    public void setRoundsWon(int roundsWon) {
+        this.roundsWon = roundsWon;
     }
 
-    public void setLosses(int losses) {
-        this.losses = losses;
+    public void setRoundsLost(int roundsLost) {
+        this.roundsLost = roundsLost;
     }
 }
