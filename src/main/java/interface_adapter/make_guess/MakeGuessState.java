@@ -19,6 +19,7 @@ public class MakeGuessState {
     private int totalRound = 1;
     private int hintAttempts;
     private String fullWord = "";
+    private boolean usedhint = false;
 
     public MakeGuessState() {
 
@@ -131,5 +132,13 @@ public class MakeGuessState {
 
     public void setFullWord(String fullWord) {
         this.fullWord = fullWord;
+    }
+
+    public boolean getUsedhint() {
+        return usedhint;
+    }
+
+    public void setUsedhint(boolean usedhint) {
+        this.usedhint = usedhint;
     }
 }
