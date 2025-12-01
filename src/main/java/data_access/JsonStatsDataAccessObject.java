@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import entity.GameStats;
-import use_case.Stats.StatsDataAccessInterface;
+import use_case.stats.StatsDataAccessInterface;
 
 import java.io.FileReader;
 import java.io.FileWriter;
