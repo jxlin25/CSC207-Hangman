@@ -23,37 +23,11 @@ public class HangmanGame {
 
         // Creating rounds of the game
         for (String word : words) {
-            WordPuzzle wordPuzzle = new WordPuzzle(word.toCharArray());
+            final WordPuzzle wordPuzzle = new WordPuzzle(word.toCharArray());
             this.rounds.add(new Round(wordPuzzle));
 
         }
         this.currentRoundIndex = 0;
-    }
-
-    /**
-     * Gets the maximum attempts per round for this game (difficulty).
-     */
-    public int getMaxAttempts() {
-        return maxAttempts;
-    }
-
-    public void setMaxAttempts(int maxAttempts) {
-        this.maxAttempts = maxAttempts;
-    }
-
-    public int getHintAttempts() {
-        return hintAttempts;
-    }
-
-    public void setHintAttempts(int hintAttempts) {
-        this.hintAttempts = hintAttempts;
-    }
-
-    /**
-     * decreasing the hint attempts.
-     */
-    public void decreaseHintAttempt() {
-        this.hintAttempts = hintAttempts - 1;
     }
 
     public ArrayList<Round> getRounds() {
@@ -85,43 +59,6 @@ public class HangmanGame {
         return result;
     }
 
-    /**
-     * Attempts to move to the next round.
-     * @return true if successfully moved to a new round, false if all rounds are over.
-     */
-    public boolean startNextRound(boolean won) {
-        if (won){
-            this.getCurrentRound().setWon();
-        }
-        else{
-            this.getCurrentRound().setLost();
-        }
-        if (currentRoundIndex >= rounds.size() - 1) {
-            return false; // cannot move to next round
-        }
-
-        // Otherwise move to next
-        currentRoundIndex++;
-        this.getCurrentRound().startRound();
-        return true;
-    }
-
-    /**
-     * Checks if all rounds are over.
-     * @return boolean of whether all the rounds are over
-     */
-    public boolean isGameOver() {
-
-        // Check if all the round has the status of either WON or LOST
-        // If not, immediately return false
-        for (Round round : rounds) {
-            if (!(round.getStatus() == constant.StatusConstant.WON || round.getStatus() == constant.StatusConstant.LOST)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public int getCurrentRoundNumber() {
         // Add 1 because index is 0-based
         return currentRoundIndex + 1;
@@ -146,4 +83,66 @@ public class HangmanGame {
 
         return wins;
     }
+
+    /**
+     * Attempts to move to the next round.
+     * @param win whether this round is won or lost
+     * @return true if successfully moved to a new round, false if all rounds are over.
+     */
+    public boolean startNextRound(boolean win) {
+        if (win) {
+            this.getCurrentRound().setWon();
+        }
+        else {
+            this.getCurrentRound().setLost();
+        }
+        if (currentRoundIndex >= rounds.size() - 1) {
+            return false;
+        }
+
+        // Otherwise move to next
+        currentRoundIndex++;
+        this.getCurrentRound().startRound();
+        return true;
+    }
+
+    /**
+     * Checks if all rounds are over.
+     * @return boolean of whether all the rounds are over
+     */
+    public boolean isGameOver() {
+
+        // Check if all the round has the status of either WON or LOST
+        // If not, immediately return false
+        for (Round round : rounds) {
+            if (!(round.getStatus() == constant.StatusConstant.WON || round.getStatus() == constant.StatusConstant.LOST)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int getMaxAttempts() {
+        return maxAttempts;
+    }
+
+    public void setMaxAttempts(int maxAttempts) {
+        this.maxAttempts = maxAttempts;
+    }
+
+    public int getHintAttempts() {
+        return hintAttempts;
+    }
+
+    public void setHintAttempts(int hintAttempts) {
+        this.hintAttempts = hintAttempts;
+    }
+
+    /**
+     * Decreases the hint attempts.
+     */
+    public void decreaseHintAttempt() {
+        this.hintAttempts = hintAttempts - 1;
+    }
+
 }
