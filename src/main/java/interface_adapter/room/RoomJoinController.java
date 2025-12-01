@@ -1,4 +1,4 @@
-package interface_adapter.Room;
+package interface_adapter.room;
 import view.RoomJoinView;
 import use_case.room.RoomJoinInteractor;
 

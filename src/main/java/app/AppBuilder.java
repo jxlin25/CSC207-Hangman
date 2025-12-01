@@ -50,7 +50,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import view.RoomJoinView;
-import interface_adapter.Room.RoomJoinController;
+import interface_adapter.room.RoomJoinController;
 import use_case.room.RoomJoinInteractor;
 
 

@@ -1,4 +1,4 @@
-package interface_adapter.Room;
+package interface_adapter.lobby;
 
 public class LobbyController {
 }
