@@ -1,42 +1,42 @@
 package use_case.generate_hint;
 
-import use_case.make_guess.HangmanGameDataAccessInterface;
-
 /**
  * The Generate Word Interactor.
  */
 
 public class HintInteractor implements HintInputBoundary {
-    private final HintDataAccessInterface hintDataAccessInterface;
+    private final DatabaseHintDataAccessInterface databaseHintDataAccessObject;
     private final HintOutputBoundary hintOutputBoundary;
-    private final HangmanGameDataAccessInterface hangmanGameDataAccessInterface;
+    private final InMemoryHintDataAccessInterface inMemoryHintDataAccessObject;
 
-    public HintInteractor(HintDataAccessInterface hintDataAccessInterface,
+    public HintInteractor(DatabaseHintDataAccessInterface databaseHintDataAccessObject,
                           HintOutputBoundary hintOutputBoundary,
-                          HangmanGameDataAccessInterface hangmanGameDataAccessInterface) {
-        this.hintDataAccessInterface = hintDataAccessInterface;
+                          InMemoryHintDataAccessInterface inMemoryHintDataAccessObject) {
+        this.databaseHintDataAccessObject = databaseHintDataAccessObject;
         this.hintOutputBoundary = hintOutputBoundary;
-        this.hangmanGameDataAccessInterface = hangmanGameDataAccessInterface;
+        this.inMemoryHintDataAccessObject = inMemoryHintDataAccessObject;
     }
 
     @Override
     public void execute() {
-        final String word = new String(hangmanGameDataAccessInterface.getCurrentWordPuzzle().getLetters());
-        hangmanGameDataAccessInterface.getHangmanGame().decreasingHint();
-        final int remainHint = hangmanGameDataAccessInterface.getHangmanGame().getHintAttempts();
+        final String word = inMemoryHintDataAccessObject.getCurrentWord();
+        inMemoryHintDataAccessObject.decreaseHintAttempt();
+        final int remainHint = inMemoryHintDataAccessObject.getHintAttempts();
         String hint = "";
-        if (hintDataAccessInterface.isApiKeyValid()) {
-            hint = hintDataAccessInterface.getGemiHint(word);
+        if (databaseHintDataAccessObject.isApiKeyValid()) {
+            hint = databaseHintDataAccessObject.getGemiHint(word);
         }
         else {
-            final String dictHint = hintDataAccessInterface.getDictHint(word);
+            final String dictHint = databaseHintDataAccessObject.getDictHint(word);
             if (!(dictHint == null || dictHint.trim().isEmpty())) {
                 hint = "You haven't set an API Key or the Key is invalid. Here is a hint from the dictionary: "
-                        + hintDataAccessInterface.getDictHint(word);
+                        + databaseHintDataAccessObject.getDictHint(word);
             }
-        }
-        if (hint == null || hint.trim().isEmpty()) {
-            hint = "No hint available.";
+
+            if (hint == null || hint.trim().isEmpty()) {
+                hint = "No hint available.";
+            }
+
         }
         final HintOutputData hintOutputData = new HintOutputData(hint, remainHint);
         System.out.println("----------------------------");

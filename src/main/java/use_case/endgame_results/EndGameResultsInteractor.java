@@ -14,17 +14,17 @@ import interface_adapter.endgame_results.EndGameResultsState.RoundResult;
 public class EndGameResultsInteractor implements EndGameResultsInputBoundary {
 
     private final EndGameResultsOutputBoundary endGameResultsPresenter;
-    private final InMemoryHangmanDataAccessObject hangmanGameDAO;
+    private final EndGameResultsDataAccessInterface endGameResultsDataAccessObject;
 
-    public EndGameResultsInteractor(EndGameResultsOutputBoundary endGameResultsPresenter,
-                                    InMemoryHangmanDataAccessObject hangmanGameDAO) {
-        this.endGameResultsPresenter = endGameResultsPresenter;
-        this.hangmanGameDAO = hangmanGameDAO;
+    public EndGameResultsInteractor(EndGameResultsOutputBoundary EndGameResultsPresenter,
+                                    InMemoryHangmanDataAccessObject endGameResultsDataAccessObject) {
+        this.endGameResultsPresenter = EndGameResultsPresenter;
+        this.endGameResultsDataAccessObject = endGameResultsDataAccessObject;
     }
 
     @Override
     public void execute(EndGameResultsInputData inputData) {
-        final HangmanGame game = hangmanGameDAO.getHangmanGame();
+        final HangmanGame game = endGameResultsDataAccessObject.getHangmanGame();
 
         // Determine overall game status based on the last round
         final String finalStatus = "Game Over";
@@ -52,20 +52,14 @@ public class EndGameResultsInteractor implements EndGameResultsInputBoundary {
 
             // Get status
             final String status = round.getStatus();
-            final String statusText;
-            if (status.equals(constant.StatusConstant.WON)) {
-                statusText = "Won";
-            }
-            else {
-                statusText = "Lost";
-            }
+            final String statusText = status.equals(constant.StatusConstant.WON) ? "Won" : "Lost";
 
             // Create round result
             final RoundResult result = new RoundResult(
-                    i + 1,
-                    word,
-                    attemptsUsed,
-                    statusText
+                    i + 1,           // Round number (1-based)
+                    word,            // The word
+                    attemptsUsed,    // Attempts used in THIS round only
+                    statusText       // Won or Lost
             );
 
             roundResults.add(result);

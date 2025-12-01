@@ -3,7 +3,7 @@ package use_case.generate_word;
 import java.util.ArrayList;
 
 import entity.HangmanGame;
-import use_case.make_guess.HangmanGameDataAccessInterface;
+import use_case.make_guess.MakeGuessDataAccessInterface;
 
 /**
  * The Generate Word Interactor.
@@ -12,11 +12,11 @@ public class GenerateWordInteractor implements GenerateWordInputBoundary {
 
     private final GenerateWordDataAccessInterface generateWordDataAccessInterface;
     private final GenerateWordOutputBoundary generateWordOutputBoundary;
-    private final HangmanGameDataAccessInterface hangmanGameDataAccessObject;
+    private final MakeGuessDataAccessInterface hangmanGameDataAccessObject;
 
     public GenerateWordInteractor(GenerateWordDataAccessInterface generateWordDataAccessInterface,
                                   GenerateWordOutputBoundary generateWordOutputBoundary,
-                                  HangmanGameDataAccessInterface hangmanGameDataAccessObject) {
+                                  MakeGuessDataAccessInterface hangmanGameDataAccessObject) {
         this.generateWordDataAccessInterface = generateWordDataAccessInterface;
         this.generateWordOutputBoundary = generateWordOutputBoundary;
         this.hangmanGameDataAccessObject = hangmanGameDataAccessObject;
@@ -24,13 +24,13 @@ public class GenerateWordInteractor implements GenerateWordInputBoundary {
 
     @Override
     public void execute(GenerateWordInputData inputData) {
-        int n = inputData.getNumbers();
+        final int n = inputData.getNumbers();
         if (n < 0) {
-            //This situation won't occur, but to prevent any accidents
+            // This situation won't occur, but to prevent any accidents
             generateWordOutputBoundary.prepareFailureView("Number of words must be langer than 0!!");
             return;
         }
-        ArrayList<String> words = new ArrayList<>();
+        final ArrayList<String> words = new ArrayList<>();
         for (int i = 0; i < n; i++) {
             int tries = 0;
             String word = null;
@@ -52,7 +52,7 @@ public class GenerateWordInteractor implements GenerateWordInputBoundary {
         System.out.println("----------------------------");
 
         hangmanGameDataAccessObject.setHangmanGame(new HangmanGame(words));
-        GenerateWordOutputData outputData = new GenerateWordOutputData(words);
+        final GenerateWordOutputData outputData = new GenerateWordOutputData(words);
         generateWordOutputBoundary.prepareSuccessView(outputData);
     }
 }

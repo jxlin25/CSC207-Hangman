@@ -18,7 +18,7 @@ public class HintInteractorTest {
      * A dummy Hint DAO that can only return a fixed hint and api key verify whether
      * this key is valid as our the set.
      */
-    private static class DummyHintDAO implements HintDataAccessInterface {
+    private static class DummyHintDAO implements DatabaseHintDataAccessInterface {
         boolean apiValid = true;
         String gemiHint;
         String dictHint;
@@ -61,11 +61,14 @@ public class HintInteractorTest {
         InMemoryHangmanDataAccessObject hangmanDAO = new InMemoryHangmanDataAccessObject();
         List<String> words = Arrays.asList("hint");
         HangmanGame hangmanGame = new HangmanGame(words);
+        // set attempts = 2
+        hangmanGame.setHintAttempts(2);
         hangmanDAO.setHangmanGame(hangmanGame);
 
         HintInteractor interactor = new HintInteractor(hintDAO, presenter, hangmanDAO);
         interactor.execute();
 
+        assertEquals(1, presenter.capturedData.getRemainHintAttempts());
         assertEquals("Gemini Hint", presenter.capturedData.getHint());
     }
 
@@ -79,11 +82,14 @@ public class HintInteractorTest {
         InMemoryHangmanDataAccessObject hangmanDAO = new InMemoryHangmanDataAccessObject();
         List<String> words = Arrays.asList("hint");
         HangmanGame hangmanGame = new HangmanGame(words);
+        // set attempts = 6
+        hangmanGame.setHintAttempts(6);
         hangmanDAO.setHangmanGame(hangmanGame);
 
         HintInteractor interactor = new HintInteractor(hintDAO, presenter, hangmanDAO);
         interactor.execute();
 
+        assertEquals(5, presenter.capturedData.getRemainHintAttempts());
         assertEquals("You haven't set an API Key or the Key is invalid. Here is a hint from the dictionary: Dictionary Hint",
                 presenter.capturedData.getHint());
     }
@@ -98,11 +104,13 @@ public class HintInteractorTest {
         InMemoryHangmanDataAccessObject hangmanDAO = new InMemoryHangmanDataAccessObject();
         List<String> words = Arrays.asList("hint");
         HangmanGame hangmanGame = new HangmanGame(words);
+        hangmanGame.setHintAttempts(1);
         hangmanDAO.setHangmanGame(hangmanGame);
 
         HintInteractor interactor = new HintInteractor(hintDAO, presenter, hangmanDAO);
         interactor.execute();
 
+        assertEquals(0, presenter.capturedData.getRemainHintAttempts());
         assertEquals("No hint available.", presenter.capturedData.getHint());
     }
 
@@ -116,13 +124,16 @@ public class HintInteractorTest {
         InMemoryHangmanDataAccessObject hangmanDAO = new InMemoryHangmanDataAccessObject();
         List<String> words = Arrays.asList("hint");
         HangmanGame hangmanGame = new HangmanGame(words);
+        hangmanGame.setHintAttempts(1);
         hangmanDAO.setHangmanGame(hangmanGame);
 
         HintInteractor interactor = new HintInteractor(hintDAO, presenter, hangmanDAO);
         interactor.execute();
 
+        assertEquals(0, presenter.capturedData.getRemainHintAttempts());
         assertEquals("No hint available.", presenter.capturedData.getHint());
     }
+
     @Test
     public void testDictionaryHintIsEmpty() {
         DummyHintDAO hintDAO = new DummyHintDAO();
@@ -133,11 +144,13 @@ public class HintInteractorTest {
         InMemoryHangmanDataAccessObject hangmanDAO = new InMemoryHangmanDataAccessObject();
         List<String> words = Arrays.asList("hint");
         HangmanGame hangmanGame = new HangmanGame(words);
+        hangmanGame.setHintAttempts(1);
         hangmanDAO.setHangmanGame(hangmanGame);
 
         HintInteractor interactor = new HintInteractor(hintDAO, presenter, hangmanDAO);
         interactor.execute();
 
+        assertEquals(0, presenter.capturedData.getRemainHintAttempts());
         assertEquals("No hint available.", presenter.capturedData.getHint());
     }
 
@@ -151,11 +164,33 @@ public class HintInteractorTest {
         InMemoryHangmanDataAccessObject hangmanDAO = new InMemoryHangmanDataAccessObject();
         List<String> words = Arrays.asList("hint");
         HangmanGame hangmanGame = new HangmanGame(words);
+        hangmanGame.setHintAttempts(1);
         hangmanDAO.setHangmanGame(hangmanGame);
 
         HintInteractor interactor = new HintInteractor(hintDAO, presenter, hangmanDAO);
         interactor.execute();
 
+        assertEquals(0, presenter.capturedData.getRemainHintAttempts());
         assertEquals("No hint available.", presenter.capturedData.getHint());
+    }
+
+    @Test
+    public void testNotAttempts() {
+        DummyHintDAO hintDAO = new DummyHintDAO();
+        hintDAO.apiValid = true;
+        hintDAO.gemiHint = "hint";
+
+        DummyPresenter presenter = new DummyPresenter();
+        InMemoryHangmanDataAccessObject hangmanDAO = new InMemoryHangmanDataAccessObject();
+        List<String> words = Arrays.asList("hint");
+        HangmanGame hangmanGame = new HangmanGame(words);
+        hangmanGame.setHintAttempts(0);
+        hangmanDAO.setHangmanGame(hangmanGame);
+
+        HintInteractor interactor = new HintInteractor(hintDAO, presenter, hangmanDAO);
+        interactor.execute();
+
+        assertEquals(0, presenter.capturedData.getRemainHintAttempts());
+        assertEquals("Don't have hint attempts", presenter.capturedData.getHint());
     }
 }

@@ -52,7 +52,7 @@ public class HangmanGame {
     /**
      * decreasing the hint attempts.
      */
-    public void decreasingHint() {
+    public void decreaseHintAttempt() {
         this.hintAttempts = hintAttempts - 1;
     }
 
