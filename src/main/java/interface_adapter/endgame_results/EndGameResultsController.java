@@ -5,15 +5,18 @@ import use_case.endgame_results.EndGameResultsInputData;
 
 public class EndGameResultsController {
 
-    final EndGameResultsInputBoundary endGameResultsInteractor;
+    private final EndGameResultsInputBoundary endGameResultsInteractor;
 
     public EndGameResultsController(EndGameResultsInputBoundary endGameResultsInteractor) {
         this.endGameResultsInteractor = endGameResultsInteractor;
     }
+    /**
+     * Executes the Generate Word Use Case.
+     *  creates an empty end game results object and passes it to the input boundary to perform use case.
+     */
 
     public void execute() {
-        // Creates the empty InputData object as required by the Input Boundary contract
-        EndGameResultsInputData inputData = new EndGameResultsInputData();
+        final EndGameResultsInputData inputData = new EndGameResultsInputData();
         endGameResultsInteractor.execute(inputData);
     }
 }
