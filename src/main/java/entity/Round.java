@@ -19,7 +19,7 @@ public class Round {
         this.wordPuzzle = wordPuzzle;
         this.status = constant.StatusConstant.WAITING;
         this.guesses = new ArrayList<Guess>();
-        this.attempt = 6; //can be modified once all the difficulty levels are implemented
+        this.attempt = 6;
     }
 
     public String getStatus() {
@@ -34,7 +34,7 @@ public class Round {
      * Sets the status of the current round to WON.
      */
     public void setWon() {
-        this.setStatus(constant.StatusConstant.WON);
+        this.setStatus(StatusConstant.WON);
     }
 
     /**
