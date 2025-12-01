@@ -1,12 +1,15 @@
 package use_case.initialize_round;
 
-
+/**
+ * The interactor for InitializeRound use case.
+ */
 public class InitializeRoundInteractor implements InitializeRoundInputBoundary {
 
     private final InitializeRoundOutputBoundary presenter;
     private final InitializeRoundDataAccessInterface dataAccessObject;
 
-    public InitializeRoundInteractor(InitializeRoundOutputBoundary presenter, InitializeRoundDataAccessInterface dataAccessObject) {
+    public InitializeRoundInteractor(InitializeRoundOutputBoundary presenter,
+                                     InitializeRoundDataAccessInterface dataAccessObject) {
         this.presenter = presenter;
         this.dataAccessObject = dataAccessObject;
     }

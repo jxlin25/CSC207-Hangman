@@ -9,49 +9,45 @@ import java.util.List;
 
 public class EndGameResultsInteractor implements EndGameResultsInputBoundary {
 
-    final EndGameResultsOutputBoundary EndGameResultsPresenter;
-    final InMemoryHangmanDataAccessObject hangmanGameDAO;
+    private final EndGameResultsOutputBoundary endGameResultsPresenter;
+    private final EndGameResultsDataAccessInterface endGameResultsDataAccessObject;
 
     public EndGameResultsInteractor(EndGameResultsOutputBoundary EndGameResultsPresenter,
-                                    InMemoryHangmanDataAccessObject hangmanGameDAO) {
-        this.EndGameResultsPresenter = EndGameResultsPresenter;
-        this.hangmanGameDAO = hangmanGameDAO;
+                                    InMemoryHangmanDataAccessObject endGameResultsDataAccessObject) {
+        this.endGameResultsPresenter = EndGameResultsPresenter;
+        this.endGameResultsDataAccessObject = endGameResultsDataAccessObject;
     }
 
     @Override
     public void execute(EndGameResultsInputData inputData) {
-        HangmanGame game = hangmanGameDAO.getHangmanGame();
-
-        // Get the LAST round to determine overall win/loss
-        Round lastRound = game.getRounds().get(game.getRounds().size() - 1);
-        String lastRoundStatus = lastRound.getStatus();
+        final HangmanGame game = endGameResultsDataAccessObject.getHangmanGame();
 
         // Determine overall game status based on the last round
-        String finalStatus = "Game Over";
+        final String finalStatus = "Game Over";
 
         // Build round-by-round results
-        List<RoundResult> roundResults = new ArrayList<>();
+        final List<RoundResult> roundResults = new ArrayList<>();
 
         for (int i = 0; i < game.getRounds().size(); i++) {
-            Round round = game.getRounds().get(i);
+            final Round round = game.getRounds().get(i);
 
-            System.out.println("Round " + (i+1) + ":");
+            System.out.println("Round " + (i + 1) + ":");
             System.out.println("  Status: " + round.getStatus());
             System.out.println("  Remaining Attempts: " + round.getAttempt());
-            System.out.println("  Attempts Used: " + (hangmanGameDAO.getMaxAttempts() - round.getAttempt()));
+            System.out.println("  Attempts Used: " + (endGameResultsDataAccessObject.getMaxAttempts() - round.getAttempt()));
 
             // Calculate attempts used for this round (6 - remaining)
-            int attemptsUsed = hangmanGameDAO.getMaxAttempts() - round.getAttempt();
+            final int attemptsUsed = endGameResultsDataAccessObject.getMaxAttempts() - round.getAttempt();
 
             // Get word
-            String word = new String(round.getWordPuzzle().getLetters());
+            final String word = new String(round.getWordPuzzle().getLetters());
 
             // Get status
-            String status = round.getStatus();
-            String statusText = status.equals(constant.StatusConstant.WON) ? "Won" : "Lost";
+            final String status = round.getStatus();
+            final String statusText = status.equals(constant.StatusConstant.WON) ? "Won" : "Lost";
 
             // Create round result
-            RoundResult result = new RoundResult(
+            final RoundResult result = new RoundResult(
                     i + 1,           // Round number (1-based)
                     word,            // The word
                     attemptsUsed,    // Attempts used in THIS round only
@@ -61,6 +57,6 @@ public class EndGameResultsInteractor implements EndGameResultsInputBoundary {
             roundResults.add(result);
         }
 
-        EndGameResultsPresenter.present(finalStatus, roundResults);
+        endGameResultsPresenter.present(finalStatus, roundResults);
     }
 }

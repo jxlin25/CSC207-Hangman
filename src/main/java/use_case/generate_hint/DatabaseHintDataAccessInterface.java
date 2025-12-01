@@ -3,7 +3,7 @@ package use_case.generate_hint;
 /**
  * The DAO interface for the Hint Use Case.
  */
-public interface DBHintDataAccessInterface {
+public interface DatabaseHintDataAccessInterface {
     /**
      * Determine whether the player has a Gemini API Key. If not, return False; otherwise, return True.
      * @return boolean.

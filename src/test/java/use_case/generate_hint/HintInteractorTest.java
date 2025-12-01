@@ -18,7 +18,7 @@ public class HintInteractorTest {
      * A dummy Hint DAO that can only return a fixed hint and api key verify whether
      * this key is valid as our the set.
      */
-    private static class DummyHintDAO implements HintDataAccessInterface {
+    private static class DummyHintDAO implements DatabaseHintDataAccessInterface {
         boolean apiValid = true;
         String gemiHint;
         String dictHint;

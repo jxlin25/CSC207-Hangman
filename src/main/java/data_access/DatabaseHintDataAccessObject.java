@@ -8,15 +8,15 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import constant.Constants;
-import use_case.generate_hint.DBHintDataAccessInterface;
+import use_case.generate_hint.DatabaseHintDataAccessInterface;
 
-public class DBHintDataAccessObject implements DBHintDataAccessInterface {
+public class DatabaseHintDataAccessObject implements DatabaseHintDataAccessInterface {
 
     private final OkHttpClient client;
 
     private Boolean apiValid;
 
-    public DBHintDataAccessObject() {
+    public DatabaseHintDataAccessObject() {
         this.client = new OkHttpClient().newBuilder().build();
     }
 

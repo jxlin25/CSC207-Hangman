@@ -1,4 +1,11 @@
 package use_case.generate_hint;
 
-public class InMemoryHintDataAccessInterface {
+public interface InMemoryHintDataAccessInterface {
+
+    void decreaseHintAttempt();
+
+    int getHintAttempts();
+
+    String getCurrentWord();
+
 }

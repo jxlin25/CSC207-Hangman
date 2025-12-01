@@ -11,13 +11,13 @@ import okhttp3.Request;
 import okhttp3.Response;
 import use_case.generate_word.GenerateWordDataAccessInterface;
 
-public class DBGenerateWordDataAccessObject implements GenerateWordDataAccessInterface {
+public class DatabaseGenerateWordDataAccessObject implements GenerateWordDataAccessInterface {
 
     private final OkHttpClient client;
 
     private final Random random = new Random();
 
-    public DBGenerateWordDataAccessObject() {
+    public DatabaseGenerateWordDataAccessObject() {
         this.client = new OkHttpClient().newBuilder().build();
     }
 
