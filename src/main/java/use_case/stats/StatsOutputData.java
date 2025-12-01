@@ -1,4 +1,4 @@
-package use_case.Stats;
+package use_case.stats;
 
 import entity.GameStats;
 

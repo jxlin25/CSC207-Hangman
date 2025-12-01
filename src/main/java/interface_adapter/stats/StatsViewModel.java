@@ -1,4 +1,4 @@
-package interface_adapter.Stats;
+package interface_adapter.stats;
 
 import interface_adapter.ViewModel;
 

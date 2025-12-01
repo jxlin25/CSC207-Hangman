@@ -4,7 +4,7 @@ import data_access.InMemoryHangmanDataAccessObject;
 import entity.HangmanGame;
 import entity.Round;
 import interface_adapter.endgame_results.EndGameResultsState.RoundResult;
-import use_case.Stats.StatsDataAccessInterface; // Import the interface
+import use_case.stats.StatsDataAccessInterface; // Import the interface
 import entity.GameStats; // Import GameStats
 import constant.StatusConstant; // Corrected import for StatusConstant
 
