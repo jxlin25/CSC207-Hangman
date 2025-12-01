@@ -52,7 +52,7 @@ public class HangmanGame {
     /**
      * decreasing the hint attempts.
      */
-    public void decreasingHint() {
+    public void decreaseHintAttempt() {
         this.hintAttempts = hintAttempts - 1;
     }
 
@@ -72,6 +72,11 @@ public class HangmanGame {
         return rounds.get(currentRoundIndex);
     }
 
+    /**
+     * Gets a Round object by index.
+     * @param index index of the Round object
+     * @return the corresponding Round object
+     */
     public Round getRound(int index) {
         Round result = null;
         if (index >= 0 && index < this.rounds.size()) {
@@ -110,7 +115,7 @@ public class HangmanGame {
         // Check if all the round has the status of either WON or LOST
         // If not, immediately return false
         for (Round round : rounds) {
-            if (!(round.getStatus() == Constant.StatusConstant.WON || round.getStatus() == Constant.StatusConstant.LOST)) {
+            if (!(round.getStatus() == constant.StatusConstant.WON || round.getStatus() == constant.StatusConstant.LOST)) {
                 return false;
             }
         }
@@ -134,7 +139,7 @@ public class HangmanGame {
         int wins = 0;
 
         for (int i = 0; i < currentRoundIndex; i++) {
-            if (rounds.get(i).getStatus().equals(Constant.StatusConstant.WON)) {
+            if (rounds.get(i).getStatus().equals(constant.StatusConstant.WON)) {
                 wins++;
             }
         }

@@ -4,11 +4,18 @@ import entity.Guess;
 import entity.HangmanGame;
 import entity.Round;
 import entity.WordPuzzle;
-import use_case.ChooseDifficulty.ChooseDifficultyDataAccessInterface;
-import use_case.MakeGuess.HangmanGameDataAccessInterface;
+import use_case.choose_difficulty.ChooseDifficultyDataAccessInterface;
+import use_case.endgame_results.EndGameResultsDataAccessInterface;
+import use_case.generate_hint.InMemoryHintDataAccessInterface;
+import use_case.initialize_round.InitializeRoundDataAccessInterface;
+import use_case.make_guess.MakeGuessDataAccessInterface;
 
 public class InMemoryHangmanDataAccessObject implements
-        HangmanGameDataAccessInterface, ChooseDifficultyDataAccessInterface {
+        MakeGuessDataAccessInterface,
+        InitializeRoundDataAccessInterface,
+        InMemoryHintDataAccessInterface,
+        EndGameResultsDataAccessInterface,
+        ChooseDifficultyDataAccessInterface {
 
     private HangmanGame currentHangmanGame;
 
@@ -51,6 +58,11 @@ public class InMemoryHangmanDataAccessObject implements
     @Override
     public boolean setCurrentRoundLostAndStartNextRound() {
         return this.getHangmanGame().startNextRound(false);
+    }
+
+    @Override
+    public int getTotalRoundNumber() {
+        return this.getHangmanGame().getTotalRounds();
     }
 
     @Override
@@ -105,7 +117,6 @@ public class InMemoryHangmanDataAccessObject implements
         return this.getHangmanGame().getCurrentRoundNumber();
     }
 
-    // full word string for the *current* round
     @Override
     public String getCurrentWord() {
         char[] letters = this.getCurrentWordPuzzleLetters();
@@ -127,6 +138,11 @@ public class InMemoryHangmanDataAccessObject implements
     }
 
     @Override
+    public void decreaseHintAttempt() {
+        this.getHangmanGame().decreaseHintAttempt();
+    }
+
+    @Override
     public int getHintAttempts() {
         return this.getHangmanGame().getHintAttempts();
     }
@@ -134,11 +150,5 @@ public class InMemoryHangmanDataAccessObject implements
     public int getMaxAttempts() {
         return this.getHangmanGame().getMaxAttempts();
     }
-
-//    @Override
-//    public int getInitialAttemptsForGame() {
-//        // Example logic: if  Round entity keeps the starting attempts of round 1,
-//        // return that. Adjust to actual model.
-//        return this.getHangmanGame().getMaxAttempts();
 }
 

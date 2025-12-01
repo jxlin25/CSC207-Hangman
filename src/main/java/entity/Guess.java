@@ -7,22 +7,13 @@ package entity;
 public class Guess {
 
     private final char letter;
-    private boolean isCorrect;
 
     public Guess(char letter) {
         this.letter = letter;
-        this.isCorrect = false;
     }
 
     public char getLetter() {
         return letter;
     }
 
-    public boolean isCorrect() {
-        return isCorrect;
-    }
-
-    public void setIsCorrect(boolean isCorrect) {
-        this.isCorrect = isCorrect;
-    }
 }
