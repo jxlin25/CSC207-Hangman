@@ -252,7 +252,7 @@ public class MakeGuessView extends JPanel implements ActionListener, PropertyCha
 
         hintAttemptsLabel.setText("Hint attempts left: " + state.getHintAttempts());
 
-        if (state.getHintAttempts() == 0) {
+        if (state.getUsedhint() || state.getHintAttempts() == 0) {
             hintButton.setEnabled(false);
         }
         else {
