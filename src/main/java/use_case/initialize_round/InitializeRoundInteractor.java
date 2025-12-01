@@ -6,12 +6,12 @@ package use_case.initialize_round;
 public class InitializeRoundInteractor implements InitializeRoundInputBoundary {
 
     private final InitializeRoundOutputBoundary presenter;
-    private final InitializeRoundDataAccessInterface dataAccessObject;
+    private final InitializeRoundDataAccessInterface initializeRoundDataAccessObject;
 
     public InitializeRoundInteractor(InitializeRoundOutputBoundary presenter,
-                                     InitializeRoundDataAccessInterface dataAccessObject) {
+                                     InitializeRoundDataAccessInterface initializeRoundDataAccessObject) {
         this.presenter = presenter;
-        this.dataAccessObject = dataAccessObject;
+        this.initializeRoundDataAccessObject = initializeRoundDataAccessObject;
     }
 
     @Override
@@ -19,10 +19,10 @@ public class InitializeRoundInteractor implements InitializeRoundInputBoundary {
 
         final InitializeRoundOutputData outputData =
                 new InitializeRoundOutputData(
-                        this.dataAccessObject.getCurrentRoundAttempt(),
-                        this.dataAccessObject.getCurrentRoundNumber(),
-                        this.dataAccessObject.getCurrentMaskedWord(),
-                        this.dataAccessObject.getTotalRoundNumber()
+                        this.initializeRoundDataAccessObject.getCurrentRoundAttempt(),
+                        this.initializeRoundDataAccessObject.getCurrentRoundNumber(),
+                        this.initializeRoundDataAccessObject.getCurrentMaskedWord(),
+                        this.initializeRoundDataAccessObject.getTotalRoundNumber()
                 );
 
         this.presenter.initializeView(outputData);
