@@ -53,7 +53,7 @@ public class EndGameResultsInteractorTest {
 
         InMemoryHangmanDataAccessObject dao = new InMemoryHangmanDataAccessObject();
         dao.setHangmanGame(game);
-        JsonStatsDataAccessObject statsDao = new JsonStatsDataAccessObject()
+        JsonStatsDataAccessObject statsDao = new JsonStatsDataAccessObject("./test_stats.json");
         DummyEndGameResultsPresenter presenter = new DummyEndGameResultsPresenter();
         EndGameResultsInteractor interactor = new EndGameResultsInteractor(presenter, dao, statsDao);
 
@@ -127,7 +127,7 @@ public class EndGameResultsInteractorTest {
 
         InMemoryHangmanDataAccessObject dao = new InMemoryHangmanDataAccessObject();
         dao.setHangmanGame(game);
-        JsonStatsDataAccessObject statsDAO = new JsonStatsDataAccessObject();
+        JsonStatsDataAccessObject statsDAO = new JsonStatsDataAccessObject("./test_stats.json");
         DummyEndGameResultsPresenter presenter = new DummyEndGameResultsPresenter();
         EndGameResultsInteractor interactor = new EndGameResultsInteractor(presenter, dao, statsDAO);
 
