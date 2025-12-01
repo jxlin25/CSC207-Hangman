@@ -1,6 +1,7 @@
 package use_case.make_guess;
 
 import entity.Guess;
+import entity.Round;
 
 /**
  * The Interactor for the MakeGuess use case.
@@ -20,63 +21,30 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
     public void execute(MakeGuessInputData inputData) {
 
         final Guess guess = inputData.getGuess();
-        final int currentRoundNumber = this.dataAccessObject.getCurrentRoundNumber();
-        int currentRemainingAttempts = this.dataAccessObject.getCurrentRoundAttempt();
-        String currentMaskedWord = this.dataAccessObject.getCurrentMaskedWord();
-        String roundStatus = constant.StatusConstant.GUESSING;
-        boolean isGameOver = false;
-        final String fullWord = this.dataAccessObject.getCurrentWord();
-        // Check if the letter in the guess exist in the word puzzle
-        final boolean isGuessCorrect = dataAccessObject.isGuessCorrectToCurrentWordPuzzle(guess);
 
-        // Add the guess to the current round
-        this.dataAccessObject.addGuessToCurrentRound(guess);
+        final Round currentRound = dataAccessObject.getCurrentRound();
+        final int currentRoundNumber = dataAccessObject.getCurrentRoundNumber();
+        final boolean isGuessCorrect = currentRound.isGuessCorrect(guess);
 
-        // If the guess is correct, reveal the correctly guessed letter and check if the puzzle is complete
-        if (isGuessCorrect) {
-            this.dataAccessObject.revealLetterInCurrentWordPuzzle(guess);
-            currentMaskedWord = this.dataAccessObject.getCurrentMaskedWord();
+        // Let the Round apply the guess
+        //    - reveal letter when correct
+        //    - decrease attempts when wrong
+        //    - transfer to WON/LOST state if the round is over
+        currentRound.handleGuess(guess);
 
-            // If this guess leads to the completion of the puzzle,
-            // mark the current round as Won
-            if (this.dataAccessObject.isCurrentWordPuzzleComplete()) {
+        // Store the updated Round
+        dataAccessObject.saveCurrentRound(currentRound);
 
-                roundStatus = constant.StatusConstant.WON;
+        final String fullWord = dataAccessObject.getCurrentWord();
+        final String currentMaskedWord = dataAccessObject.getCurrentMaskedWord();
+        final int currentRemainingAttempts = dataAccessObject.getCurrentRoundAttempt();
+        final String roundStatus = dataAccessObject.getCurrentRound().getStatus();
 
-                // If this is the last round, mark the game as over
-                if (this.dataAccessObject.isCurrentRoundTheLastRound()) {
-                    isGameOver = true;
-                    this.dataAccessObject.getCurrentRound().setWon();
-                }
-                // If not, move to the next round
-                else {
-                    this.dataAccessObject.setCurrentRoundWonAndStartNextRound();
-                }
-            }
-        }
-        else {
-            // Deduct 1 attempt if the guess is wrong
-            this.dataAccessObject.decreaseCurrentRoundAttempt();
-            currentRemainingAttempts = this.dataAccessObject.getCurrentRoundAttempt();
+        final boolean roundEnded = dataAccessObject.getCurrentRound().isOver();
+        final boolean isLastRound = dataAccessObject.isCurrentRoundTheLastRound();
+        final boolean isGameOver = roundEnded && isLastRound;
 
-            // If the guess is the last guess and does not complete the puzzle,
-            // mark the current round as Lost
-            if (this.dataAccessObject.getCurrentRoundAttempt() == 0) {
-
-                roundStatus = constant.StatusConstant.LOST;
-
-                // If this is the last round, mark the game as over
-                if (this.dataAccessObject.isCurrentRoundTheLastRound()) {
-                    isGameOver = true;
-                    this.dataAccessObject.getCurrentRound().setLost();
-                }
-                // If not, move to the next round
-                else {
-                    this.dataAccessObject.setCurrentRoundLostAndStartNextRound();
-                }
-            }
-        }
-
+        // Pack up data into outputData and pass to the presenter
         final MakeGuessOutputData outputData = new MakeGuessOutputData(
                 guess,
                 isGuessCorrect,
@@ -85,8 +53,15 @@ public class MakeGuessInteractor implements MakeGuessInputBoundary {
                 currentRemainingAttempts,
                 currentRoundNumber,
                 currentMaskedWord,
-                fullWord);
-
+                fullWord
+        );
         presenter.updateView(outputData);
+
+        // If the current round ends while not being the last round,
+        // move to the next round
+        if (roundEnded && !isLastRound) {
+            dataAccessObject.startNextRound();
+        }
+
     }
 }

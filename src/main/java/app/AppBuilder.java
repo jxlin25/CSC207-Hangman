@@ -51,7 +51,7 @@ import java.awt.*;
 
 import view.RoomJoinView;
 import interface_adapter.Room.RoomJoinController;
-import use_case.Room.RoomJoinInteractor;
+import use_case.room.RoomJoinInteractor;
 
 
 import view.MakeGuessView;
