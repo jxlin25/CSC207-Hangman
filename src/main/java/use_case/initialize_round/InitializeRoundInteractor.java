@@ -1,24 +1,25 @@
 package use_case.initialize_round;
 
+
 public class InitializeRoundInteractor implements InitializeRoundInputBoundary {
 
-    private InitializeRoundOutputBoundary presenter;
-    private InitializeRoundDataAccessInterface hangmanGameDAO;
+    private final InitializeRoundOutputBoundary presenter;
+    private final InitializeRoundDataAccessInterface dataAccessObject;
 
-    public InitializeRoundInteractor(InitializeRoundOutputBoundary presenter, InitializeRoundDataAccessInterface hangmanGameDAO) {
+    public InitializeRoundInteractor(InitializeRoundOutputBoundary presenter, InitializeRoundDataAccessInterface dataAccessObject) {
         this.presenter = presenter;
-        this.hangmanGameDAO = hangmanGameDAO;
+        this.dataAccessObject = dataAccessObject;
     }
 
     @Override
     public void execute() {
 
-        InitializeRoundOutputData outputData =
+        final InitializeRoundOutputData outputData =
                 new InitializeRoundOutputData(
-                        this.hangmanGameDAO.getCurrentRoundAttempt(),
-                        this.hangmanGameDAO.getCurrentRoundNumber(),
-                        this.hangmanGameDAO.getCurrentMaskedWord(),
-                        this.hangmanGameDAO.getTotalRoundNumber()
+                        this.dataAccessObject.getCurrentRoundAttempt(),
+                        this.dataAccessObject.getCurrentRoundNumber(),
+                        this.dataAccessObject.getCurrentMaskedWord(),
+                        this.dataAccessObject.getTotalRoundNumber()
                 );
 
         this.presenter.initializeView(outputData);

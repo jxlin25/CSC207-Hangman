@@ -72,6 +72,11 @@ public class HangmanGame {
         return rounds.get(currentRoundIndex);
     }
 
+    /**
+     * Gets a Round object by index.
+     * @param index index of the Round object
+     * @return the corresponding Round object
+     */
     public Round getRound(int index) {
         Round result = null;
         if (index >= 0 && index < this.rounds.size()) {

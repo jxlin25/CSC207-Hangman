@@ -7,16 +7,14 @@ public class Main {
     public static void main(String[] args) {
         HangmanServer server = new HangmanServer(8080);
         server.start();
-        JFrame app = new AppBuilder()
+        final JFrame app = new AppBuilder()
                 .addEndGameResultsViewModel()
                 .addGenerateWordView()
                 .addMakeGuessView()
-//                .addDifficultySelectionView()
                 .addEndGameResultsView()
-
                 .addRoomJoinView()
                 .addGenerateWordUseCase()
-                .addInitializeRoundUseCase() // Please ensure addInitializeFirstRoundUseCase() is after addGenerateWordView()
+                .addInitializeRoundUseCase()
                 .addMakeGuessUseCase()
                 .addEndGameResultsUseCase()
                 .addHintUseCase()
