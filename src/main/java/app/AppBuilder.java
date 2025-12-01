@@ -4,6 +4,16 @@ import data_access.InMemoryHangmanDataAccessObject;
 import data_access.DatabaseHintDataAccessObject;
 import data_access.DatabaseGenerateWordDataAccessObject;
 
+import data_access.JsonStatsDataAccessObject;
+import interface_adapter.ChooseDifficulty.ChooseDifficultyController;
+import interface_adapter.ChooseDifficulty.ChooseDifficultyPresenter;
+import interface_adapter.EndGameResults.EndGameResultsController;
+import interface_adapter.EndGameResults.EndGameResultsPresenter;
+import interface_adapter.InitializeRound.InitializeRoundController;
+import interface_adapter.InitializeRound.InitializeRoundPresenter;
+import interface_adapter.Stats.StatsController;
+import interface_adapter.Stats.StatsPresenter;
+import interface_adapter.Stats.StatsViewModel;
 import interface_adapter.choose_difficulty.ChooseDifficultyController;
 import interface_adapter.choose_difficulty.ChooseDifficultyPresenter;
 import interface_adapter.endgame_results.EndGameResultsController;
@@ -25,6 +35,18 @@ import use_case.endgame_results.EndGameResultsInteractor;
 import use_case.endgame_results.EndGameResultsOutputBoundary;
 import use_case.generate_hint.HintInteractor;
 
+import use_case.GenerateWord.GenerateWordInputBoundary;
+import use_case.GenerateWord.GenerateWordInteractor;
+import use_case.GenerateWord.GenerateWordOutputBoundary;
+import use_case.Hint.HintDataAccessInterface;
+import use_case.Hint.HintInputBoundary;
+import use_case.Hint.HintOutputBoundary;
+import use_case.InitializeRound.InitializeRoundInputBoundary;
+import use_case.InitializeRound.InitializeRoundInteractor;
+import use_case.InitializeRound.InitializeRoundOutputBoundary;
+import use_case.MakeGuess.*;
+import use_case.Stats.StatsInputBoundary;
+import use_case.Stats.StatsInteractor;
 import use_case.generate_word.GenerateWordInputBoundary;
 import use_case.generate_word.GenerateWordInteractor;
 import use_case.generate_word.GenerateWordOutputBoundary;
@@ -78,11 +100,16 @@ public class AppBuilder {
     private RoomJoinView roomJoinView;
     private EndGameResultsView endGameResultsView;
 
+    private StatsController statsController;
+    private StatsViewModel statsViewModel;
+    private JsonStatsDataAccessObject statsDAO;
+
     //Controller
     private RoomJoinController roomJoinController;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
+        buildStatsComponents();
     }
 
     /**
@@ -93,7 +120,9 @@ public class AppBuilder {
         return this.viewManagerModel;
     }
 
-
+    public AppBuilder addStatsView() {
+        return this;
+    }
     public AppBuilder addGenerateWordView() {
         generateWordViewModel = new GenerateWordViewModel();
         generateWordView = new GenerateWordView(generateWordViewModel);
@@ -189,6 +218,17 @@ public class AppBuilder {
         return this;
     }
 
+    private void buildStatsComponents() {
+        statsViewModel = new StatsViewModel();
+
+        statsDAO = new JsonStatsDataAccessObject();
+
+        StatsPresenter statsPresenter = new StatsPresenter(statsViewModel);
+
+        StatsInputBoundary statsInteractor = new StatsInteractor(statsDAO, statsPresenter);
+
+        statsController = new StatsController(statsInteractor);
+    }
 
     public AppBuilder addEndGameResultsUseCase() {
         final EndGameResultsOutputBoundary presenter =
@@ -225,8 +265,23 @@ public class AppBuilder {
         });
 
         gameMenu.add(roomMenuItem);
+
+        JMenu statsMenu = new JMenu("Statistics");
+        JMenuItem statsMenuItem = new JMenuItem("View Stats");
+        statsMenuItem.addActionListener(e -> {
+            if (statsController != null && statsViewModel != null) {
+                StatsView statsView = new StatsView(application, statsController, statsViewModel);
+                statsView.showStats();
+            } else {
+                System.out.println("Stats components not initialized!");
+            }
+        });
+        statsMenu.add(statsMenuItem);
+
         menuBar.add(gameMenu);
+        menuBar.add(statsMenu);
         application.setJMenuBar(menuBar);
+
 
 //        // CHANGED: start on difficulty selection instead of generate word
 //        if (chooseDifficultyView != null) {
