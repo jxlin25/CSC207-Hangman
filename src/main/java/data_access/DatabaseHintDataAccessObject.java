@@ -8,9 +8,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import constant.Constants;
-import use_case.generate_hint.HintDataAccessInterface;
+import use_case.generate_hint.DBHintDataAccessInterface;
 
-public class DBHintDataAccessObject implements HintDataAccessInterface {
+public class DBHintDataAccessObject implements DBHintDataAccessInterface {
 
     private final OkHttpClient client;
 
