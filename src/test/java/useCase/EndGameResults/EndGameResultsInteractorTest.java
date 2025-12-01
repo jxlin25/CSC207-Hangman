@@ -1,6 +1,7 @@
 package use_case.EndGameResults;
 
 import data_access.InMemoryHangmanDataAccessObject;
+import data_access.JsonStatsDataAccessObject;
 import entity.HangmanGame;
 import entity.Round;
 import interface_adapter.EndGameResults.EndGameResultsState.RoundResult;
@@ -53,9 +54,9 @@ public class EndGameResultsInteractorTest {
 
         InMemoryHangmanDataAccessObject dao = new InMemoryHangmanDataAccessObject();
         dao.setHangmanGame(game);
-
+        JsonStatsDataAccessObject statsDao = new JsonStatsDataAccessObject()
         DummyEndGameResultsPresenter presenter = new DummyEndGameResultsPresenter();
-        EndGameResultsInteractor interactor = new EndGameResultsInteractor(presenter, dao);
+        EndGameResultsInteractor interactor = new EndGameResultsInteractor(presenter, dao, statsDao);
 
         EndGameResultsInputData inputData = new EndGameResultsInputData();
 
@@ -127,9 +128,9 @@ public class EndGameResultsInteractorTest {
 
         InMemoryHangmanDataAccessObject dao = new InMemoryHangmanDataAccessObject();
         dao.setHangmanGame(game);
-
+        JsonStatsDataAccessObject statsDAO = new JsonStatsDataAccessObject();
         DummyEndGameResultsPresenter presenter = new DummyEndGameResultsPresenter();
-        EndGameResultsInteractor interactor = new EndGameResultsInteractor(presenter, dao);
+        EndGameResultsInteractor interactor = new EndGameResultsInteractor(presenter, dao, statsDAO);
 
         EndGameResultsInputData inputData = new EndGameResultsInputData();
 

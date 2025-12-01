@@ -1,9 +1,13 @@
 package use_case.EndGameResults;
 
+import Constant.StatusConstant;
 import data_access.InMemoryHangmanDataAccessObject;
+import data_access.JsonStatsDataAccessObject;
 import entity.HangmanGame;
 import entity.Round;
 import interface_adapter.EndGameResults.EndGameResultsState.RoundResult;
+import use_case.Stats.StatsDataAccessInterface;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,11 +15,13 @@ public class EndGameResultsInteractor implements EndGameResultsInputBoundary {
 
     final EndGameResultsOutputBoundary EndGameResultsPresenter;
     final InMemoryHangmanDataAccessObject hangmanGameDAO;
+    final JsonStatsDataAccessObject statsDAO;
 
     public EndGameResultsInteractor(EndGameResultsOutputBoundary EndGameResultsPresenter,
-                                    InMemoryHangmanDataAccessObject hangmanGameDAO) {
+                                    InMemoryHangmanDataAccessObject hangmanGameDAO, JsonStatsDataAccessObject statsDAO) {
         this.EndGameResultsPresenter = EndGameResultsPresenter;
         this.hangmanGameDAO = hangmanGameDAO;
+        this.statsDAO = statsDAO;
     }
 
     @Override
@@ -31,6 +37,16 @@ public class EndGameResultsInteractor implements EndGameResultsInputBoundary {
 
         // Build round-by-round results
         List<RoundResult> roundResults = new ArrayList<>();
+
+        boolean gameWon = lastRoundStatus.equals(StatusConstant.WON);
+        if (gameWon || lastRoundStatus.equals(StatusConstant.LOST)) {
+            try {
+                statsDAO.updateStats(gameWon);
+                System.out.println("Stats recorded: " + (gameWon ? "WIN" : "LOSS"));
+            } catch (Exception e) {
+                System.err.println("Error recording stats: " + e.getMessage());
+            }
+        }
 
         for (int i = 0; i < game.getRounds().size(); i++) {
             Round round = game.getRounds().get(i);
