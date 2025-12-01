@@ -20,25 +20,29 @@ public class HintInteractor implements HintInputBoundary {
     @Override
     public void execute() {
         final String word = inMemoryHintDataAccessObject.getCurrentWord();
-        inMemoryHintDataAccessObject.decreaseHintAttempt();
         final int remainHint = inMemoryHintDataAccessObject.getHintAttempts();
-        String hint = "";
-        if (databaseHintDataAccessObject.isApiKeyValid()) {
-            hint = databaseHintDataAccessObject.getGemiHint(word);
+        String hint = null;
+        if (remainHint <= 0) {
+            hint = "Don't have hint attempts";
         }
         else {
-            final String dictHint = databaseHintDataAccessObject.getDictHint(word);
-            if (!(dictHint == null || dictHint.trim().isEmpty())) {
-                hint = "You haven't set an API Key or the Key is invalid. Here is a hint from the dictionary: "
-                        + databaseHintDataAccessObject.getDictHint(word);
+            inMemoryHintDataAccessObject.decreaseHintAttempt();
+            if (databaseHintDataAccessObject.isApiKeyValid()) {
+                hint = databaseHintDataAccessObject.getGemiHint(word);
             }
-
-            if (hint == null || hint.trim().isEmpty()) {
-                hint = "No hint available.";
+            else {
+                final String dictHint = databaseHintDataAccessObject.getDictHint(word);
+                if (!(dictHint == null || dictHint.trim().isEmpty())) {
+                    hint = "You haven't set an API Key or the Key is invalid. Here is a hint from the dictionary: "
+                            + databaseHintDataAccessObject.getDictHint(word);
+                }
             }
-
         }
-        final HintOutputData hintOutputData = new HintOutputData(hint, remainHint);
+        if (hint == null || hint.trim().isEmpty()) {
+            hint = "No hint available.";
+        }
+        final int nowHint = inMemoryHintDataAccessObject.getHintAttempts();
+        final HintOutputData hintOutputData = new HintOutputData(hint, nowHint);
         System.out.println("----------------------------");
         System.out.println("The Hint is :" + hint);
         System.out.println("----------------------------");

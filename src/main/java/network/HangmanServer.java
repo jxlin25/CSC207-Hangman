@@ -114,7 +114,6 @@ public class HangmanServer extends WebSocketServer {
 
     @Override
     public void onStart() {
-        System.out.println("Hangman server started!");
     }
 
     public Set<String> getEstablishedRooms() {

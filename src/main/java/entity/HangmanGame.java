@@ -23,37 +23,11 @@ public class HangmanGame {
 
         // Creating rounds of the game
         for (String word : words) {
-            WordPuzzle wordPuzzle = new WordPuzzle(word.toCharArray());
+            final WordPuzzle wordPuzzle = new WordPuzzle(word.toCharArray());
             this.rounds.add(new Round(wordPuzzle));
 
         }
         this.currentRoundIndex = 0;
-    }
-
-    /**
-     * Gets the maximum attempts per round for this game (difficulty).
-     */
-    public int getMaxAttempts() {
-        return maxAttempts;
-    }
-
-    public void setMaxAttempts(int maxAttempts) {
-        this.maxAttempts = maxAttempts;
-    }
-
-    public int getHintAttempts() {
-        return hintAttempts;
-    }
-
-    public void setHintAttempts(int hintAttempts) {
-        this.hintAttempts = hintAttempts;
-    }
-
-    /**
-     * decreasing the hint attempts.
-     */
-    public void decreaseHintAttempt() {
-        this.hintAttempts = hintAttempts - 1;
     }
 
     public ArrayList<Round> getRounds() {
@@ -86,21 +60,65 @@ public class HangmanGame {
     }
 
     /**
+     * Gets the number of the current round.
+     * @return current round number
+     */
+    public int getCurrentRoundNumber() {
+        // Add 1 because index is 0-based
+        return currentRoundIndex + 1;
+    }
+
+    /**
+     * Gets the number of total rounds.
+     * @return the number of total rounds.
+     */
+    public int getTotalRounds() {
+        return rounds.size();
+    }
+
+    /**
+     * Calculates the total number of rounds won so far.
+     * @return number of won round
+     */
+    public int getRoundsWon() {
+        int wins = 0;
+
+        for (int i = 0; i < currentRoundIndex; i++) {
+            if (rounds.get(i).getStatus().equals(constant.StatusConstant.WON)) {
+                wins++;
+            }
+        }
+
+        return wins;
+    }
+
+    /**
      * Attempts to move to the next round.
+     * @param win whether this round is won or lost
      * @return true if successfully moved to a new round, false if all rounds are over.
      */
-    public boolean startNextRound(boolean won) {
-        if (won){
+    public boolean startNextRound(boolean win) {
+        if (win) {
             this.getCurrentRound().setWon();
         }
-        else{
+        else {
             this.getCurrentRound().setLost();
         }
         if (currentRoundIndex >= rounds.size() - 1) {
-            return false; // cannot move to next round
+            return false;
         }
 
         // Otherwise move to next
+        currentRoundIndex++;
+        this.getCurrentRound().startRound();
+        return true;
+    }
+
+    public boolean startNextRound() {
+        if (currentRoundIndex >= rounds.size() - 1) {
+            return false;
+        }
+
         currentRoundIndex++;
         this.getCurrentRound().startRound();
         return true;
@@ -122,28 +140,27 @@ public class HangmanGame {
         return true;
     }
 
-    public int getCurrentRoundNumber() {
-        // Add 1 because index is 0-based
-        return currentRoundIndex + 1;
+    public int getMaxAttempts() {
+        return maxAttempts;
     }
 
-    public int getTotalRounds() {
-        return rounds.size();
+    public void setMaxAttempts(int maxAttempts) {
+        this.maxAttempts = maxAttempts;
+    }
+
+    public int getHintAttempts() {
+        return hintAttempts;
+    }
+
+    public void setHintAttempts(int hintAttempts) {
+        this.hintAttempts = hintAttempts;
     }
 
     /**
-     * Calculates the total number of rounds won so far.
-     * @return number of won round
+     * Decreases the hint attempts.
      */
-    public int getRoundsWon() {
-        int wins = 0;
-
-        for (int i = 0; i < currentRoundIndex; i++) {
-            if (rounds.get(i).getStatus().equals(constant.StatusConstant.WON)) {
-                wins++;
-            }
-        }
-
-        return wins;
+    public void decreaseHintAttempt() {
+        this.hintAttempts = hintAttempts - 1;
     }
+
 }

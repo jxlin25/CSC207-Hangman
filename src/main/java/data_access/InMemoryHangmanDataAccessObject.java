@@ -34,6 +34,12 @@ public class InMemoryHangmanDataAccessObject implements
     }
 
     @Override
+    public void saveCurrentRound(Round round) {
+        final int index = currentHangmanGame.getCurrentRoundIndex();
+        this.currentHangmanGame.getRounds().set(index, round);
+    }
+
+    @Override
     public void setHangmanGame(HangmanGame hangmanGame) {
         this.currentHangmanGame = hangmanGame;
     }
@@ -46,6 +52,11 @@ public class InMemoryHangmanDataAccessObject implements
     @Override
     public void addGuessToCurrentRound(Guess guess) {
         this.getCurrentRound().addGuess(guess);
+    }
+
+    @Override
+    public void startNextRound() {
+        this.getHangmanGame().startNextRound();
     }
 
     // Set current round as WON and move on to the next round
@@ -75,31 +86,8 @@ public class InMemoryHangmanDataAccessObject implements
         return this.getCurrentRound().getWordPuzzle();
     }
 
-    @Override
-    public boolean isGuessCorrectToCurrentWordPuzzle(Guess guess) {
-        // If the letter in the guess corresponds to a hidden letter in the puzzle, this is a correct guess
-        return this.getCurrentWordPuzzle().isLetterHidden(guess.getLetter());
-    }
-
-    @Override
-    // Reveal the given letter in the word puzzle
-    public void revealLetterInCurrentWordPuzzle(Guess guess) {
-        this.getCurrentWordPuzzle().revealLetter(guess.getLetter());
-    }
-
-    @Override
-    // Check if the puzzle is completed
-    public boolean isCurrentWordPuzzleComplete() {
-        return this.getCurrentWordPuzzle().isPuzzleComplete();
-    }
-
     public boolean isCurrentRoundTheLastRound() {
         return this.getHangmanGame().getCurrentRoundIndex() == this.getHangmanGame().getRounds().size() - 1;
-    }
-
-    @Override
-    public boolean[] getCurrentWordPuzzleRevealedLettersBooleans() {
-        return this.getCurrentWordPuzzle().getRevealedLettersBooleans();
     }
 
     @Override

@@ -76,25 +76,6 @@ public interface MakeGuessDataAccessInterface {
     WordPuzzle getCurrentWordPuzzle();
 
     /**
-     * Checks if a guess is correct to the current WordPuzzle object.
-     * @param guess Guess object that is going to be assessed
-     * @return true if the guess is correct to the current WordPuzzle object; otherwise false
-     */
-    boolean isGuessCorrectToCurrentWordPuzzle(Guess guess);
-
-    /**
-     * Marks all the occurrences of the letter in a Guess object in the current WordPuzzle object as unrevealed.
-     * @param guess Guess object that is going to be assessed
-     */
-    void revealLetterInCurrentWordPuzzle(Guess guess);
-
-    /**
-     * Checks if the current WordPuzzle isComplete.
-     * @return true if the current WordPuzzle is marked as complete; otherwise false
-     */
-    boolean isCurrentWordPuzzleComplete();
-
-    /**
      * Gets the string of the masked word of the current WordPuzzle.
      * @return the string of the masked word of the current WordPuzzle
      */
@@ -107,15 +88,13 @@ public interface MakeGuessDataAccessInterface {
     char[] getCurrentWordPuzzleLetters();
 
     /**
-     * Gets the array of booleans in the current WordPuzzle that marks whether each letter is revealed/hidden.
-     * @return the array of booleans in the current WordPuzzle that marks whether each letter is revealed/hidden
-     */
-    boolean[] getCurrentWordPuzzleRevealedLettersBooleans();
-
-    /**
      * Gets the full word of the current WordPuzzle.
      * @return the full word of the current WordPuzzle as a String
      */
     String getCurrentWord();
+
+    void saveCurrentRound(Round round);
+
+    void startNextRound();
 
 }

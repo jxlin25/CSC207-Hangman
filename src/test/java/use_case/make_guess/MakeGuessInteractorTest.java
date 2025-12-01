@@ -58,12 +58,14 @@ public class MakeGuessInteractorTest {
 
         // Assert
         assertNotNull("Output data should not be null", outputData);
+        assertEquals("Round number should be 1", 1, outputData.getCurrentRoundNumber());
         assertEquals("Guessed letter should remain the same in output data", 'a', outputData.getGuess().getLetter());
         assertTrue("Guess should be correct", outputData.isGuessCorrect());
         assertEquals("Round status should remain GUESSING", GUESSING, outputData.getRoundStatus());
         assertFalse("Game should not be over with unfinished round(s) remain", outputData.isGameOver());
         assertEquals("RemainingAttempts should remain 6 since the guess is correct", 6, outputData.getRemainingAttempts());
         assertEquals("Letter 'A' should be revealed", outputData.getMaskedWord(), "A _ _ _ _");
+        assertEquals("Full word should be 'Apple'", "Apple", outputData.getFullWord());
 
     }
 

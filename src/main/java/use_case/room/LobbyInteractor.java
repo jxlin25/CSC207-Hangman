@@ -1,4 +1,4 @@
-package use_case.Room;
+package use_case.room;
 
 public class LobbyInteractor {
 }

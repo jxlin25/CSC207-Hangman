@@ -1,6 +1,9 @@
 package entity;
 
+import constant.Constants;
 import constant.StatusConstant;
+import entity.round_states.GuessingRoundState;
+import entity.round_states.WaitingRoundState;
 
 import java.util.ArrayList;
 
@@ -14,12 +17,14 @@ public class Round {
     private String status;
     private ArrayList<Guess> guesses;
     private int attempt;
+    private RoundState roundState;
 
     public Round(WordPuzzle wordPuzzle) {
         this.wordPuzzle = wordPuzzle;
         this.status = constant.StatusConstant.WAITING;
+        this.roundState = new WaitingRoundState();
         this.guesses = new ArrayList<Guess>();
-        this.attempt = 6; //can be modified once all the difficulty levels are implemented
+        this.attempt = Constants.DEFAULT_MAX_ATTEMPTS;
     }
 
     public String getStatus() {
@@ -34,7 +39,7 @@ public class Round {
      * Sets the status of the current round to WON.
      */
     public void setWon() {
-        this.setStatus(constant.StatusConstant.WON);
+        this.setStatus(StatusConstant.WON);
     }
 
     /**
@@ -50,6 +55,7 @@ public class Round {
      */
     public void startRound() {
         this.setStatus(constant.StatusConstant.GUESSING);
+        this.roundState = new GuessingRoundState();
     }
 
     /**
@@ -84,6 +90,42 @@ public class Round {
     public boolean isGuessCorrect(Guess guess) {
 
         return this.wordPuzzle.isLetterHidden(guess.getLetter());
+    }
+
+    /**
+     * Delegate guess-handling to the current state.
+     * @param guess Guess object
+     */
+    public void handleGuess(Guess guess) {
+        this.roundState.handleGuess(this, guess);
+    }
+
+    /**
+     * Reveals a letter in the word puzzle
+     * @param guess Guess object the contains the letter
+     */
+    public void revealLetter(Guess guess) {
+        // You will need a method like this in WordPuzzle
+        this.wordPuzzle.revealLetter(guess.getLetter());
+    }
+
+    public RoundState getRoundState() {
+        return roundState;
+    }
+
+    public void setState(RoundState roundState) {
+        this.roundState = roundState;
+    }
+
+    /**
+     * Decreases the attempt by 1.
+     */
+    public void decreaseAttempt() {
+        this.attempt--;
+    }
+
+    public boolean isOver() {
+        return this.roundState.isOver();
     }
 }
 

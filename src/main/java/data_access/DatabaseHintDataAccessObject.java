@@ -2,14 +2,20 @@ package data_access;
 
 import java.io.IOException;
 
-import okhttp3.*;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import constant.Constants;
+import okhttp3.*;
 import use_case.generate_hint.DatabaseHintDataAccessInterface;
 
+/**
+ * If people want to use this DAO, they need valid Gemini 2.5 API KEY.
+ * https://aistudio.google.com/api-keys
+ * This is an API for accessing websites.
+ * if people not have it and set it to Environment Variables, it will ues Dictionary API.
+ */
 public class DatabaseHintDataAccessObject implements DatabaseHintDataAccessInterface {
 
     private final OkHttpClient client;

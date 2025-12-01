@@ -2,7 +2,7 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 
-import use_case.Room.RoomJoinInteractor;
+import use_case.room.RoomJoinInteractor;
 
 public class RoomJoinView extends JFrame {
 
