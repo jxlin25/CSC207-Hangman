@@ -16,4 +16,6 @@ public class Constants {
     public static final String DEF_STRING = "Definition: ";
 
     public static final int HANGMAN_FIGURE_MAX_INDEX = 6;
+
+    public static final int DEFAULT_MAX_ATTEMPTS = 6;
 }

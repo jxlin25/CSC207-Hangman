@@ -1,6 +1,6 @@
 package interface_adapter.Room;
 import view.RoomJoinView;
-import use_case.Room.RoomJoinInteractor;
+import use_case.room.RoomJoinInteractor;
 
 public class RoomJoinController implements RoomJoinView.Controller {
     private RoomJoinInteractor interactor;

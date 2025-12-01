@@ -114,6 +114,16 @@ public class HangmanGame {
         return true;
     }
 
+    public boolean startNextRound() {
+        if (currentRoundIndex >= rounds.size() - 1) {
+            return false;
+        }
+
+        currentRoundIndex++;
+        this.getCurrentRound().startRound();
+        return true;
+    }
+
     /**
      * Checks if all rounds are over.
      * @return boolean of whether all the rounds are over
