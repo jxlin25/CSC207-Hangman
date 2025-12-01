@@ -118,7 +118,7 @@ public class WordPuzzle {
      * Checks if the puzzle is completed by check if all the letter has been revealed in the WordPuzzle.
      * @return boolean of whether all the letters have been marked as revealed,
      * which is an indication of whether the puzzle is completed or not
-     */
+    */
     public boolean isPuzzleComplete() {
         for (boolean a : this.revealedLettersBooleans) {
             if (!a) {
