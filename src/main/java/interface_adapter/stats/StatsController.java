@@ -1,6 +1,6 @@
-package interface_adapter.Stats;
+package interface_adapter.stats;
 
-import use_case.Stats.StatsInputBoundary;
+import use_case.stats.StatsInputBoundary;
 
 /**
  * Controller for statistics

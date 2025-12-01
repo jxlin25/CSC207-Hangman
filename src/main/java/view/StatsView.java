@@ -1,14 +1,12 @@
 package view;
 
-import interface_adapter.Stats.StatsController;
-import interface_adapter.Stats.StatsViewModel;
-import interface_adapter.Stats.StatsState;
+import interface_adapter.stats.StatsController;
+import interface_adapter.stats.StatsViewModel;
+import interface_adapter.stats.StatsState;
 import entity.GameStats;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 

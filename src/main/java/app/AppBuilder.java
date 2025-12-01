@@ -5,9 +5,9 @@ import data_access.DatabaseHintDataAccessObject;
 import data_access.DatabaseGenerateWordDataAccessObject;
 
 import data_access.JsonStatsDataAccessObject;
-import interface_adapter.Stats.StatsController;
-import interface_adapter.Stats.StatsPresenter;
-import interface_adapter.Stats.StatsViewModel;
+import interface_adapter.stats.StatsController;
+import interface_adapter.stats.StatsPresenter;
+import interface_adapter.stats.StatsViewModel;
 import interface_adapter.choose_difficulty.ChooseDifficultyController;
 import interface_adapter.choose_difficulty.ChooseDifficultyPresenter;
 import interface_adapter.endgame_results.EndGameResultsController;
@@ -29,9 +29,9 @@ import use_case.endgame_results.EndGameResultsInteractor;
 import use_case.endgame_results.EndGameResultsOutputBoundary;
 import use_case.generate_hint.HintInteractor;
 
-import use_case.Stats.StatsInputBoundary;
-import use_case.Stats.StatsInteractor;
-import use_case.Stats.StatsDataAccessInterface;
+import use_case.stats.StatsInputBoundary;
+import use_case.stats.StatsInteractor;
+import use_case.stats.StatsDataAccessInterface;
 import use_case.generate_word.GenerateWordInputBoundary;
 import use_case.generate_word.GenerateWordInteractor;
 import use_case.generate_word.GenerateWordOutputBoundary;
@@ -248,8 +248,8 @@ public class AppBuilder {
                 System.out.println("roomJoinView is null!");
             }
         });
-
-        gameMenu.add(roomMenuItem);
+//
+//        gameMenu.add(roomMenuItem);
 
         JMenu statsMenu = new JMenu("Statistics");
         JMenuItem statsMenuItem = new JMenuItem("View Stats");
@@ -263,7 +263,7 @@ public class AppBuilder {
         });
         statsMenu.add(statsMenuItem);
 
-        menuBar.add(gameMenu);
+//        menuBar.add(gameMenu);
         menuBar.add(statsMenu);
         application.setJMenuBar(menuBar);
 

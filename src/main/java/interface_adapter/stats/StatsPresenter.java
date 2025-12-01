@@ -1,6 +1,6 @@
-package interface_adapter.Stats;
+package interface_adapter.stats;
 
-import use_case.Stats.StatsOutputBoundary;
+import use_case.stats.StatsOutputBoundary;
 import entity.GameStats;
 
 /**
