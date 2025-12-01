@@ -1,68 +1,81 @@
 package use_case.endgame_results;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import data_access.InMemoryHangmanDataAccessObject;
 import entity.HangmanGame;
 import entity.Round;
 import interface_adapter.endgame_results.EndGameResultsState.RoundResult;
+import use_case.Stats.StatsDataAccessInterface; // Import the interface
+import entity.GameStats; // Import GameStats
+import constant.StatusConstant; // Corrected import for StatusConstant
 
+import java.util.ArrayList;
+import java.util.List;
 
-
-/**
- * The Interactor for the EndGameResults use case.
- */
 public class EndGameResultsInteractor implements EndGameResultsInputBoundary {
 
-    private final EndGameResultsOutputBoundary endGameResultsPresenter;
-    private final EndGameResultsDataAccessInterface endGameResultsDataAccessObject;
+    final EndGameResultsOutputBoundary EndGameResultsPresenter;
+    final InMemoryHangmanDataAccessObject hangmanGameDAO; // Keep as concrete class
+    final StatsDataAccessInterface statsDataAccess; // New field for stats DAO
 
     public EndGameResultsInteractor(EndGameResultsOutputBoundary EndGameResultsPresenter,
-                                    InMemoryHangmanDataAccessObject endGameResultsDataAccessObject) {
-        this.endGameResultsPresenter = EndGameResultsPresenter;
-        this.endGameResultsDataAccessObject = endGameResultsDataAccessObject;
+                                    InMemoryHangmanDataAccessObject hangmanGameDAO, // Keep as concrete class
+                                    StatsDataAccessInterface statsDataAccess) { // Add to constructor
+        this.EndGameResultsPresenter = EndGameResultsPresenter;
+        this.hangmanGameDAO = hangmanGameDAO;
+        this.statsDataAccess = statsDataAccess; // Initialize
     }
 
     @Override
     public void execute(EndGameResultsInputData inputData) {
-        final HangmanGame game = endGameResultsDataAccessObject.getHangmanGame();
+        HangmanGame game = hangmanGameDAO.getHangmanGame();
 
-        // Determine overall game status based on the last round
-        final String finalStatus = "Game Over";
+        Round lastRound = game.getRounds().get(game.getRounds().size() - 1);
+        boolean overallGameWon = lastRound.getStatus().equals(StatusConstant.WON);
 
-        // Build round-by-round results
-        final List<RoundResult> roundResults = new ArrayList<>();
+        GameStats currentStats = statsDataAccess.loadStatistics(); // Load existing stats
+
+        if (overallGameWon) {
+            currentStats.incrementWins(); // Increment wins if overall game won
+        } else {
+            currentStats.incrementLosses(); // Increment losses if overall game lost
+        }
+        statsDataAccess.saveStatistics(currentStats); // Save updated stats
+
+        List<RoundResult> roundResults = new ArrayList<>();
+        int gameWins = 0; // Track wins for this specific game
+        int gameLosses = 0; // Track losses for this specific game
 
         for (int i = 0; i < game.getRounds().size(); i++) {
-            final Round round = game.getRounds().get(i);
+            Round round = game.getRounds().get(i);
 
-            System.out.println("Round " + (i + 1) + ":");
+            // Existing debug prints
+            System.out.println("Round " + (i+1) + ":");
             System.out.println("  Status: " + round.getStatus());
             System.out.println("  Remaining Attempts: " + round.getAttempt());
-            System.out.println("  Attempts Used: " + (endGameResultsDataAccessObject.getMaxAttempts() - round.getAttempt()));
+            System.out.println("  Attempts Used: " + (hangmanGameDAO.getMaxAttempts() - round.getAttempt()));
 
-            // Calculate attempts used for this round (6 - remaining)
-            final int attemptsUsed = endGameResultsDataAccessObject.getMaxAttempts() - round.getAttempt();
+            int attemptsUsed = hangmanGameDAO.getMaxAttempts() - round.getAttempt();
+            String word = new String(round.getWordPuzzle().getLetters());
+            String status = round.getStatus();
+            String statusText = status.equals(StatusConstant.WON) ? "Won" : "Lost";
 
-            // Get word
-            final String word = new String(round.getWordPuzzle().getLetters());
+            // Aggregate wins/losses for the current game for presentation if needed
+            if (status.equals(StatusConstant.WON)) {
+                gameWins++;
+            } else {
+                gameLosses++;
+            }
 
-            // Get status
-            final String status = round.getStatus();
-            final String statusText = status.equals(constant.StatusConstant.WON) ? "Won" : "Lost";
-
-            // Create round result
-            final RoundResult result = new RoundResult(
-                    i + 1,           // Round number (1-based)
-                    word,            // The word
-                    attemptsUsed,    // Attempts used in THIS round only
-                    statusText       // Won or Lost
+            RoundResult result = new RoundResult(
+                    i + 1,
+                    word,
+                    attemptsUsed,
+                    statusText
             );
-
             roundResults.add(result);
         }
 
-        endGameResultsPresenter.present(finalStatus, roundResults);
+        EndGameResultsPresenter.present(overallGameWon ? "You Won the Game!" : "You Lost the Game!", roundResults);
+
     }
 }

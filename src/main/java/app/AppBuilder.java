@@ -31,6 +31,7 @@ import use_case.generate_hint.HintInteractor;
 
 import use_case.Stats.StatsInputBoundary;
 import use_case.Stats.StatsInteractor;
+import use_case.Stats.StatsDataAccessInterface;
 import use_case.generate_word.GenerateWordInputBoundary;
 import use_case.generate_word.GenerateWordInteractor;
 import use_case.generate_word.GenerateWordOutputBoundary;
@@ -86,7 +87,7 @@ public class AppBuilder {
 
     private StatsController statsController;
     private StatsViewModel statsViewModel;
-    private JsonStatsDataAccessObject statsDAO;
+    private StatsDataAccessInterface statsDataAccessObject;
 
     //Controller
     private RoomJoinController roomJoinController;
@@ -205,11 +206,11 @@ public class AppBuilder {
     private void buildStatsComponents() {
         statsViewModel = new StatsViewModel();
 
-        statsDAO = new JsonStatsDataAccessObject();
+        this.statsDataAccessObject = new JsonStatsDataAccessObject("hangman_stats.json");
 
         StatsPresenter statsPresenter = new StatsPresenter(statsViewModel);
 
-        StatsInputBoundary statsInteractor = new StatsInteractor(statsDAO, statsPresenter);
+        StatsInputBoundary statsInteractor = new StatsInteractor(this.statsDataAccessObject, statsPresenter);
 
         statsController = new StatsController(statsInteractor);
     }
@@ -218,7 +219,7 @@ public class AppBuilder {
         final EndGameResultsOutputBoundary presenter =
                 new EndGameResultsPresenter(endGameResultsViewModel, viewManagerModel);
         final EndGameResultsInputBoundary interactor =
-                new EndGameResultsInteractor(presenter, hangmanGameDAO);
+                new EndGameResultsInteractor(presenter, hangmanGameDAO, this.statsDataAccessObject);
         final EndGameResultsController controller =
                 new EndGameResultsController(interactor);
         makeGuessView.setEndGameResultsController(controller);
