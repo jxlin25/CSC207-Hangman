@@ -29,6 +29,7 @@ public class InitializeRoundPresenter implements InitializeRoundOutputBoundary {
         state.setMaskedWord(outputData.getMaskedWord());
         state.setHintText(null);
         state.setResetAlphabetButtons(true);
+        state.setUsedhint(false);
 
         makeGuessViewModel.setState(state);
         makeGuessViewModel.firePropertyChanged();
