@@ -6,22 +6,18 @@ package use_case.generate_hint;
 
 public class HintOutputData {
     private String hint;
-    private int remainHint;
+    private int remainHintAttempts;
 
-    public HintOutputData(String hint, int remainHint) {
+    public HintOutputData(String hint, int remainHintAttempts) {
         this.hint = hint;
-        this.remainHint = remainHint;
+        this.remainHintAttempts = remainHintAttempts;
     }
 
     public String getHint() {
         return hint;
     }
 
-    public void setHint(String hint) {
-        this.hint = hint;
-    }
-
-    public int getRemainHint() {
-        return remainHint;
+    public int getRemainHintAttempts() {
+        return remainHintAttempts;
     }
 }

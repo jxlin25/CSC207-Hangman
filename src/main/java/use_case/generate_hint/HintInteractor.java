@@ -22,21 +22,29 @@ public class HintInteractor implements HintInputBoundary {
     @Override
     public void execute() {
         final String word = new String(hangmanGameDataAccessInterface.getCurrentWordPuzzle().getLetters());
-        hangmanGameDataAccessInterface.getHangmanGame().decreasingHint();
-        final int remainHint = hangmanGameDataAccessInterface.getHangmanGame().getHintAttempts();
+        int remainHint = hangmanGameDataAccessInterface.getHangmanGame().getHintAttempts();
         String hint = "";
-        if (hintDataAccessInterface.isApiKeyValid()) {
-            hint = hintDataAccessInterface.getGemiHint(word);
+
+        if (remainHint <= 0) {
+            hint = "Don't have hint attempts";
         }
         else {
-            final String dictHint = hintDataAccessInterface.getDictHint(word);
-            if (!(dictHint == null || dictHint.trim().isEmpty())) {
-                hint = "You haven't set an API Key or the Key is invalid. Here is a hint from the dictionary: "
-                        + hintDataAccessInterface.getDictHint(word);
+            if (hintDataAccessInterface.isApiKeyValid()) {
+                hint = hintDataAccessInterface.getGemiHint(word);
             }
-        }
-        if (hint == null || hint.trim().isEmpty()) {
-            hint = "No hint available.";
+            else {
+                final String dictHint = hintDataAccessInterface.getDictHint(word);
+                if (!(dictHint == null || dictHint.trim().isEmpty())) {
+                    hint = "You haven't set an API Key or the Key is invalid. Here is a hint from the dictionary: "
+                            + hintDataAccessInterface.getDictHint(word);
+                }
+            }
+            if (hint == null || hint.trim().isEmpty()) {
+                hint = "No hint available.";
+            }
+            hangmanGameDataAccessInterface.getHangmanGame().decreasingHint();
+            remainHint = hangmanGameDataAccessInterface.getHangmanGame().getHintAttempts();
+
         }
         final HintOutputData hintOutputData = new HintOutputData(hint, remainHint);
         System.out.println("----------------------------");

@@ -100,6 +100,27 @@ public class GenerateWordInteractorTest {
     }
 
     @Test
+    public void testWordIsNull() {
+        // test we can not get word.
+        DummyGenerateWordDAO wordDAO = new DummyGenerateWordDAO();
+        DummyPresenter presenter = new DummyPresenter();
+        InMemoryHangmanDataAccessObject hangmanDAO = new InMemoryHangmanDataAccessObject();
+
+        wordDAO.word = null;
+        wordDAO.valid = false;
+
+        GenerateWordInteractor interactor = new GenerateWordInteractor(wordDAO, presenter, hangmanDAO);
+        interactor.execute(new GenerateWordInputData(1));
+
+        // Hangman should not be set up
+        assertNull("Game should not be created on failure", hangmanDAO.getHangmanGame());
+        assertNotNull("Error message expected", presenter.error);
+        assertEquals("Failed to generate a valid word after 10 attempts, please try again!", presenter.error);
+
+        assertTrue("API should be called at least 10 times", wordDAO.callCount >= 10);
+    }
+
+    @Test
     public void testNegativeNumberOfWords() {
         // test if enter <= 0, actually this doesn't happen.
         DummyGenerateWordDAO wordDAO = new DummyGenerateWordDAO();
