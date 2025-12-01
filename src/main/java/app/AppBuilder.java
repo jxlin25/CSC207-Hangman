@@ -1,50 +1,59 @@
 package app;
 
-import data_access.InMemoryHangmanDataAccessObject;
-import data_access.DBHintDataAccessObject;
+import java.awt.CardLayout;
+
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.WindowConstants;
+
 import data_access.DBGenerateWordDataAccessObject;
+import data_access.DBHintDataAccessObject;
+import data_access.InMemoryHangmanDataAccessObject;
+import interface_adapter.Room.RoomJoinController;
+import interface_adapter.ViewManagerModel;
 
 import interface_adapter.EndGameResults.EndGameResultsController;
 import interface_adapter.EndGameResults.EndGameResultsPresenter;
-import interface_adapter.InitializeRound.InitializeRoundController;
-import interface_adapter.InitializeRound.InitializeRoundPresenter;
-import interface_adapter.ViewManagerModel;
+import interface_adapter.EndGameResults.EndGameResultsViewModel;
 import interface_adapter.GenerateWord.GenerateWordController;
 import interface_adapter.GenerateWord.GenerateWordPresenter;
 import interface_adapter.GenerateWord.GenerateWordViewModel;
-import interface_adapter.Hint.HintPresenter;
 import interface_adapter.Hint.HintController;
-
+import interface_adapter.Hint.HintPresenter;
+import interface_adapter.InitializeRound.InitializeRoundController;
+import interface_adapter.InitializeRound.InitializeRoundPresenter;
+import interface_adapter.MakeGuess.MakeGuessController;
+import interface_adapter.MakeGuess.MakeGuessPresenter;
+import interface_adapter.MakeGuess.MakeGuessViewModel;
 import use_case.endgameresults.EndGameResultsInputBoundary;
 import use_case.endgameresults.EndGameResultsInteractor;
 import use_case.endgameresults.EndGameResultsOutputBoundary;
-import use_case.Hint.HintInteractor;
-
 import use_case.GenerateWord.GenerateWordInputBoundary;
 import use_case.GenerateWord.GenerateWordInteractor;
 import use_case.GenerateWord.GenerateWordOutputBoundary;
 import use_case.Hint.HintInputBoundary;
+import use_case.Hint.HintInteractor;
 import use_case.Hint.HintOutputBoundary;
 import use_case.InitializeRound.InitializeRoundInputBoundary;
 import use_case.InitializeRound.InitializeRoundInteractor;
 import use_case.InitializeRound.InitializeRoundOutputBoundary;
-import use_case.MakeGuess.*;
-
-import view.*;
-
-import javax.swing.*;
-import java.awt.*;
-
-import interface_adapter.Room.RoomJoinController;
+import use_case.MakeGuess.MakeGuessInputBoundary;
+import use_case.MakeGuess.MakeGuessInteractor;
+import use_case.MakeGuess.MakeGuessOutputBoundary;
 import use_case.Room.RoomJoinInteractor;
+import view.EndGameResultsView;
+import view.GenerateWordView;
+import view.MakeGuessView;
+import view.RoomJoinView;
+import view.ViewManager;
 
-
-import interface_adapter.MakeGuess.MakeGuessViewModel;
-import interface_adapter.MakeGuess.MakeGuessController;
-import interface_adapter.MakeGuess.MakeGuessPresenter;
-
-import interface_adapter.EndGameResults.EndGameResultsViewModel;
-
+/**
+ * Builder class for constructing the Hangman application.
+ * Handles initialization of all views, view models, controllers, and use cases.
+ */
 public class AppBuilder {
 
     private final JPanel cardPanel = new JPanel();
@@ -53,23 +62,23 @@ public class AppBuilder {
     private final ViewManagerModel viewManagerModel = new ViewManagerModel();
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
-    //DAO
-    final DBGenerateWordDataAccessObject generateWordAccessObject = new DBGenerateWordDataAccessObject();
-    final InMemoryHangmanDataAccessObject hangmanGameDAO = new InMemoryHangmanDataAccessObject();
-    final DBHintDataAccessObject hintDAO = new DBHintDataAccessObject();
+    // DAO
+    private final DBGenerateWordDataAccessObject generateWordAccessObject = new DBGenerateWordDataAccessObject();
+    private final InMemoryHangmanDataAccessObject hangmanGameDAO = new InMemoryHangmanDataAccessObject();
+    private final DBHintDataAccessObject hintDAO = new DBHintDataAccessObject();
 
-    //View Model
+    // View Model
     private GenerateWordViewModel generateWordViewModel;
     private MakeGuessViewModel makeGuessViewModel;
     private EndGameResultsViewModel endGameResultsViewModel;
 
-    //View
+    // View
     private GenerateWordView generateWordView;
     private MakeGuessView makeGuessView;
     private RoomJoinView roomJoinView;
     private EndGameResultsView endGameResultsView;
 
-    //Controller
+    // Controller
     private RoomJoinController roomJoinController;
 
     public AppBuilder() {
@@ -77,14 +86,17 @@ public class AppBuilder {
     }
 
     /**
-     * View
+     * Gets the ViewManagerModel instance.
+     * @return the ViewManagerModel
      */
-
     public ViewManagerModel getViewManagerModel() {
         return this.viewManagerModel;
     }
 
-
+    /**
+     * Adds the Generate Word View to the application.
+     * @return this AppBuilder instance for method chaining
+     */
     public AppBuilder addGenerateWordView() {
         generateWordViewModel = new GenerateWordViewModel();
         generateWordView = new GenerateWordView(generateWordViewModel);
@@ -92,6 +104,10 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the Make Guess View to the application.
+     * @return this AppBuilder instance for method chaining
+     */
     public AppBuilder addMakeGuessView() {
         makeGuessViewModel = new MakeGuessViewModel();
         makeGuessView = new MakeGuessView(makeGuessViewModel);
@@ -99,6 +115,10 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the End Game Results View to the application.
+     * @return this AppBuilder instance for method chaining
+     */
     public AppBuilder addEndGameResultsView() {
         endGameResultsView = new EndGameResultsView(endGameResultsViewModel);
         endGameResultsView.setViewManagerModel(viewManagerModel);
@@ -106,29 +126,39 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the Room Join View to the application.
+     * @return this AppBuilder instance for method chaining
+     */
     public AppBuilder addRoomJoinView() {
-        RoomJoinInteractor interactor = new RoomJoinInteractor();
+        final RoomJoinInteractor interactor = new RoomJoinInteractor();
         roomJoinController = new RoomJoinController(interactor);
         roomJoinView = new RoomJoinView();
         roomJoinView.setController(roomJoinController);
         return this;
     }
 
-    //TODO if we have any new view, put it aboard, and usecase below
-
     /**
-     *UseCase
+     * Adds the Generate Word Use Case to the application.
+     * @return this AppBuilder instance for method chaining
      */
-
     public AppBuilder addGenerateWordUseCase() {
-
-        GenerateWordOutputBoundary GenerateWordOutputBoundary = new GenerateWordPresenter(generateWordViewModel, makeGuessViewModel, viewManagerModel);
-        GenerateWordInputBoundary generateWordInteractor = new GenerateWordInteractor(generateWordAccessObject, GenerateWordOutputBoundary,hangmanGameDAO);
-        GenerateWordController controller = new GenerateWordController(generateWordInteractor);
+        final GenerateWordOutputBoundary generateWordPresenter =
+                new GenerateWordPresenter(generateWordViewModel, makeGuessViewModel, viewManagerModel);
+        final GenerateWordInputBoundary generateWordInteractor =
+                new GenerateWordInteractor(generateWordAccessObject, generateWordPresenter, hangmanGameDAO);
+        final GenerateWordController controller = new GenerateWordController(generateWordInteractor);
         generateWordView.setGenerateWordController(controller);
+
         return this;
     }
 
+
+
+    /**
+     * Adds the Make Guess Use Case to the application.
+     * @return this AppBuilder instance for method chaining
+     */
     public AppBuilder addMakeGuessUseCase() {
         final MakeGuessOutputBoundary makeGuessPresenter = new MakeGuessPresenter(makeGuessViewModel);
         final MakeGuessInputBoundary makeGuessInteractor = new MakeGuessInteractor(makeGuessPresenter, hangmanGameDAO);
@@ -138,33 +168,48 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the Initialize Round Use Case to the application.
+     * @return this AppBuilder instance for method chaining
+     */
     public AppBuilder addInitializeRoundUseCase() {
-        final InitializeRoundOutputBoundary initializeFirstRoundPresenter = new InitializeRoundPresenter(makeGuessViewModel);
-        final InitializeRoundInputBoundary initializeFirstRoundInteractor = new InitializeRoundInteractor(initializeFirstRoundPresenter, hangmanGameDAO);
-        final InitializeRoundController initializeRoundController = new InitializeRoundController(initializeFirstRoundInteractor);
+        final InitializeRoundOutputBoundary initializeFirstRoundPresenter =
+                new InitializeRoundPresenter(makeGuessViewModel);
+        final InitializeRoundInputBoundary initializeFirstRoundInteractor =
+                new InitializeRoundInteractor(initializeFirstRoundPresenter, hangmanGameDAO);
+        final InitializeRoundController initializeRoundController =
+                new InitializeRoundController(initializeFirstRoundInteractor);
         generateWordView.setInitializeRoundController(initializeRoundController);
         makeGuessView.setInitializeRoundController(initializeRoundController);
         return this;
     }
 
+    /**
+     * Adds the Hint Use Case to the application.
+     * @return this AppBuilder instance for method chaining
+     */
     public AppBuilder addHintUseCase() {
-        HintOutputBoundary hintPresenter = new HintPresenter(makeGuessViewModel);
-
-        HintInputBoundary hintInteractor = new HintInteractor(hintDAO, hintPresenter, hangmanGameDAO);
-
-        HintController hintController = new HintController(hintInteractor);
-
+        final HintOutputBoundary hintPresenter = new HintPresenter(makeGuessViewModel);
+        final HintInputBoundary hintInteractor = new HintInteractor(hintDAO, hintPresenter, hangmanGameDAO);
+        final HintController hintController = new HintController(hintInteractor);
         makeGuessView.setHintController(hintController);
 
         return this;
     }
 
+    /**
+     * Adds the End Game Results View Model to the application.
+     * @return this AppBuilder instance for method chaining
+     */
     public AppBuilder addEndGameResultsViewModel() {
         this.endGameResultsViewModel = new EndGameResultsViewModel();
         return this;
     }
 
-
+    /**
+     * Adds the End Game Results Use Case to the application.
+     * @return this AppBuilder instance for method chaining
+     */
     public AppBuilder addEndGameResultsUseCase() {
         final EndGameResultsOutputBoundary presenter =
                 new EndGameResultsPresenter(endGameResultsViewModel, viewManagerModel);
@@ -176,22 +221,21 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Builds and returns the main application JFrame.
+     * @return the configured JFrame for the Hangman application
+     */
     public JFrame build() {
-        JFrame application = new JFrame("Hangman");
+        final JFrame application = new JFrame("Hangman");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         application.add(cardPanel);
 
-// disable for demo
-// viewManagerModel.setState(generateWordView.getViewName());
-//  viewManagerModel.firePropertyChange();
-
-        JMenuBar menuBar = new JMenuBar();
-        JMenu gameMenu = new JMenu("Multiplayer"); // Changed from "Game" to be more clear
-        JMenuItem roomMenuItem = new JMenuItem("Join/Create Room");
-        roomMenuItem.addActionListener(e -> {
+        final JMenuBar menuBar = new JMenuBar();
+        final JMenu gameMenu = new JMenu("Multiplayer");
+        final JMenuItem roomMenuItem = new JMenuItem("Join/Create Room");
+        roomMenuItem.addActionListener(event -> {
             if (roomJoinView != null) {
                 roomJoinView.setVisible(true);
-                // Center the room join view
                 roomJoinView.setLocationRelativeTo(application);
             }
             else {
@@ -205,7 +249,7 @@ public class AppBuilder {
 
         viewManagerModel.setState(generateWordView.getViewName());
         viewManagerModel.firePropertyChange();
-        // Add the main content
+
         return application;
     }
 }
