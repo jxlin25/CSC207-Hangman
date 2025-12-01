@@ -14,7 +14,6 @@ release.properties
 # =========================
 
 # IntelliJ IDEA
-.idea/
 *.iml
 out/
 
@@ -74,7 +73,5 @@ desktop.ini
 *.env
 *.key
 *.pem
-*.credentials
-
-*.puml
-*.txt
+*.credentials.idea/workspace.xml
+*.json

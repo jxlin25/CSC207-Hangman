@@ -1,12 +1,15 @@
 package entity;
 
+import constant.StatusConstant;
+
 import java.util.ArrayList;
 
-import static Constant.StatusConstant.*;
-
+/**
+ * Represents a single round of Hangman game, storing the target word,
+ * its status quo, and array of all the guesses been made in the round and the attempts left.
+ */
 public class Round {
-    //leave for multiplayer
-    //private String roundId;
+
     private WordPuzzle wordPuzzle;
     private String status;
     private ArrayList<Guess> guesses;
@@ -14,13 +17,9 @@ public class Round {
 
     public Round(WordPuzzle wordPuzzle) {
         this.wordPuzzle = wordPuzzle;
-        this.status = WAITING;
+        this.status = constant.StatusConstant.WAITING;
         this.guesses = new ArrayList<Guess>();
         this.attempt = 6; //can be modified once all the difficulty levels are implemented
-    }
-
-    public boolean isGuessCorrect(Guess guess) {
-        return this.wordPuzzle.isLetterHidden(guess.getLetter());
     }
 
     public String getStatus() {
@@ -31,18 +30,32 @@ public class Round {
         this.status = status;
     }
 
-    public void setWON() {
-        this.setStatus(WON);
+    /**
+     * Sets the status of the current round to WON.
+     */
+    public void setWon() {
+        this.setStatus(constant.StatusConstant.WON);
     }
 
-    public void setLOST() {
-        this.setStatus(LOST);
+    /**
+     * Sets the status of the current round to LOST.
+     */
+    public void setLost() {
+        this.setStatus(StatusConstant.LOST);
     }
 
+    /**
+     * Sets the status of the current round to GUESSING,
+     * marking this round as started.
+     */
     public void startRound() {
-        this.setStatus(GUESSING);
+        this.setStatus(constant.StatusConstant.GUESSING);
     }
 
+    /**
+     * Add a guess to this round.
+     * @param guess the guess object that is going to be added
+     */
     public void addGuess(Guess guess) {
         this.guesses.add(guess);
     }
@@ -55,12 +68,22 @@ public class Round {
         this.attempt = attempt;
     }
 
-    public boolean isPuzzleComplete(){
+    public boolean isPuzzleComplete() {
         return wordPuzzle.isPuzzleComplete();
     }
 
     public WordPuzzle getWordPuzzle() {
         return wordPuzzle;
+    }
+
+    /**
+     * Checks if a guess is correct to the word puzzle.
+     * @param guess A guess that is going to be assessed
+     * @return boolean of whether the guess is correct
+     */
+    public boolean isGuessCorrect(Guess guess) {
+
+        return this.wordPuzzle.isLetterHidden(guess.getLetter());
     }
 }
 

@@ -3,8 +3,6 @@ package entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Constant.StatusConstant.*;
-
 /**
  * Manages the overall game state, including a list of all rounds.
  * This class is the main "entity" for the whole game.
@@ -13,6 +11,8 @@ public class HangmanGame {
 
     private ArrayList<Round> rounds;
     private int currentRoundIndex;
+    private int maxAttempts;
+    private int hintAttempts;
 
     /**
      * Creates a new game.
@@ -21,35 +21,69 @@ public class HangmanGame {
     public HangmanGame(List<String> words) {
         this.rounds = new ArrayList<>();
 
-        //creating rounds of the game
+        // Creating rounds of the game
         for (String word : words) {
             WordPuzzle wordPuzzle = new WordPuzzle(word.toCharArray());
             this.rounds.add(new Round(wordPuzzle));
+
         }
         this.currentRoundIndex = 0;
     }
 
+    /**
+     * Gets the maximum attempts per round for this game (difficulty).
+     */
+    public int getMaxAttempts() {
+        return maxAttempts;
+    }
+
+    public void setMaxAttempts(int maxAttempts) {
+        this.maxAttempts = maxAttempts;
+    }
+
+    public int getHintAttempts() {
+        return hintAttempts;
+    }
+
+    public void setHintAttempts(int hintAttempts) {
+        this.hintAttempts = hintAttempts;
+    }
+
+    /**
+     * decreasing the hint attempts.
+     */
+    public void decreaseHintAttempt() {
+        this.hintAttempts = hintAttempts - 1;
+    }
+
+    public ArrayList<Round> getRounds() {
+        return this.rounds;
+    }
+
+    public int getCurrentRoundIndex() {
+        return currentRoundIndex;
+    }
 
     /**
      * Gets the currently active round.
-     * @return The current Round object, or null if the game is over.
+     * @return The current Round object.
      */
     public Round getCurrentRound() {
-
         return rounds.get(currentRoundIndex);
     }
 
-    public Round getRound(int index){
-        if(index >= 0 && index < this.rounds.size()){
-            return this.rounds.get(index);
+    /**
+     * Gets a Round object by index.
+     * @param index index of the Round object
+     * @return the corresponding Round object
+     */
+    public Round getRound(int index) {
+        Round result = null;
+        if (index >= 0 && index < this.rounds.size()) {
+            result = this.rounds.get(index);
         }
-        else{
-            return null;
-        }
-
+        return result;
     }
-
-
 
     /**
      * Attempts to move to the next round.
@@ -57,10 +91,10 @@ public class HangmanGame {
      */
     public boolean startNextRound(boolean won) {
         if (won){
-            this.getCurrentRound().setWON();
+            this.getCurrentRound().setWon();
         }
         else{
-            this.getCurrentRound().setLOST();
+            this.getCurrentRound().setLost();
         }
         if (currentRoundIndex >= rounds.size() - 1) {
             return false; // cannot move to next round
@@ -73,10 +107,19 @@ public class HangmanGame {
     }
 
     /**
-     * Checks if all rounds have been played.
+     * Checks if all rounds are over.
+     * @return boolean of whether all the rounds are over
      */
     public boolean isGameOver() {
-        return currentRoundIndex >= rounds.size();
+
+        // Check if all the round has the status of either WON or LOST
+        // If not, immediately return false
+        for (Round round : rounds) {
+            if (!(round.getStatus() == constant.StatusConstant.WON || round.getStatus() == constant.StatusConstant.LOST)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public int getCurrentRoundNumber() {
@@ -90,12 +133,13 @@ public class HangmanGame {
 
     /**
      * Calculates the total number of rounds won so far.
+     * @return number of won round
      */
     public int getRoundsWon() {
         int wins = 0;
 
         for (int i = 0; i < currentRoundIndex; i++) {
-            if (rounds.get(i).getStatus().equals(WON)) {
+            if (rounds.get(i).getStatus().equals(constant.StatusConstant.WON)) {
                 wins++;
             }
         }

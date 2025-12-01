@@ -12,12 +12,13 @@ public class HangmanImagePanel extends JPanel {
         this.setLayout(new BorderLayout());
         this.add(imageLabel, BorderLayout.CENTER);
         // Start with 0 attempt used image loaded (assuming it's in resources/images/hangman0.png)
-        setIncorrectGuesses(0);
+        setImageIndex(0);
     }
 
     // This method updates the image based on the number of attempts used
-    public void setIncorrectGuesses(int guesses) {
-        ImageIcon icon = loadImage(guesses);
+    public void setImageIndex(int attemptsUsed) {
+
+        ImageIcon icon = loadImage(attemptsUsed);
         imageLabel.setIcon(icon);
     }
 

@@ -4,14 +4,24 @@ import entity.Guess;
 import entity.HangmanGame;
 import entity.Round;
 import entity.WordPuzzle;
-import use_case.InitializeFirstRound.InitializeFirstRoundDataAccessInterface;
-import use_case.MakeGuess.MakeGuessHangmanGameDataAccessInterface;
+import use_case.choose_difficulty.ChooseDifficultyDataAccessInterface;
+import use_case.endgame_results.EndGameResultsDataAccessInterface;
+import use_case.generate_hint.InMemoryHintDataAccessInterface;
+import use_case.initialize_round.InitializeRoundDataAccessInterface;
+import use_case.make_guess.MakeGuessDataAccessInterface;
 
-public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameDataAccessInterface, InitializeFirstRoundDataAccessInterface {
+public class InMemoryHangmanDataAccessObject implements
+        MakeGuessDataAccessInterface,
+        InitializeRoundDataAccessInterface,
+        InMemoryHintDataAccessInterface,
+        EndGameResultsDataAccessInterface,
+        ChooseDifficultyDataAccessInterface {
 
     private HangmanGame currentHangmanGame;
 
-    public InMemoryHangmanDataAccessObject() {}
+    public InMemoryHangmanDataAccessObject() {
+
+    }
 
     @Override
     public HangmanGame getHangmanGame() {
@@ -34,7 +44,7 @@ public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameData
     }
 
     @Override
-    public void addGuessToCurrentRound(Guess guess){
+    public void addGuessToCurrentRound(Guess guess) {
         this.getCurrentRound().addGuess(guess);
     }
 
@@ -48,12 +58,16 @@ public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameData
     @Override
     public boolean setCurrentRoundLostAndStartNextRound() {
         return this.getHangmanGame().startNextRound(false);
+    }
 
+    @Override
+    public int getTotalRoundNumber() {
+        return this.getHangmanGame().getTotalRounds();
     }
 
     @Override
     public int getCurrentRoundAttempt() {
-        return  this.getCurrentRound().getAttempt();
+        return this.getCurrentRound().getAttempt();
     }
 
     @Override
@@ -62,26 +76,25 @@ public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameData
     }
 
     @Override
-    public boolean isGuessCorrect(Guess guess){
+    public boolean isGuessCorrectToCurrentWordPuzzle(Guess guess) {
         // If the letter in the guess corresponds to a hidden letter in the puzzle, this is a correct guess
         return this.getCurrentWordPuzzle().isLetterHidden(guess.getLetter());
     }
 
     @Override
     // Reveal the given letter in the word puzzle
-    public void revealLetter(Guess guess) {
+    public void revealLetterInCurrentWordPuzzle(Guess guess) {
         this.getCurrentWordPuzzle().revealLetter(guess.getLetter());
     }
 
     @Override
     // Check if the puzzle is completed
-    public boolean isPuzzleComplete() {
+    public boolean isCurrentWordPuzzleComplete() {
         return this.getCurrentWordPuzzle().isPuzzleComplete();
     }
 
-    @Override
-    public char[] getCurrentWordPuzzleLetters() {
-        return new char[0];
+    public boolean isCurrentRoundTheLastRound() {
+        return this.getHangmanGame().getCurrentRoundIndex() == this.getHangmanGame().getRounds().size() - 1;
     }
 
     @Override
@@ -90,8 +103,13 @@ public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameData
     }
 
     @Override
-    public String getMaskedWord(){
+    public String getCurrentMaskedWord() {
         return this.getCurrentWordPuzzle().getMaskedWord();
+    }
+
+    @Override
+    public char[] getCurrentWordPuzzleLetters() {
+        return this.getCurrentWordPuzzle().getLetters();
     }
 
     @Override
@@ -99,30 +117,38 @@ public class InMemoryHangmanDataAccessObject implements MakeGuessHangmanGameData
         return this.getHangmanGame().getCurrentRoundNumber();
     }
 
-    // InitializeFirstRoundDataAccessInterface
     @Override
-    public Round getFirstRound() {
-        return this.currentHangmanGame.getRound(0);
+    public String getCurrentWord() {
+        char[] letters = this.getCurrentWordPuzzleLetters();
+        return new String(letters);
     }
 
     @Override
-    public String getFirstMaskedWord() {
-        return this.getFirstWordPuzzle().getMaskedWord();
+    public void setMaxAttempt(int maxAttempt) {
+        this.getHangmanGame().setMaxAttempts(maxAttempt);
+
+        for (Round round : this.getHangmanGame().getRounds()) {
+            round.setAttempt(maxAttempt);
+        }
     }
 
     @Override
-    public WordPuzzle getFirstWordPuzzle() {
-        return this.getFirstRound().getWordPuzzle();
+    public void setHintAttempts(int hintAttempts) {
+        this.getHangmanGame().setHintAttempts(hintAttempts);
     }
 
     @Override
-    public int getFirstRoundNumber() {
-        return 1;
+    public void decreaseHintAttempt() {
+        this.getHangmanGame().decreaseHintAttempt();
     }
 
     @Override
-    public int getFirstRoundAttempt() {
-        return this.getFirstRound().getAttempt();
+    public int getHintAttempts() {
+        return this.getHangmanGame().getHintAttempts();
+    }
+
+    public int getMaxAttempts() {
+        return this.getHangmanGame().getMaxAttempts();
     }
 }
 
