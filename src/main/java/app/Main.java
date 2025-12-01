@@ -1,6 +1,7 @@
 package app;
 
 import javax.swing.*;
+
 import network.*;
 
 public class Main {
