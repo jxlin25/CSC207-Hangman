@@ -59,11 +59,19 @@ public class HangmanGame {
         return result;
     }
 
+    /**
+     * Gets the number of the current round.
+     * @return current round number
+     */
     public int getCurrentRoundNumber() {
         // Add 1 because index is 0-based
         return currentRoundIndex + 1;
     }
 
+    /**
+     * Gets the number of total rounds.
+     * @return the number of total rounds.
+     */
     public int getTotalRounds() {
         return rounds.size();
     }
