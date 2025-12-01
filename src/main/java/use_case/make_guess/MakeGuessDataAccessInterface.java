@@ -8,7 +8,7 @@ import entity.WordPuzzle;
 /**
  * The data access interface for the MakeGuess use case.
  */
-public interface HangmanGameDataAccessInterface {
+public interface MakeGuessDataAccessInterface {
 
     /**
      * Gets the HangmanGame entity.

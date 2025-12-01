@@ -1,8 +1,8 @@
 package app;
 
 import data_access.InMemoryHangmanDataAccessObject;
-import data_access.DBHintDataAccessObject;
-import data_access.DBGenerateWordDataAccessObject;
+import data_access.DatabaseHintDataAccessObject;
+import data_access.DatabaseGenerateWordDataAccessObject;
 
 import interface_adapter.choose_difficulty.ChooseDifficultyController;
 import interface_adapter.choose_difficulty.ChooseDifficultyPresenter;
@@ -63,9 +63,9 @@ public class AppBuilder {
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
     //DAO
-    final DBGenerateWordDataAccessObject generateWordAccessObject = new DBGenerateWordDataAccessObject();
+    final DatabaseGenerateWordDataAccessObject generateWordAccessObject = new DatabaseGenerateWordDataAccessObject();
     final InMemoryHangmanDataAccessObject hangmanGameDAO = new InMemoryHangmanDataAccessObject();
-    final DBHintDataAccessObject hintDAO = new DBHintDataAccessObject();
+    final DatabaseHintDataAccessObject hintDAO = new DatabaseHintDataAccessObject();
 
     //View Model
     private GenerateWordViewModel generateWordViewModel;

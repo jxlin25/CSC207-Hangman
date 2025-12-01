@@ -3,7 +3,7 @@ package use_case.generate_word;
 import java.util.ArrayList;
 
 import entity.HangmanGame;
-import use_case.make_guess.HangmanGameDataAccessInterface;
+import use_case.make_guess.MakeGuessDataAccessInterface;
 
 /**
  * The Generate Word Interactor.
@@ -12,11 +12,11 @@ public class GenerateWordInteractor implements GenerateWordInputBoundary {
 
     private final GenerateWordDataAccessInterface generateWordDataAccessInterface;
     private final GenerateWordOutputBoundary generateWordOutputBoundary;
-    private final HangmanGameDataAccessInterface hangmanGameDataAccessObject;
+    private final MakeGuessDataAccessInterface hangmanGameDataAccessObject;
 
     public GenerateWordInteractor(GenerateWordDataAccessInterface generateWordDataAccessInterface,
                                   GenerateWordOutputBoundary generateWordOutputBoundary,
-                                  HangmanGameDataAccessInterface hangmanGameDataAccessObject) {
+                                  MakeGuessDataAccessInterface hangmanGameDataAccessObject) {
         this.generateWordDataAccessInterface = generateWordDataAccessInterface;
         this.generateWordOutputBoundary = generateWordOutputBoundary;
         this.hangmanGameDataAccessObject = hangmanGameDataAccessObject;

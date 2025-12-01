@@ -8,9 +8,10 @@ import entity.Guess;
 public class MakeGuessInteractor implements MakeGuessInputBoundary {
 
     private final MakeGuessOutputBoundary presenter;
-    private final HangmanGameDataAccessInterface dataAccessObject;
+    private final MakeGuessDataAccessInterface dataAccessObject;
 
-    public MakeGuessInteractor(MakeGuessOutputBoundary presenter, HangmanGameDataAccessInterface dataAccessObject) {
+    public MakeGuessInteractor(MakeGuessOutputBoundary presenter,
+                               MakeGuessDataAccessInterface dataAccessObject) {
         this.presenter = presenter;
         this.dataAccessObject = dataAccessObject;
     }
