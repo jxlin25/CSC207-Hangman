@@ -34,37 +34,27 @@ public class EndGameResultsInteractor implements EndGameResultsInputBoundary {
 
         GameStats currentStats = statsDataAccess.loadStatistics(); // Load existing stats
 
-        if (overallGameWon) {
-            currentStats.incrementWins(); // Increment wins if overall game won
-        } else {
-            currentStats.incrementLosses(); // Increment losses if overall game lost
-        }
-        statsDataAccess.saveStatistics(currentStats); // Save updated stats
-
         List<RoundResult> roundResults = new ArrayList<>();
-        int gameWins = 0; // Track wins for this specific game
-        int gameLosses = 0; // Track losses for this specific game
 
         for (int i = 0; i < game.getRounds().size(); i++) {
             Round round = game.getRounds().get(i);
+            String status = round.getStatus();
+
+            if (status.equals(StatusConstant.WON)) {
+                currentStats.incrementRoundsWon();
+            } else {
+                currentStats.incrementRoundsLost();
+            }
 
             // Existing debug prints
-            System.out.println("Round " + (i+1) + ":");
+            System.out.println("Round " + (i + 1) + ":");
             System.out.println("  Status: " + round.getStatus());
             System.out.println("  Remaining Attempts: " + round.getAttempt());
             System.out.println("  Attempts Used: " + (hangmanGameDAO.getMaxAttempts() - round.getAttempt()));
 
             int attemptsUsed = hangmanGameDAO.getMaxAttempts() - round.getAttempt();
             String word = new String(round.getWordPuzzle().getLetters());
-            String status = round.getStatus();
             String statusText = status.equals(StatusConstant.WON) ? "Won" : "Lost";
-
-            // Aggregate wins/losses for the current game for presentation if needed
-            if (status.equals(StatusConstant.WON)) {
-                gameWins++;
-            } else {
-                gameLosses++;
-            }
 
             RoundResult result = new RoundResult(
                     i + 1,
@@ -75,7 +65,8 @@ public class EndGameResultsInteractor implements EndGameResultsInputBoundary {
             roundResults.add(result);
         }
 
-        EndGameResultsPresenter.present(overallGameWon ? "You Won the Game!" : "You Lost the Game!", roundResults);
+        statsDataAccess.saveStatistics(currentStats); // Save updated stats
 
+        EndGameResultsPresenter.present(overallGameWon ? "You Won the Game!" : "You Lost the Game!", roundResults);
     }
 }

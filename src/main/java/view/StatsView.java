@@ -18,8 +18,8 @@ import java.beans.PropertyChangeListener;
 public class StatsView extends JDialog implements PropertyChangeListener {
     private StatsController statsController;
     private StatsViewModel statsViewModel;
-    private JLabel winsLabel;
-    private JLabel lossesLabel;
+    private JLabel roundsWonLabel;
+    private JLabel roundsLostLabel;
     private JLabel winRateLabel;
 
 
@@ -70,17 +70,17 @@ public class StatsView extends JDialog implements PropertyChangeListener {
         JPanel panel = new JPanel(new GridLayout(3, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        panel.add(new JLabel("Wins:"));
-        this.winsLabel = new JLabel("0");
-        winsLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        panel.add(winsLabel);
+        panel.add(new JLabel("Rounds Won:"));
+        this.roundsWonLabel = new JLabel("0");
+        roundsWonLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        panel.add(roundsWonLabel);
 
-        panel.add(new JLabel("Losses:"));
-        this.lossesLabel= new JLabel("0");
-        lossesLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        panel.add(lossesLabel);
+        panel.add(new JLabel("Rounds Lost:"));
+        this.roundsLostLabel = new JLabel("0");
+        roundsLostLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        panel.add(roundsLostLabel);
 
-        panel.add(new JLabel("Win Rate:"));
+        panel.add(new JLabel("Round Win Rate:"));
         this.winRateLabel = new JLabel("0%");
         winRateLabel.setFont(new Font("Arial", Font.BOLD, 14));
         panel.add(winRateLabel);
@@ -93,9 +93,9 @@ public class StatsView extends JDialog implements PropertyChangeListener {
     }
 
     private void updateStatsDisplay(GameStats stats) {
-        this.winsLabel.setText(String.valueOf(stats.getWins()));
-        this.lossesLabel.setText(String.valueOf(stats.getLosses()));
-        this.winRateLabel.setText(String.format("%.1f%%", stats.getWinRate()));
+        this.roundsWonLabel.setText(String.valueOf(stats.getRoundsWon()));
+        this.roundsLostLabel.setText(String.valueOf(stats.getRoundsLost()));
+        this.winRateLabel.setText(String.format("%.1f%%", stats.getRoundWinRate()));
     }
 
     @Override
