@@ -32,9 +32,19 @@ public class HintInteractor implements HintInputBoundary {
                 hint = "You haven't set an API Key or the Key is invalid. Here is a hint from the dictionary: "
                         + databaseHintDataAccessObject.getDictHint(word);
             }
-        }
-        if (hint == null || hint.trim().isEmpty()) {
-            hint = "No hint available.";
+            else {
+                final String dictHint = hintDataAccessInterface.getDictHint(word);
+                if (!(dictHint == null || dictHint.trim().isEmpty())) {
+                    hint = "You haven't set an API Key or the Key is invalid. Here is a hint from the dictionary: "
+                            + hintDataAccessInterface.getDictHint(word);
+                }
+            }
+            if (hint == null || hint.trim().isEmpty()) {
+                hint = "No hint available.";
+            }
+            hangmanGameDataAccessInterface.getHangmanGame().decreasingHint();
+            remainHint = hangmanGameDataAccessInterface.getHangmanGame().getHintAttempts();
+
         }
         final HintOutputData hintOutputData = new HintOutputData(hint, remainHint);
         System.out.println("----------------------------");

@@ -1,12 +1,18 @@
 package use_case.endgame_results;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import data_access.InMemoryHangmanDataAccessObject;
 import entity.HangmanGame;
 import entity.Round;
 import interface_adapter.endgame_results.EndGameResultsState.RoundResult;
-import java.util.ArrayList;
-import java.util.List;
 
+
+
+/**
+ * The Interactor for the EndGameResults use case.
+ */
 public class EndGameResultsInteractor implements EndGameResultsInputBoundary {
 
     private final EndGameResultsOutputBoundary endGameResultsPresenter;
