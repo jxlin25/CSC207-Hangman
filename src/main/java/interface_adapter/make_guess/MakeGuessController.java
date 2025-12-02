@@ -4,7 +4,8 @@ import entity.Guess;
 import use_case.make_guess.MakeGuessInputBoundary;
 import use_case.make_guess.MakeGuessInputData;
 
-/** The Controller for the MakeGuess use case.
+/**
+ * The Controller for the MakeGuess use case.
  */
 public class MakeGuessController {
 

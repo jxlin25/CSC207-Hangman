@@ -5,6 +5,10 @@ import interface_adapter.make_guess.MakeGuessViewModel;
 import use_case.generate_hint.HintOutputBoundary;
 import use_case.generate_hint.HintOutputData;
 
+/**
+ * The Presenter for the Hint Use Case.
+ */
+
 public class HintPresenter implements HintOutputBoundary {
     private final MakeGuessViewModel makeGuessViewModel;
 

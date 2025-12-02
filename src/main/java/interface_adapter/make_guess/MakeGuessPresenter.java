@@ -3,7 +3,8 @@ package interface_adapter.make_guess;
 import use_case.make_guess.MakeGuessOutputBoundary;
 import use_case.make_guess.MakeGuessOutputData;
 
-/** The Presenter for the MakeGuess use case.
+/**
+ * The Presenter for the MakeGuess use case.
  */
 public class MakeGuessPresenter implements MakeGuessOutputBoundary {
 
