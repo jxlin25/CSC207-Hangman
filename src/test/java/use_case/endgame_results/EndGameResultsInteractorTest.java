@@ -170,6 +170,7 @@ public class EndGameResultsInteractorTest {
 
         JsonStatsDataAccessObject statsDAO = new JsonStatsDataAccessObject("test_stats_mixed.json");
 
+
         DummyEndGameResultsPresenter presenter = new DummyEndGameResultsPresenter();
         EndGameResultsInteractor interactor = new EndGameResultsInteractor(presenter, dao, statsDAO);
 

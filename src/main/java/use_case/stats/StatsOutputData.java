@@ -23,7 +23,15 @@ public class StatsOutputData {
     }
 
     // Getters
-    public GameStats getStatistics() { return statistics; }
-    public boolean isSuccess() { return success; }
-    public String getErrorMessage() { return errorMessage; }
+    public GameStats getStatistics() {
+        return statistics;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
 }

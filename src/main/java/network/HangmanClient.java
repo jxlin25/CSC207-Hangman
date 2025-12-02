@@ -1,18 +1,18 @@
 package network;
 
+import java.net.URI;
+
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
-import java.net.URI;
-
 public class HangmanClient extends WebSocketClient {
 
-    public HangmanClient(int roomId) throws Exception {
-        super(new URI("ws://localhost:8080"));
+    private final int roomId;
+
+    public HangmanClient(int roomId) {
+        super(URI.create("ws://localhost:8080"));
         this.roomId = roomId;
     }
-
-    private final int roomId;
 
     @Override
     public void onOpen(ServerHandshake handshake) {

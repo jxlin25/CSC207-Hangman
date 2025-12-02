@@ -2,8 +2,6 @@ package use_case.stats;
 
 import entity.GameStats;
 
-
-
 /**
  * Interactor for handling statistics use cases.
  */
@@ -17,9 +15,11 @@ public class StatsInteractor implements StatsInputBoundary {
         this.statsPresenter = statsPresenter;
     }
 
-    @Override
+    /**
+     * Execution function.
+     */
     public void execute() {
-        GameStats stats = statsDataAccess.loadStatistics();
+        final GameStats stats = statsDataAccess.loadStatistics();
         statsPresenter.presentStatistics(stats);
     }
 }

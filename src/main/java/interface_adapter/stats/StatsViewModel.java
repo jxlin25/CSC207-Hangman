@@ -3,7 +3,7 @@ package interface_adapter.stats;
 import interface_adapter.ViewModel;
 
 /**
- * ViewModel for statistics
+ * ViewModel for statistics.
  */
 public class StatsViewModel extends ViewModel {
     private StatsState state = new StatsState();
