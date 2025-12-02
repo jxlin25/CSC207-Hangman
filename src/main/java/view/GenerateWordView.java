@@ -88,7 +88,7 @@ public class GenerateWordView extends JPanel implements PropertyChangeListener {
         numberSelector.setAlignmentX(Component.CENTER_ALIGNMENT);
         numberSelector.setSelectedItem(1);
 
-        JLabel numberLabel = new JLabel("Number of Words:");
+        JLabel numberLabel = new JLabel("Number of Rounds:");
         numberLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Start button
