@@ -1,5 +1,10 @@
 package data_access;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,14 +14,8 @@ import com.google.gson.GsonBuilder;
 import entity.GameStats;
 import use_case.stats.StatsDataAccessInterface;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-
 /**
- * JSON-based persistence for game statistics
+ * JSON-based persistence for game statistics.
  */
 public class JsonStatsDataAccessObject implements StatsDataAccessInterface {
     private final Path filePath;
@@ -30,30 +29,40 @@ public class JsonStatsDataAccessObject implements StatsDataAccessInterface {
 
     private void ensureStatsFileExists() {
         if (!Files.exists(filePath)) {
-            GameStats defaultStats = new GameStats();
+            final GameStats defaultStats = new GameStats();
             saveStatistics(defaultStats);
         }
     }
+
     @Override
     public GameStats loadStatistics() {
-        if (!Files.exists(filePath)) {
-            return new GameStats();
+        GameStats result = new GameStats();
+
+        try {
+            if (Files.exists(filePath)) {
+                try (Reader reader = new FileReader(filePath.toFile())) {
+                    final GameStats loaded = gson.fromJson(reader, GameStats.class);
+
+                    if (loaded != null) {
+                        result = loaded;
+                    }
+                }
+            }
         }
-        try (Reader reader = new FileReader(filePath.toFile())) {
-            GameStats stats = gson.fromJson(reader, GameStats.class);
-            return stats != null ? stats : new GameStats();
-        } catch (IOException e) {
-            System.err.println("Error loading statistics from " + filePath + ": " + e.getMessage());
-            return new GameStats();
+        catch (IOException error) {
+            System.err.println("Error loading statistics from " + filePath + ": " + error.getMessage());
         }
+
+        return result;
     }
 
     @Override
     public void saveStatistics(GameStats stats) {
         try (Writer writer = new FileWriter(filePath.toFile())) {
             gson.toJson(stats, writer);
-        } catch (IOException e) {
-            System.err.println("Error saving statistics to " + filePath + ": " + e.getMessage());
+        }
+        catch (IOException error) {
+            System.err.println("Error saving statistics to " + filePath + ": " + error.getMessage());
         }
     }
 }

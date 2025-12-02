@@ -1,27 +1,30 @@
 package interface_adapter.room;
-import view.RoomJoinView;
+
 import use_case.room.RoomJoinInteractor;
+import view.RoomJoinView;
 
 public class RoomJoinController implements RoomJoinView.Controller {
+    private static final int MAX_ATTEMPT = 3;
+
     private RoomJoinInteractor interactor;
     private String username;
+    private int currentAttempt = 1;
 
     public RoomJoinController(RoomJoinInteractor interactor) {
         this.interactor = interactor;
-//        this.username = username;
     }
 
     @Override
-    public void onJoinRoom(int roomId, String username) {
-//        interactor.joinRoom(roomId);
-//
+    public void onJoinRoom(int roomId, String inputUsername) {
         interactor.checkRoomExists(roomId, new RoomJoinInteractor.RoomCheckCallback() {
             @Override
             public void onRoomChecked(int roomId, boolean exists) {
                 if (exists) {
                     System.out.println("Room " + roomId + " exists!");
-                    interactor.joinRoom(roomId, username);
-                } else {
+
+                    interactor.joinRoom(roomId, inputUsername);
+                }
+                else {
                     System.out.println("Room " + roomId + " does not exist!");
                 }
             }
@@ -33,23 +36,34 @@ public class RoomJoinController implements RoomJoinView.Controller {
         });
     }
 
-    public void onCreateRoom(String username) {
-        createRoomWithRetry(3, 1, username);
+    /**
+     * Creates the room.
+     * @param inputUsername the username you input.
+     */
+    public void onCreateRoom(String inputUsername) {
+        createRoomWithRetry(MAX_ATTEMPT, currentAttempt, inputUsername);
     }
 
-    public void createRoomWithRetry(int maxAttempt, int currentAttempt, String username) {
+    /**
+     * Room creation retry logic.
+     * @param maxAttempt is the max attempts.
+     * @param attempt is the current iteration of attempt.
+     * @param inputUsername is the username.
+     */
+    public void createRoomWithRetry(int maxAttempt, int attempt, String inputUsername) {
         if (currentAttempt > maxAttempt) {
             System.out.println("Failed to create room after " + currentAttempt + " attempts");
         }
-        int roomId = (int) (Math.random() * 9000) + 1000;
+        final int roomId = (int) (Math.random() * 9000) + 1000;
         interactor.checkRoomExists(roomId, new RoomJoinInteractor.RoomCheckCallback() {
             @Override
             public void onRoomChecked(int roomId, boolean exists) {
                 if (!exists) {
-                    interactor.createRoom(roomId, username);
-                } else {
+                    interactor.createRoom(roomId, inputUsername);
+                }
+                else {
                     System.out.println("Room id exists, trying a different one...");
-                    createRoomWithRetry(maxAttempt, currentAttempt + 1, username);
+                    createRoomWithRetry(maxAttempt, attempt + 1, inputUsername);
                 }
             }
 
@@ -57,37 +71,10 @@ public class RoomJoinController implements RoomJoinView.Controller {
             public void onError(String message) {
                 System.out.println("error: " + message);
                 System.out.println("retrying...");
-                createRoomWithRetry(maxAttempt, currentAttempt + 1, username);
+                createRoomWithRetry(maxAttempt, attempt + 1, inputUsername);
             }
         });
 
     }
-
-
-//    public void onCreateRoom() {
-//        AtomicBoolean flag = new AtomicBoolean(true);
-//        while (flag.get()) {
-//            int random4Digit = (int) (Math.random() * 9000) + 1000;
-//            interactor.checkRoomExists(random4Digit, new RoomJoinInteractor.RoomCheckCallback() {
-//                @Override
-//                public void onRoomChecked(int roomId, boolean exists) {
-//                    if (exists) {
-//                        System.out.println("Room " + roomId + " exists, trying another...");
-//                    } else {
-//                        flag.set(false);
-//                        interactor.joinRoom(roomId);  // ← Use the parameter from callback!
-//                        System.out.println("Created and joined room: " + roomId);
-//                    }
-//                }
-//
-//                @Override
-//                public void onError(String message) {
-//                    System.out.println("Error: " + message);
-//                    flag.set(false);
-//                }
-//            });
-//        }
-//    }
-
 
 }
