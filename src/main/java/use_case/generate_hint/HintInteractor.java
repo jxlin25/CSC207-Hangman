@@ -41,11 +41,16 @@ public class HintInteractor implements HintInputBoundary {
         if (hint == null || hint.trim().isEmpty()) {
             hint = "No hint available.";
         }
-        final int nowHint = inMemoryHintDataAccessObject.getHintAttempts();
-        final HintOutputData hintOutputData = new HintOutputData(hint, nowHint);
+
+        final int nowHintAttempts = inMemoryHintDataAccessObject.getHintAttempts();
+        final HintOutputData hintOutputData = new HintOutputData(hint, nowHintAttempts);
+
+        // This part is only for checking the current running status of the
+        // game and will not affect the game content.
         System.out.println("----------------------------");
         System.out.println("The Hint is :" + hint);
         System.out.println("----------------------------");
+
         hintOutputBoundary.prepareSuccessView(hintOutputData);
     }
 }

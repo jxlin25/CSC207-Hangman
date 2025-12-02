@@ -42,11 +42,14 @@ public class GenerateWordInteractor implements GenerateWordInputBoundary {
                 tries++;
             }
             if (word == null || !generateWordDataAccessInterface.isValidWord(word)) {
-                generateWordOutputBoundary.prepareFailureView("Failed to generate a valid word after 10 attempts, please try again!");
+                generateWordOutputBoundary.prepareFailureView("Failed to generate a "
+                        + "valid word after 10 attempts, please try again!");
                 return;
             }
             words.add(word);
         }
+        // This part of the content is to help us check the current status of the
+        // game and will not affect the actual operation of the game. It can also be deleted.
         System.out.println("----------------------------");
         System.out.println("The Generate Words is :" + words);
         System.out.println("----------------------------");

@@ -1,7 +1,8 @@
 package interface_adapter.make_guess;
 
 
-/** The State object for the MakeGuessViewModel.
+/**
+ * The State object for the MakeGuessViewModel.
  */
 public class MakeGuessState {
 

@@ -5,7 +5,8 @@ import interface_adapter.ViewModel;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-/** The View Model for the MakeGuess use case.
+/**
+ * The View Model for the MakeGuess use case.
  */
 public class MakeGuessViewModel extends ViewModel<MakeGuessState> {
     public static final String VIEW_NAME = "Make Guess";
