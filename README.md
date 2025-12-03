@@ -7,7 +7,8 @@ Hangman is a word guessing game designed to store words fetched from an external
 
 ### Game Rounds
 Players can decide for themselves the number of rounds for the game to be played, ranging from 1 to 6 rounds. The default setting is 1 round.
-<img width="792" height="597" alt="Round" https://github.com/user-attachments/assets/6844e2e8-befc-4d47-b66f-8863ad240346" />
+
+<img width="792" height="597" alt="Round" src="https://github.com/user-attachments/assets/447a673c-3b53-446f-8e6b-3bfcc072cdaa" />
 
 ### Difficulty Levels
 Players can choose from three levels of difficulty.
@@ -15,7 +16,8 @@ Players can choose from three levels of difficulty.
 1. Easy: The player has 8 attempts to guess in each round, and receives the hint attempts equivalent the number of game rounds.
 2. Normal: The player has 6 attempts to guess in each round, and receives the hint attempts equivalent of half the number of game rounds (rounded up).
 3. Hard: The player has 4 attempts to guess in each round, players will not receive the number of hint attempts.
-   <img width="792" height="597" alt="Round" src="https://github.com/user-attachments/assets/bb8a91b3-78a8-4368-8b08-f8889404f133" />
+
+<img width="792" height="597" alt="Diff" src="https://github.com/user-attachments/assets/e23bb37d-20a3-4d0a-929c-a0f1e3cf1ec6" />
 
 
 ### Hints
