@@ -7,7 +7,7 @@ Hangman is a word guessing game designed to store words fetched from an external
 
 ### Game Rounds
 Players can decide for themselves the number of rounds for the game to be played, ranging from 1 to 6 rounds. The default setting is 1 round.
-<img width="792" height="597" alt="Round"https://github.com/user-attachments/assets/6844e2e8-befc-4d47-b66f-8863ad240346" />
+<img width="792" height="597" alt="Round" https://github.com/user-attachments/assets/6844e2e8-befc-4d47-b66f-8863ad240346" />
 
 ### Difficulty Levels
 Players can choose from three levels of difficulty.
