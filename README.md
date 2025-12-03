@@ -15,7 +15,8 @@ Players can choose from three levels of difficulty.
 1. Easy: The player has 8 attempts to guess in each round, and receives the hint attempts equivalent the number of game rounds.
 2. Normal: The player has 6 attempts to guess in each round, and receives the hint attempts equivalent of half the number of game rounds (rounded up).
 3. Hard: The player has 4 attempts to guess in each round, players will not receive the number of hint attempts.
-<img width="792" height="597" alt="Difficulty" src="https://github.com/user-attachments/assets/b4a76a94-976f-4225-8306-bee279602cbb" />
+   <img width="792" height="597" alt="Round" src="https://github.com/user-attachments/assets/bb8a91b3-78a8-4368-8b08-f8889404f133" />
+
 
 ### Hints
 
